@@ -1,6 +1,7 @@
 /**
  * Created by AC on 2/9/17.
  */
+
 var DISTANCE = 5;
 var SIZE = 10;
 var NUM_BLOCK = 30;
@@ -20,10 +21,11 @@ app.renderer.backgroundColor = 0xffffff;
 app.renderer.autoResize = true;
 document.body.appendChild(app.view);
 
-var squares = new PIXI.particles.ParticleContainer();
+var squares = new PIXI.Container();
 squares.interactive = true;
 
-var msg = new PIXI.Text();
+var msg = new PIXI.Text('Rotation id');
+msg.visible = false;
 msg.position.set(NUM_BLOCK * (SQUARE_SIZE + SQUARE_DISTANCE), start_y);
 
 app.stage.addChild(squares);
@@ -43,7 +45,11 @@ for (var i = 0; i < NUM_TRAINEE; i ++) {
         // create a new Sprite
         var square = new PIXI.Graphics();
 
-        square.beginFill(0x66CCFF);
+        if (j % 3) {
+            var color = getRandomColor();
+        }
+
+        square.beginFill(color);
 
         var x1 = start_x + rot_count * UNIT_RANGE;
         var y1 = start_y + trainee_count * UNIT_RANGE;
@@ -66,7 +72,7 @@ for (var i = 0; i < NUM_TRAINEE; i ++) {
             .on('mouseover', onButtonOver);
 
         // finally we push the dude into the maggots array so it it can be easily accessed later
-        maggots.push(square);
+        maggots.push(spirite);
         squares.addChild(spirite);
 
         rot_count += 1;
@@ -76,11 +82,16 @@ for (var i = 0; i < NUM_TRAINEE; i ++) {
 
 function onButtonOver() {
     this.isOver = true;
-    msg.Text = "Rotation Info";
+    msg.visible = true;
     this.visible = false;
+
 }
 
-function onButtonOut() {
-    this.isOver = false;
-    msg.Text = "";
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '0x';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
