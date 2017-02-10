@@ -2,17 +2,6 @@
  * Created by AC on 2/9/17.
  */
 
-var DISTANCE = 5;
-var SIZE = 10;
-var NUM_BLOCK = 30;
-var NUM_TRAINEE = 30;
-var LABEL_HEIGHT = 18;
-var SQUARE_TOP_LEFT = [300, 40];
-var SQUARE_SIZE = 12;
-var SQUARE_HEIGHT = LABEL_HEIGHT;
-var SQUARE_DISTANCE = 4;
-var UNIT_RANGE = SQUARE_SIZE + SQUARE_DISTANCE;
-
 var start_x = SQUARE_TOP_LEFT[0];
 var start_y = SQUARE_TOP_LEFT[1];
 
@@ -42,38 +31,35 @@ for (var i = 0; i < NUM_TRAINEE; i ++) {
 
     for (var j = 0; j < NUM_BLOCK; j++) {
 
-        // create a new Sprite
-        var square = new PIXI.Graphics();
-
         if (j % 3) {
             var color = getRandomColor();
         }
 
-        square.beginFill(color);
-
         var x1 = start_x + rot_count * UNIT_RANGE;
         var y1 = start_y + trainee_count * UNIT_RANGE;
 
-        square.drawRect(x1, y1, SQUARE_SIZE, SQUARE_SIZE);
+        var newSquare = new Square(x1, y1, color, '', i, app.renderer);
+        newSquare.draw();
 
-        square.endFill();
+        // square.drawRect(0, 0, SQUARE_SIZE, SQUARE_SIZE);
+        //
+        // square.endFill();
+        //
+        // var texture = app.renderer.generateTexture(square);
+        //
+        // var spirite = new PIXI.Sprite(texture);
+        // spirite.buttonMode = true;
+        //
+        // spirite.x = x1;
+        // spirite.y = y1;
+        //
+        // spirite.interactive = true;
+        //
+        // spirite
+        //     .on('mouseover', onButtonOver);
 
-        var texture = app.renderer.generateTexture(square);
-
-        var spirite = new PIXI.Sprite(texture);
-        spirite.buttonMode = true;
-
-        spirite.x = x1;
-        spirite.y = y1;
-
-        spirite.interactive = true;
-
-        spirite
-            .on('mouseover', onButtonOver);
-
-        // finally we push the dude into the maggots array so it it can be easily accessed later
-        maggots.push(spirite);
-        squares.addChild(spirite);
+        // finally we push the dude into the maggots array so it it can be easily accessed late
+        squares.addChild(newSquare.sprite);
 
         rot_count += 1;
     }
