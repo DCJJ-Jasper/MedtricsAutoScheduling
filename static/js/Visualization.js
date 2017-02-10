@@ -41,6 +41,9 @@ for (var i = 0; i < NUM_TRAINEE; i ++) {
         var newSquare = new Square(x1, y1, color, '', i, app.renderer);
         newSquare.draw();
 
+        newSquare.sprite
+            .on('mouseover', onButtonOver);
+
         // square.drawRect(0, 0, SQUARE_SIZE, SQUARE_SIZE);
         //
         // square.endFill();

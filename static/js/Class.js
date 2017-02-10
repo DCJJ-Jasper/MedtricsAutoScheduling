@@ -14,6 +14,7 @@ class Square {
         this.sprite.x = this.x;
         this.sprite.y = this.y;
         this.sprite.interactive = true;
+
     }
 
     draw() {
@@ -22,6 +23,11 @@ class Square {
         texture.drawRect(0, 0, SQUARE_SIZE, SQUARE_SIZE);
         texture.endFill();
         this.sprite.texture = this.renderer.generateTexture(texture);
+    }
+
+    set setColor(color) {
+        this.color = color;
+        this.draw();
     }
 
 
