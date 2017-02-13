@@ -31,13 +31,11 @@ app.stage.addChild(msg);
 
 // create an array to store all the sprites
 var maggots = [];
-
 var trainee_count = 0;
 
 for (var i = 0; i < NUM_TRAINEE; i ++) {
 
     var rot_count = 0;
-
     for (var j = 0; j < NUM_BLOCK; j++) {
 
         // create a new Sprite
@@ -67,7 +65,7 @@ for (var i = 0; i < NUM_TRAINEE; i ++) {
 
         // finally we push the dude into the maggots array so it it can be easily accessed later
         maggots.push(square);
-        squares.addChild(spirite);
+        app.stage.addChild(spirite);
 
         rot_count += 1;
     }
@@ -83,4 +81,11 @@ function onButtonOver() {
 function onButtonOut() {
     this.isOver = false;
     msg.Text = "";
+}
+
+/**
+ * All animation lives here
+ */
+function animate() {
+
 }
