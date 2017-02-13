@@ -146,7 +146,6 @@ for (var t of trainees) {
     var trainee_label = new PIXI.Text(t.name, {
         fontSize: LABEL_SIZE
     });
-    console.log(trainee_label.text.fontsize());
     trainee_label.position.set(LABEL_TOP_LEFT_X, LABEL_TOP_LEFT_Y + trainee_count * LABEL_HEIGHT);
     squares.addChild(trainee_label);
     trainee_count += 1;
@@ -170,30 +169,8 @@ for (var i = 0; i < NUM_TRAINEE; i ++) {
         newSquare.draw();
 
         newSquare.sprite
-            .on('mouseover', onButtonOver);
+            .on('mousedown', onButtonPressed);
 
-        // finally we push the dude into the maggots array so it it can be easily accessed later
-        //maggots.push(square);
-        //app.stage.addChild(spirite);
-
-        // square.drawRect(0, 0, SQUARE_SIZE, SQUARE_SIZE);
-        //
-        // square.endFill();
-        //
-        // var texture = app.renderer.generateTexture(square);
-        //
-        // var spirite = new PIXI.Sprite(texture);
-        // spirite.buttonMode = true;
-        //
-        // spirite.x = x1;
-        // spirite.y = y1;
-        //
-        // spirite.interactive = true;
-        //
-        // spirite
-        //     .on('mouseover', onButtonOver);
-
-        // finally we push the dude into the maggots array so it it can be easily accessed late
         squares.addChild(newSquare.sprite);
 
         // Merge conflict here
@@ -202,14 +179,13 @@ for (var i = 0; i < NUM_TRAINEE; i ++) {
     trainee_count += 1;
 }
 
-function onButtonOver() {
+function onButtonPressed() {
     this.isOver = true;
     this.visible = false;
 }
 
 function onButtonOut() {
     this.isOver = false;
-    msg.Text = "";
 }
 
 function getRandomColor() {
