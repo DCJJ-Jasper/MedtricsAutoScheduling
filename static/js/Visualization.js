@@ -116,7 +116,7 @@ function read_in_data(input_text) {
     // Read in the requirements now
 }
 
-console.log(rotations)
+console.log(rotations);
 
 var start_x = SQUARE_TOP_LEFT[0];
 var start_y = SQUARE_TOP_LEFT[1];
@@ -129,16 +129,30 @@ document.body.appendChild(app.view);
 var squares = new PIXI.Container();
 squares.interactive = true;
 
-var msg = new PIXI.Text('Rotation id');
-msg.visible = false;
-msg.position.set(NUM_BLOCK * (SQUARE_SIZE + SQUARE_DISTANCE), start_y);
-
 app.stage.addChild(squares);
-app.stage.addChild(msg);
 
 // create an array to store all the sprites
 var maggots = [];
 var trainee_count = 0;
+
+
+// Create fake trainees
+for (var k = 0; k < NUM_TRAINEE; k ++) {
+    var new_trainee = new Trainee(chance.name(), "PGY1", 3, num_block);
+    trainees.push(new_trainee);
+}
+
+for (var t of trainees) {
+    var trainee_label = new PIXI.Text(t.name, {
+        fontSize: LABEL_SIZE
+    });
+    console.log(trainee_label.text.fontsize());
+    trainee_label.position.set(LABEL_TOP_LEFT_X, LABEL_TOP_LEFT_Y + trainee_count * LABEL_HEIGHT);
+    squares.addChild(trainee_label);
+    trainee_count += 1;
+}
+
+trainee_count = 0;
 
 for (var i = 0; i < NUM_TRAINEE; i ++) {
 
@@ -190,7 +204,6 @@ for (var i = 0; i < NUM_TRAINEE; i ++) {
 
 function onButtonOver() {
     this.isOver = true;
-    msg.visible = true;
     this.visible = false;
 }
 
