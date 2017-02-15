@@ -19,6 +19,7 @@ function Trainee(name, role, id, num_block) {
     this.role = role;
     this.id = id;
     this.num_block = num_block;
+    this.scheduled_blocks = [];
 
     this.base_reqs = {};
     this.processed_reqs = {};
@@ -26,8 +27,12 @@ function Trainee(name, role, id, num_block) {
 
 Trainee.prototype.set_requirements = function(reqs) {
     this.base_reqs = reqs;
-    //this.processed_reqs = JSON.parse(JSON.stringify(reqs));
+    this.processed_reqs = Object.assign({}, reqs);;
 };
+
+Trainee.prototype.set_scheduled_blocks = function(scheduled_blocks) {
+    this.scheduled_blocks = scheduled_blocks;
+}
 
 /**
  * A Rotation with demands
