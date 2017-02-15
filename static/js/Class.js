@@ -86,8 +86,7 @@ Rotation.prototype.set_rotation_demands = function(min1, max1, min2, max2, min3,
 //////////////////
 // GRAPHIC CLASSES
 //////////////////
-class Square {
-    constructor(x, y, color, rot_name, id, renderer) {
+function Square(x, y, color, rot_name, id, renderer) {
         this.x = x;
         this.y = y;
         this.color = color;
@@ -98,21 +97,16 @@ class Square {
         this.sprite.x = this.x;
         this.sprite.y = this.y;
         this.sprite.interactive = true;
-    }
-
-    draw() {
-        var texture = new PIXI.Graphics();
-        texture.beginFill(this.color);
-        texture.drawRect(0, 0, SQUARE_SIZE, SQUARE_SIZE);
-        texture.endFill();
-        this.sprite.texture = this.renderer.generateTexture(texture);
-    }
-
-    set setColor(color) {
-        this.color = color;
-        this.draw();
-    }
 }
+
+Square.prototype.draw = function() {
+    let texture = new PIXI.Graphics();
+    texture.beginFill(this.color);
+    texture.drawRect(0, 0, SQUARE_SIZE, SQUARE_SIZE);
+    texture.endFill();
+    this.sprite.texture = this.renderer.generateTexture(texture);
+};
+
 
 /**
  * ChartBars show information about the number of people at a given rotation at anytime

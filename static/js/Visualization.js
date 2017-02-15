@@ -180,7 +180,6 @@ function read_in_data(input_text) {
 }
 
 read_in_data(SAMPLE_TEXT);
-
 console.log(trainees);
 console.log(rotations);
 
@@ -197,16 +196,32 @@ squares.interactive = true;
 
 var msg = new PIXI.Text('Rotation id');
 msg.visible = false;
-msg.position.set(num_block * (SQUARE_SIZE + SQUARE_DISTANCE), start_y);
-
+// msg.position.set(num_block * (SQUARE_SIZE + SQUARE_DISTANCE), start_y);
 app.stage.addChild(squares);
-app.stage.addChild(msg);
 
 // create an array to store all the sprites
 var maggots = [];
 var trainee_count = 0;
 
-for (var i = 0; i < num_trainees; i ++) {
+// Create fake trainees
+for (var k = 0; k < NUM_TRAINEE; k ++) {
+    var new_trainee = new Trainee(chance.name(), "PGY1", 3, num_block);
+    trainees.push(new_trainee);
+}
+
+for (var t of trainees) {
+    var trainee_label = new PIXI.Text(t.name, {
+        fontSize: LABEL_SIZE
+    });
+    trainee_label.position.set(LABEL_TOP_LEFT_X, LABEL_TOP_LEFT_Y + trainee_count * LABEL_HEIGHT);
+    squares.addChild(trainee_label);
+    trainee_count += 1;
+}
+
+trainee_count = 0;
+
+for (var i = 0; i < NUM_TRAINEE; i ++) {
+>>>>>>> fa2db519a019b2b51cb010d80d049ae1512c7f0a
 
     var rot_count = 0;
     var color;
@@ -225,9 +240,8 @@ for (var i = 0; i < num_trainees; i ++) {
         newSquare.draw();
 
         newSquare.sprite
-            .on('mouseover', onButtonOver);
+            .on('mousedown', onButtonPressed);
 
-        // finally we push the dude into the maggots array so it it can be easily accessed late
         squares.addChild(newSquare.sprite);
 
         // Merge conflict here
@@ -236,15 +250,13 @@ for (var i = 0; i < num_trainees; i ++) {
     trainee_count += 1;
 }
 
-function onButtonOver() {
+function onButtonPressed() {
     this.isOver = true;
-    msg.visible = true;
     this.visible = false;
 }
 
 function onButtonOut() {
     this.isOver = false;
-    msg.Text = "";
 }
 
 function getRandomColor() {
