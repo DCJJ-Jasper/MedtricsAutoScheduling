@@ -12,6 +12,8 @@ var num_pgy2 = 0;
 var num_pgy3 = 0;
 var trainees = [];
 var rotations = [];
+var num_groups = 3;
+
 
 function read_in_data(input_text) {
     var str_list = input_text.split("\n");
