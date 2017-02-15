@@ -7,9 +7,15 @@ var num_block = 0;
 var num_roles = 0;
 var num_trainees = 0;
 var num_rotations = 0;
+
 var num_pgy1 = 0;
 var num_pgy2 = 0;
 var num_pgy3 = 0;
+
+var pgy1_reqs = {};
+var pgy2_reqs = {};
+var pgy3_reqs = {};
+
 var trainees = [];
 var rotations = [];
 var num_groups = 3;
@@ -30,6 +36,7 @@ function read_in_data(input_text) {
     num_pgy1 = parseInt(data[0]);
     num_pgy2 = parseInt(data[1]);
     num_pgy3 = parseInt(data[2]);
+    num_trainees = num_pgy1 + num_pgy2 + num_pgy3;
 
     // Skip the next line
     line_num += 1;
@@ -44,7 +51,8 @@ function read_in_data(input_text) {
     for (var i = 0; i < num_pgy1; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
-
+        console.log(data)
+        console.log(data[3])
         // Parse the data
         name = data[0];
         id = parseInt(data[1]);
@@ -53,6 +61,7 @@ function read_in_data(input_text) {
 
         // Create a new trainee based on these information
         new_trainee = new Trainee(name, role, id, num_block);
+        new_trainee.set_scheduled_blocks(schedule);
         trainees.push(new_trainee);
     }
 
@@ -68,6 +77,7 @@ function read_in_data(input_text) {
 
         // Create a new trainee based on these information
         new_trainee = new Trainee(name, role, id, num_block);
+        new_trainee.set_scheduled_blocks(schedule);
         trainees.push(new_trainee);
     }
 
@@ -83,6 +93,7 @@ function read_in_data(input_text) {
 
         // Create a new trainee based on these information
         new_trainee = new Trainee(name, role, id, num_block);
+        new_trainee.set_scheduled_blocks(schedule);
         trainees.push(new_trainee);
     }
 
@@ -115,9 +126,63 @@ function read_in_data(input_text) {
         rotations.push(new_rotation);
     }
 
-    // Read in the requirements now
+    // Skip 2 lines
+    line_num += 2
+
+    // Read in requirements for each type of students
+    var amount = 0
+    for (var i = 0; i < num_rotations; i++) {
+        line_num += 1
+        data = str_list[line_num].trim().split(",");
+
+        // Parse the data
+        id = parseInt(data[0], 10);
+        amount = parseInt(data[2], 10);
+
+        // Input the requirement for pgy1
+        pgy1_reqs[id] = amount
+    }
+
+    for (var i = 0; i < num_rotations; i++) {
+        line_num += 1
+        data = str_list[line_num].trim().split(",");
+
+        // Parse the data
+        id = parseInt(data[0], 10);
+        amount = parseInt(data[2], 10);
+
+        // Input the requirement for pgy1
+        pgy2_reqs[id] = amount
+    }
+
+    for (var i = 0; i < num_rotations; i++) {
+        line_num += 1
+        data = str_list[line_num].trim().split(",");
+
+        // Parse the data
+        id = parseInt(data[0], 10);
+        amount = parseInt(data[2], 10);
+
+        // Input the requirement for pgy1
+        pgy3_reqs[id] = amount
+    }
+
+    // Assign requirements to students
+    for (var i = 0; i < num_pgy1; i++) {
+        trainees[i].set_requirements(pgy1_reqs)
+    }
+
+    for (var i = num_pgy1; i < num_pgy1 + num_pgy2; i++) {
+        trainees[i].set_requirements(pgy2_reqs)
+    }
+
+    for (var i = num_pgy1 + num_pgy2; i < num_trainees ; i++) {
+        trainees[i].set_requirements(pgy3_reqs)
+    }
 }
 
+read_in_data(SAMPLE_TEXT);
+console.log(trainees);
 console.log(rotations);
 
 var start_x = SQUARE_TOP_LEFT[0];
@@ -131,12 +196,14 @@ document.body.appendChild(app.view);
 var squares = new PIXI.Container();
 squares.interactive = true;
 
+var msg = new PIXI.Text('Rotation id');
+msg.visible = false;
+// msg.position.set(num_block * (SQUARE_SIZE + SQUARE_DISTANCE), start_y);
 app.stage.addChild(squares);
 
 // create an array to store all the sprites
 var maggots = [];
 var trainee_count = 0;
-
 
 // Create fake trainees
 for (var k = 0; k < NUM_TRAINEE; k ++) {
@@ -156,13 +223,17 @@ for (var t of trainees) {
 trainee_count = 0;
 
 for (var i = 0; i < NUM_TRAINEE; i ++) {
+>>>>>>> fa2db519a019b2b51cb010d80d049ae1512c7f0a
 
     var rot_count = 0;
-    for (var j = 0; j < NUM_BLOCK; j++) {
-
-        if (j % 3) {
-            var color = getRandomColor();
-        }
+    var color;
+    for (var j = 0; j < num_block; j++) {
+        id = trainees[i].scheduled_blocks[j];
+        console.log(trainees[i].scheduled_blocks);
+        console.log(id);
+        console.log(ROTATIONS_COLOR[id]);
+        color = convert_to_color_code(ROTATIONS_COLOR[id]);
+        console.log(color);
 
         var x1 = start_x + rot_count * UNIT_RANGE;
         var y1 = start_y + trainee_count * UNIT_RANGE;
@@ -199,6 +270,12 @@ function getRandomColor() {
     return color;
 }
 
+function convert_to_color_code(color_tuple) {
+    var r = color_tuple[0];
+    var g = color_tuple[1];
+    var b = color_tuple[2];
+    return "0x" + r.toString(16) + g.toString(16) + b.toString(16);
+}
 /**
  * All animation lives here
  */
