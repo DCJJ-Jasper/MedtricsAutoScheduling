@@ -9,17 +9,25 @@
 var DISTANCE = 5;
 var SIZE = 10;
 var NUM_BLOCK = 30;
-var NUM_TRAINEE = 30;
+var NUM_TRAINEE = 40;
+
+var LABEL_ROLE_TOP_LEFT_X = 40;
+var LABEL_ROLE_TOP_LEFT_Y = 40;
 var LABEL_TOP_LEFT_X = 40;
-var LABEL_TOP_LEFT_Y = 40;
+var LABEL_TOP_LEFT_Y = 40 + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
 var LABEL_SIZE = 14;
 var LABEL_HEIGHT = 18;
-var SQUARE_TOP_LEFT = [300, 40];
+var LABEL_ROLE_SIZE = 30;
+var LABEL_ROLE_HEIGHT = 34; // Role name label height
+var ROLE_LABEL_TRAINEE_DIST = 5; // Distance between role name and trainees' names
+
+var SQUARE_TOP_LEFT = [300, 40 + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST];
 var SQUARE_SIZE = 14;
 var SQUARE_HEIGHT = LABEL_HEIGHT;
 var SQUARE_DISTANCE = 4;
 var UNIT_RANGE = SQUARE_SIZE + SQUARE_DISTANCE;
-var GROUP_DISTANCE = 10;
+
+var GROUP_DISTANCE = 40; // Distance between two role groups
 
 //////////////////////
 // SAMPLE READ-IN TEXT
@@ -46,21 +54,21 @@ var SAMPLE_TEXT = "13,3\n" +
   "Louisa Botellio,15,PGY1,-1.7.0.-1.3.6.2.1.3.2.5.5.4\n" +
   "Kiesha Menlove,16,PGY1,0.7.1.-1.6.2.3.3.-1.4.5.2.5\n" +
   "Joella Middaugh,17,PGY1,-1.-1.3.3.2.2.7.6.4.1.0.5.5\n" +
-  "Janean Skomsky,18,PGY1,1.2.4.-1.3.7.6.3.-1.2.5.0.5\n" +
-  "Ramonita Gryniuk,19,PGY1,6.3.-1.2.5.0.-1.7.1.4.3.5.2\n" +
-  "Teisha Stunkard,20,PGY1,6.5.-1.1.4.2.2.-1.7.5.0.3.3\n" +
-  "Latesha Conteras,21,PGY1,4.5.7.3.5.0.-1.2.3.-1.2.6.1\n" +
+  "Janean Skomsky,18,PGY2,1.2.4.-1.3.7.6.3.-1.2.5.0.5\n" +
+  "Ramonita Gryniuk,19,PGY2,6.3.-1.2.5.0.-1.7.1.4.3.5.2\n" +
+  "Teisha Stunkard,20,PGY3,6.5.-1.1.4.2.2.-1.7.5.0.3.3\n" +
+  "Latesha Conteras,21,PGY2,4.5.7.3.5.0.-1.2.3.-1.2.6.1\n" +
   "Paris Sachse,22,PGY1,3.4.2.-1.3.5.-1.7.0.6.5.1.2\n" +
-  "Tyisha Vandenacre,23,PGY1,1.4.5.6.5.2.3.7.0.-1.2.3.-1\n" +
-  "Dewitt Petricone,24,PGY1,3.2.0.-1.3.4.-1.2.7.1.5.6.5\n" +
-  "Trinidad Dunmead,25,PGY1,-1.7.3.4.2.-1.5.1.2.5.6.3.0\n" +
+  "Tyisha Vandenacre,23,PGY3,1.4.5.6.5.2.3.7.0.-1.2.3.-1\n" +
+  "Dewitt Petricone,24,PGY2,3.2.0.-1.3.4.-1.2.7.1.5.6.5\n" +
+  "Trinidad Dunmead,25,PGY2,-1.7.3.4.2.-1.5.1.2.5.6.3.0\n" +
   "Lanette Schnitzler,26,PGY1,2.4.2.3.-1.7.1.-1.3.0.6.5.5\n" +
   "Jarod Schille,27,PGY1,3.1.2.-1.-1.4.5.5.6.3.0.2.7\n" +
-  "Annemarie Warnecke,28,PGY1,7.4.1.6.-1.0.5.2.3.2.3.5.-1\n" +
-  "Carla Tylor,29,PGY1,2.6.5.3.-1.5.1.3.2.-1.4.7.0\n" +
-  "Randy Solas,30,PGY1,6.3.7.2.1.5.2.0.-1.-1.3.4.5\n" +
+  "Annemarie Warnecke,28,PGY3,7.4.1.6.-1.0.5.2.3.2.3.5.-1\n" +
+  "Carla Tylor,29,PGY2,2.6.5.3.-1.5.1.3.2.-1.4.7.0\n" +
+  "Randy Solas,30,PGY2,6.3.7.2.1.5.2.0.-1.-1.3.4.5\n" +
   "Cassie Mercy,31,PGY1,2.5.6.4.0.3.1.3.-1.2.7.5.-1\n" +
-  "Gilberte Rezendes,32,PGY1,4.2.0.-1.5.5.2.1.-1.7.3.6.3\n" +
+  "Gilberte Rezendes,32,PGY3,4.2.0.-1.5.5.2.1.-1.7.3.6.3\n" +
   "Tony Rizzio,33,PGY1,5.3.0.1.2.6.5.2.-1.-1.3.4.7\n" +
   "Roxann Schwanbeck,34,PGY1,1.5.3.5.-1.4.3.0.7.6.2.2.-1\n" +
   "Fran Schifo,35,PGY1,5.2.2.0.1.-1.-1.3.6.5.4.7.3\n" +
