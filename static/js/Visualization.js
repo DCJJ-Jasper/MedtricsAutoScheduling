@@ -217,11 +217,9 @@ for (var t of trainees) {
     squares.addChild(trainee_label);
     trainee_count += 1;
 }
-
 trainee_count = 0;
 
 for (var i = 0; i < NUM_TRAINEE; i ++) {
->>>>>>> fa2db519a019b2b51cb010d80d049ae1512c7f0a
 
     var rot_count = 0;
     var color;
