@@ -50,7 +50,8 @@ ID, Name, Min1, Max1, Min2, Max2, Min3, Max3
 5,Inpatient Wards,3,7,0,0,0,0
 6,Medical Intensive Car Unit,1,5,0,0,0,0
 7,Neurology,1,5,0,0,0,0
-Rotation ID, Name, RequirementPGY1 Requirements
+Rotation ID, Name, Requirement
+PGY1 Requirements
 0,Ambulatory Medicine Blocks,1
 1,Backup Staffing / Urgent Visit,1
 2,Coronary Care Unit,2

@@ -18,6 +18,9 @@ var pgy3_reqs = {};
 
 var trainees = [];
 var rotations = [];
+var num_groups = 3;
+var id_list = [];
+
 
 function read_in_data(input_text) {
     var str_list = input_text.split("\n");
@@ -49,8 +52,8 @@ function read_in_data(input_text) {
     for (var i = 0; i < num_pgy1; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
-        console.log(data)
-        console.log(data[3])
+        console.log(data);
+        console.log(data[3]);
         // Parse the data
         name = data[0];
         id = parseInt(data[1]);
@@ -58,7 +61,7 @@ function read_in_data(input_text) {
         schedule = data[3].split(".");
 
         // Create a new trainee based on these information
-        new_trainee = new Trainee(name, role, id, num_block);
+        new_trainee = new Trainee(name, role, id, num_block, id_list);
         new_trainee.set_scheduled_blocks(schedule);
         trainees.push(new_trainee);
     }
@@ -74,7 +77,7 @@ function read_in_data(input_text) {
         schedule = data[3].split(".");
 
         // Create a new trainee based on these information
-        new_trainee = new Trainee(name, role, id, num_block);
+        new_trainee = new Trainee(name, role, id, num_block, id_list);
         new_trainee.set_scheduled_blocks(schedule);
         trainees.push(new_trainee);
     }
@@ -90,10 +93,11 @@ function read_in_data(input_text) {
         schedule = data[3].split(".");
 
         // Create a new trainee based on these information
-        new_trainee = new Trainee(name, role, id, num_block);
+        new_trainee = new Trainee(name, role, id, num_block, id_list);
         new_trainee.set_scheduled_blocks(schedule);
         trainees.push(new_trainee);
     }
+
 
     // Read in all the rotations
     line_num += 1
@@ -105,7 +109,7 @@ function read_in_data(input_text) {
     var new_rotation = null;
 
     for (var i = 0; i < num_rotations; i++) {
-        line_num += 1
+        line_num += 1;
         data = str_list[line_num].trim().split(",");
 
         // Parse the data
@@ -122,15 +126,16 @@ function read_in_data(input_text) {
         new_rotation = new Rotation(name, id, num_block = num_block);
         new_rotation.set_rotation_demands(min1, max1, min2, max2, min3, max3);
         rotations.push(new_rotation);
+        id_list.push(id);
     }
 
     // Skip 2 lines
-    line_num += 2
+    line_num += 2;
 
     // Read in requirements for each type of students
-    var amount = 0
+    var amount = 0;
     for (var i = 0; i < num_rotations; i++) {
-        line_num += 1
+        line_num += 1;
         data = str_list[line_num].trim().split(",");
 
         // Parse the data
@@ -142,7 +147,7 @@ function read_in_data(input_text) {
     }
 
     for (var i = 0; i < num_rotations; i++) {
-        line_num += 1
+        line_num += 1;
         data = str_list[line_num].trim().split(",");
 
         // Parse the data
@@ -154,7 +159,7 @@ function read_in_data(input_text) {
     }
 
     for (var i = 0; i < num_rotations; i++) {
-        line_num += 1
+        line_num += 1;
         data = str_list[line_num].trim().split(",");
 
         // Parse the data
@@ -184,93 +189,209 @@ console.log(trainees);
 console.log(rotations);
 
 var start_x = SQUARE_TOP_LEFT[0];
-var start_y = SQUARE_TOP_LEFT[1];
+var start_y = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
 
 var app = new PIXI.Application();
+app.renderer = PIXI.autoDetectRenderer(1920, 1080, {antialias: true});
 app.renderer.backgroundColor = 0xffffff;
 app.renderer.autoResize = true;
 document.body.appendChild(app.view);
 
-var squares = new PIXI.Container();
-squares.interactive = true;
+var stuffs = new PIXI.Container();
+stuffs.interactive = true;
+stuffs.width = 1080;
+stuffs.height = 1920;
 
 var msg = new PIXI.Text('Rotation id');
 msg.visible = false;
 // msg.position.set(num_block * (SQUARE_SIZE + SQUARE_DISTANCE), start_y);
-app.stage.addChild(squares);
+app.stage.addChild(stuffs);
 
 // create an array to store all the sprites
 var maggots = [];
 var trainee_count = 0;
 
-// Create fake trainees
-for (var k = 0; k < NUM_TRAINEE; k ++) {
-    var new_trainee = new Trainee(chance.name(), "PGY1", 3, num_block);
-    trainees.push(new_trainee);
+num_pgy1 = 0;
+num_pgy2 = 0;
+num_pgy3 = 0;
+for (var t of trainees) {
+    switch (t.role) {
+        case "PGY1": num_pgy1 += 1; break;
+        case "PGY2": num_pgy2 += 1; break;
+        case "PGY3": num_pgy3 += 1; break;
+    }
 }
 
+num_trainees = num_pgy1 + num_pgy2 + num_pgy3;
+
+// Create labels for role groups
+// PGY1
+var pgy1_label = new PIXI.Text("PGY1", {
+    fontSize: LABEL_ROLE_SIZE
+});
+pgy1_label.position.set(LABEL_ROLE_TOP_LEFT_X, LABEL_ROLE_TOP_LEFT_Y);
+var pgy1_top_left_y = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
+stuffs.addChild(pgy1_label);
+
+// PGY2
+var pgy2_label = new PIXI.Text("PGY2", {
+    fontSize: LABEL_ROLE_SIZE
+});
+
+pgy2_label.position.set(LABEL_ROLE_TOP_LEFT_X, pgy1_top_left_y + num_pgy1 * LABEL_HEIGHT + GROUP_DISTANCE);
+var pgy2_top_left_y = pgy1_top_left_y + num_pgy1 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
+
+stuffs.addChild(pgy2_label);
+
+// PGY3
+var pgy3_label = new PIXI.Text("PGY3", {
+    fontSize: LABEL_ROLE_SIZE
+});
+pgy3_label.position.set(LABEL_ROLE_TOP_LEFT_X, pgy2_top_left_y + num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE);
+var pgy3_top_left_y = pgy2_top_left_y + num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
+stuffs.addChild(pgy3_label);
+
+var pgy1_count = 0;
+var pgy2_count = 0;
+var pgy3_count = 0;
+// Create labels for all the trainees
 for (var t of trainees) {
     var trainee_label = new PIXI.Text(t.name, {
         fontSize: LABEL_SIZE
     });
-    trainee_label.position.set(LABEL_TOP_LEFT_X, LABEL_TOP_LEFT_Y + trainee_count * LABEL_HEIGHT);
-    squares.addChild(trainee_label);
-    trainee_count += 1;
+    var start_name_label_y = 0;
+    switch (t.role) {
+        case "PGY1": start_name_label_y = pgy1_top_left_y; pgy1_count += 1; trainee_count = pgy1_count; break;
+        case "PGY2": start_name_label_y = pgy2_top_left_y; pgy2_count += 1; trainee_count = pgy2_count; break;
+        case "PGY3": start_name_label_y = pgy3_top_left_y; pgy3_count += 1; trainee_count = pgy3_count; break;
+    }
+    trainee_label.position.set(LABEL_TOP_LEFT_X, start_name_label_y + trainee_count * LABEL_HEIGHT);
+    stuffs.addChild(trainee_label);
 }
 trainee_count = 0;
 
-for (var i = 0; i < NUM_TRAINEE; i ++) {
+// Drawing the stuffs
+pgy1_count = 0;
+pgy2_count = 0;
+pgy3_count = 0;
 
+// Dictionaries or the containers
+
+squares_dict = {}
+for (var i = 0; i < rotations.length; i++) {
+    var new_container = new PIXI.Container();
+    new_container.interactive = true;
+    new_container.width = 1080;
+    new_container.height = 1920;
+    squares_dict[rotations[i].id] = new_container;
+    app.stage.addChild(new_container);
+}
+
+// Add containers for empty and vacation
+var empty_container = new PIXI.Container();
+empty_container.interactive = true;
+empty_container.width = 1080;
+empty_container.height = 1920;
+squares_dict[-1] = empty_container
+
+var vac_container = new PIXI.Container();
+vac_container.interactive = true;
+vac_container.width = 1080;
+vac_container.height = 1920;
+squares_dict[-2] = empty_container
+
+// Draw out squares
+
+for (var t of trainees) {
     var rot_count = 0;
     var color;
+
+    var start_name_label_y = 0;
+    switch (t.role) {
+        case "PGY1": start_name_label_y = pgy1_top_left_y; pgy1_count += 1; trainee_count = pgy1_count; break;
+        case "PGY2": start_name_label_y = pgy2_top_left_y; pgy2_count += 1; trainee_count = pgy2_count; break;
+        case "PGY3": start_name_label_y = pgy3_top_left_y; pgy3_count += 1; trainee_count = pgy3_count; break;
+    }
+
     for (var j = 0; j < num_block; j++) {
-        id = trainees[i].scheduled_blocks[j];
-        console.log(trainees[i].scheduled_blocks);
-        console.log(id);
-        console.log(ROTATIONS_COLOR[id]);
+        id = t.scheduled_blocks[j];
+
+        t.base_reqs[id] -= 1;
+
         color = convert_to_color_code(ROTATIONS_COLOR[id]);
-        console.log(color);
 
-        var x1 = start_x + rot_count * UNIT_RANGE;
-        var y1 = start_y + trainee_count * UNIT_RANGE;
+        var x = start_x + rot_count * UNIT_RANGE;
+        var y = start_name_label_y + trainee_count * UNIT_RANGE;
 
-        var newSquare = new Square(x1, y1, color, '', i, app.renderer);
+        var newSquare = new Square(x, y, color, '', id, app.renderer);
         newSquare.draw();
 
         newSquare.sprite
-            .on('mousedown', onButtonPressed);
+            .on('mousedown', onSquarePressed);
 
-        squares.addChild(newSquare.sprite);
-
-        // Merge conflict here
+        console.log(squares_dict, id, squares_dict[id])
+        squares_dict[id.toString()].addChild(newSquare.sprite);
         rot_count += 1;
     }
-    trainee_count += 1;
 }
 
-function onButtonPressed() {
+// Draw out underdone bars on the right by using PIXI.Graphics
+var underdone_bars = {};
+var underdone_top_left = [300 + UNIT_RANGE * num_block + 20, 40 + LABEL_ROLE_HEIGHT * 2 + ROLE_LABEL_TRAINEE_DIST];
+
+for (var r of rotations) {
+    var new_graphic =  new PIXI.Graphics();
+    underdone_bars[r.id] = new_graphic;
+    app.stage.addChild(new_graphic);
+};
+
+var base_x = underdone_top_left[0];
+var base_y = underdone_top_left[1];
+for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
+    var t = trainees[trainee_i];
+    var underdone_arr = t.get_underdone_array();
+
+    for (var j = 0; j < id_list.length; j++) {
+        var rot_id = id_list[j]
+        var color = convert_to_color_code(ROTATIONS_COLOR[rot_id]);
+        var graphic = underdone_bars[rot_id];
+
+        // Calculate points
+        if (j == 0) {
+            var x1 = base_x;
+            var y1 = base_y + UNDERDONE_UNIT_RANGE * trainee_i;
+            var x2 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j];
+            var y2 = base_y + UNDERDONE_UNIT_RANGE * trainee_i + UNDERDONE_SIZE;
+        } else {
+            var x1 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j - 1];
+            var y1 = base_y + UNDERDONE_UNIT_RANGE * trainee_i;
+            var x2 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j];
+            var y2 = base_y + UNDERDONE_UNIT_RANGE * trainee_i + UNDERDONE_SIZE;
+        }
+
+        console.log(x1, y1, x2, y2);
+        // Draw the rectangle
+        graphic.beginFill(color);
+        graphic.moveTo(x1, y1);
+        graphic.lineTo(x1, y2);
+        graphic.lineTo(x2, y2);
+        graphic.lineTo(x2, y1);
+        graphic.lineTo(x1, y1);
+        graphic.endFill();
+    }
+};
+
+function onSquarePressed() {
     this.isOver = true;
-    this.visible = false;
+    //this.visible = false;
+    rot_id = this.rot_id;
+    for (key in squares_dict) squares_dict[key].alpha = SQUARE_BLUR;
+    squares_dict[rot_id].alpha = 1
 }
 
 function onButtonOut() {
     this.isOver = false;
-}
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '0x';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-function convert_to_color_code(color_tuple) {
-    var r = color_tuple[0];
-    var g = color_tuple[1];
-    var b = color_tuple[2];
-    return "0x" + r.toString(16) + g.toString(16) + b.toString(16);
+    this.visible = true;
 }
 /**
  * All animation lives here
@@ -278,3 +399,4 @@ function convert_to_color_code(color_tuple) {
 function animate() {
 
 }
+

@@ -14,11 +14,12 @@
  * @param num_block
  * @constructor
  */
-function Trainee(name, role, id, num_block) {
+function Trainee(name, role, id, num_block, id_list) {
     this.name = name;
     this.role = role;
     this.id = id;
     this.num_block = num_block;
+    this.id_list = id_list;
     this.scheduled_blocks = [];
 
     this.base_reqs = {};
@@ -32,6 +33,25 @@ Trainee.prototype.set_requirements = function(reqs) {
 
 Trainee.prototype.set_scheduled_blocks = function(scheduled_blocks) {
     this.scheduled_blocks = scheduled_blocks;
+}
+
+Trainee.prototype.get_underdone_array = function() {
+    var underdone_arr = [];
+
+    // Add the remain requirements for the first rotation
+    var num_req = this.base_reqs[this.id_list[0]];
+    if (num_req < 0) underdone_arr.push(0);
+    else underdone_arr.push(num_req);
+
+    // Add the remaining require for the rest of the rotation
+    for (var i = 1; i < this.id_list.length; i++) {
+        num_req = this.base_reqs[this.id_list[i]];
+        if (num_req < 0) underdone_arr.push(underdone_arr[i-1]);
+        else underdone_arr.push(underdone_arr[i-1] + num_req);
+    }
+
+    // Return the underdone_arr
+    return underdone_arr;
 }
 
 /**
@@ -86,25 +106,23 @@ Rotation.prototype.set_rotation_demands = function(min1, max1, min2, max2, min3,
 //////////////////
 // GRAPHIC CLASSES
 //////////////////
-function Square(x, y, color, rot_name, id, renderer) {
+function Square(x, y, color, rot_name, id, renderer, rotations_texture = ROTATIONS_TEXTURE) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.rot_name = rot_name;
         this.id = id;
         this.renderer = renderer;
+
         this.sprite = new PIXI.Sprite();
         this.sprite.x = this.x;
         this.sprite.y = this.y;
         this.sprite.interactive = true;
+        this.sprite.rot_id = id;
 }
 
 Square.prototype.draw = function() {
-    let texture = new PIXI.Graphics();
-    texture.beginFill(this.color);
-    texture.drawRect(0, 0, SQUARE_SIZE, SQUARE_SIZE);
-    texture.endFill();
-    this.sprite.texture = this.renderer.generateTexture(texture);
+    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_TEXTURE[this.id]);
 };
 
 
