@@ -302,6 +302,7 @@ squares_dict[-2] = empty_container
 
 // Draw out squares
 
+
 for (var t of trainees) {
     var rot_count = 0;
     var color;
@@ -337,7 +338,7 @@ for (var t of trainees) {
 
 // Draw out underdone bars on the right by using PIXI.Graphics
 var underdone_bars = {};
-var underdone_top_left = [300 + UNIT_RANGE * num_block + 20, 40 + LABEL_ROLE_HEIGHT * 2 + ROLE_LABEL_TRAINEE_DIST];
+var underdone_top_left_x = 300 + UNIT_RANGE * num_block + 40;
 
 for (var r of rotations) {
     var new_graphic =  new PIXI.Graphics();
@@ -345,11 +346,20 @@ for (var r of rotations) {
     app.stage.addChild(new_graphic);
 };
 
-var base_x = underdone_top_left[0];
-var base_y = underdone_top_left[1];
+pgy1_count = 0;
+pgy2_count = 0;
+pgy3_count = 0;
+
+var base_x = underdone_top_left_x;
 for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
     var t = trainees[trainee_i];
     var underdone_arr = t.get_underdone_array();
+
+    switch (t.role) {
+        case "PGY1": base_y = pgy1_top_left_y; pgy1_count += 1; trainee_count = pgy1_count; break;
+        case "PGY2": base_y = pgy2_top_left_y; pgy2_count += 1; trainee_count = pgy2_count; break;
+        case "PGY3": base_y = pgy3_top_left_y; pgy3_count += 1; trainee_count = pgy3_count; break;
+    }
 
     for (var j = 0; j < id_list.length; j++) {
         var rot_id = id_list[j]
@@ -358,15 +368,15 @@ for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
 
         // Calculate points
         if (j == 0) {
-            var x1 = base_x;
-            var y1 = base_y + UNDERDONE_UNIT_RANGE * trainee_i;
+            var x1 = base_x + UNDERDONE_UNIT_RANGE;
+            var y1 = base_y + UNDERDONE_UNIT_RANGE * trainee_count;
             var x2 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j];
-            var y2 = base_y + UNDERDONE_UNIT_RANGE * trainee_i + UNDERDONE_SIZE;
+            var y2 = base_y + UNDERDONE_UNIT_RANGE * trainee_count + UNDERDONE_SIZE;
         } else {
             var x1 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j - 1];
-            var y1 = base_y + UNDERDONE_UNIT_RANGE * trainee_i;
+            var y1 = base_y + UNDERDONE_UNIT_RANGE * trainee_count;
             var x2 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j];
-            var y2 = base_y + UNDERDONE_UNIT_RANGE * trainee_i + UNDERDONE_SIZE;
+            var y2 = base_y + UNDERDONE_UNIT_RANGE * trainee_count + UNDERDONE_SIZE;
         }
 
         console.log(x1, y1, x2, y2);
