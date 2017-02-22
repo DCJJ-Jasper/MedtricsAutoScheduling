@@ -183,3 +183,132 @@ var SAMPLE_TEXT = "13,3\n" +
   "5,Inpatient Wards,0\n" +
   "6,Medical Intensive Car Unit,0\n" +
   "7,Neurology,0\n"
+
+var FAKE_TEXT = "Program,Psychiatry,13\n" +
+    "USER_ID,FIRST_NAME,LAST_NAME\n" +
+    "Num_PGY1,40\n" +
+    "1,Santhosh,Cherian\n" +
+    "2,Ron,Rivera\n" +
+    "3,Todd,Wilkinsonv\n" +
+    "4,Mary,Renner\n" +
+    "5,Randy,Moss\n" +
+    "6,Chris,Tokodi\n" +
+    "7,Grant,Fuhr\n" +
+    "8,Fred,Marston\n" +
+    "9,Dodie,Woodman\n" +
+    "10,Edie,Ballin\n" +
+    "11,Christine,Weible\n" +
+    "12,Corina,Colwell\n" +
+    "13,Corrin,Ingersoll\n" +
+    "14,Soledad,Levey\n" +
+    "15,Ron,Dhillon\n" +
+    "16,Eileen,Telford\n" +
+    "17,In,Trimpe\n" +
+    "18,Larisa,Owen\n" +
+    "19,Gaynell,Vanleuven\n" +
+    "20,Milagros,Tanner\n" +
+    "21,Mila,Span\n" +
+    "22,Patrina,Pettaway\n" +
+    "23,Takako,Jarrells\n" +
+    "24,Jenee,Lach\n" +
+    "25,Santina,Gwynn\n" +
+    "26,Alisia,Durbin\n" +
+    "27,Carolyne,Backes\n" +
+    "28,Reyes,Turberville\n" +
+    "29,Mignon,Jesus\n" +
+    "30,Carina,Milbourn\n" +
+    "31,Erick,Mines\n" +
+    "32,Timothy,Boyes\n" +
+    "33,Dorothea,Steckler\n" +
+    "34,Tony,Rizzio\n" +
+    "35,Roxann,Schwanbeck\n" +
+    "36,Fran,Schifo\n" +
+    "37,Tawna,Roehrs\n" +
+    "38,Evelynn,Sharp\n" +
+    "39,Tawana,Vonbank\n" +
+    "40,Tung,Phan\n" +
+    "Num_PGY2,0\n" +
+    "Num_PGY3,0\n" +
+    "---\n" +
+    "Num_rotations,8\n" +
+    "ROTATION_ID, ROTATION,WORK_WITH_ALLOWED_VACATION,MINIMUM_BLOCK_LENGTH,MAX_BLOCKS_PER_YEAR,TYPE\n" +
+    "0,Ambulatory Medicine Blocks,Yes,1,6,Core\n" +
+    "1,Backup Staffing / Urgent Visit,No,1,6,Core\n" +
+    "2,Coronary Care Unit,Yes,1,6,Core\n" +
+    "3,Elective,No,0.25,1,Core\n" +
+    "4,Emergency Medicine,No,1,6,Core\n" +
+    "5,Inpatient Wards,No,1,6,Core\n" +
+    "6,Medical Intensive Care Unit,No,1,6,Core\n" +
+    "7,Neurology,Yes,1,6,Core\n" +
+    "---\n" +
+    "Workforce_requirements,8\n" +
+    "ROTATION_ID,ROTATION,MIN1,MAX1,MIN2,MAX2,MIN3,MAX3\n" +
+    "0,Ambulatory Medicine Blocks,1,5,0,0,0,0\n" +
+    "1,Backup Staffing / Urgent Visit,1,5,0,0,0,0\n" +
+    "2,Coronary Care Unit,1,7,0,0,0,0\n" +
+    "3,Elective,2,7,0,0,0,0\n" +
+    "4,Emergency Medicine,1,5,0,0,0,0\n" +
+    "5,Inpatient Wards,3,7,0,0,0,0\n" +
+    "6,Medical Intensive Care Unit,1,5,0,0,0,0\n" +
+    "7,Neurology,1,5,0,0,0,0\n" +
+    "---\n" +
+    "ROTATION,MIN_BLOCKS_REQUIRED\n" +
+    "PGY1_REQUIREMENT,8\n" +
+    "Ambulatory Medicine Blocks,1.25\n" +
+    "Backup Staffing / Urgent Visit,1\n" +
+    "Coronary Care Unit,2\n" +
+    "Elective,2\n" +
+    "Emergency Medicine,1\n" +
+    "Inpatient Wards,2\n" +
+    "Medical Intensive Care Unit,1.5\n" +
+    "Neurology,4\n" +
+    "PGY2_REQUIREMENT,8\n" +
+    "Ambulatory Medicine Blocks,0\n" +
+    "Backup Staffing / Urgent Visit,0\n" +
+    "Coronary Care Unit,0\n" +
+    "Elective,0\n" +
+    "Emergency Medicine,0\n" +
+    "Inpatient Wards,0\n" +
+    'Medical Intensive Care Unit,0\n" +
+    'Neurology,0\n" +
+    'PGY3_REQUIREMENT,8\n" +
+    'Ambulatory Medicine Blocks,0\n" +
+    'Backup Staffing / Urgent Visit,0\n" +
+    'Coronary Care Unit,0\n" +
+    'Elective,0\n" +
+    "Emergency Medicine,0\n" +
+    "Inpatient Wards,0\n" +
+    "Medical Intensive Care Unit,0\n" +
+    "Neurology,0\n" +
+    "---\n" +
+    "ROTATION,LIMITATION\n" +
+    "PGY1_LIMITATION,8\n" +
+    "Ambulatory Medicine Blocks,10\n" +
+    "Backup Staffing / Urgent Visit,10\n" +
+    "Coronary Care Unit,10\n" +
+    "Elective,10\n" +
+    "Emergency Medicine,10\n" +
+    "Inpatient Wards,10\n" +
+    "Medical Intensive Care Unit,10\n" +
+    "Neurology,10\n" +
+    "PGY2_LIMITATION,8\n" +
+    "Ambulatory Medicine Blocks,10\n" +
+    "Backup Staffing / Urgent Visit,10\n" +
+    "Coronary Care Unit,10\n" +
+    "Elective,10\n" +
+    "Emergency Medicine,10\n" +
+    "Inpatient Wards,10\n" +
+    "Medical Intensive Care Unit,10\n" +
+    "Neurology,10\n" +
+    "PGY3_LIMITATION,8\n" +
+    "Ambulatory Medicine Blocks,10\n" +
+    "Backup Staffing / Urgent Visit,10\n" +
+    "Coronary Care Unit,10\n" +
+    "Elective,10\n" +
+    "Emergency Medicine,10\n" +
+    "Inpatient Wards,10\n" +
+    "Medical Intensive Care Unit,10\n" +
+    "Neurology,10\n" +
+    "---\n" +
+    "Prefilled,0\n" +
+    "USERID,BLOCK,ROTATION,WHERE_IN_BLOCK_RANGE"
