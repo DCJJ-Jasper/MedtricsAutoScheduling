@@ -38,6 +38,7 @@ var GROUP_DISTANCE = 40; // Distance between two role groups
 //////////////////
 
 var SQUARE_BLUR = 0.2;
+var OTHER_ROLE_BLUR = 0.08;
 
 var ROTATIONS_COLOR = {
     '-2': [50.0, 50.0, 50.0],
@@ -89,7 +90,7 @@ for (var key in ROTATIONS_COLOR) {
 //////////////////////
 
 var SAMPLE_TEXT = "13,3\n" +
-  "40,0,0\n" +
+  "28,8,4\n" +
   "Student, Role, Schedule\n" +
   "In Weatherly,0,PGY1,3.3.5.5.6.1.2.7.4.0.-1.2.-1\n" +
   "Bong Dubre,1,PGY1,3.3.5.5.2.1.6.-1.0.7.2.4.-1\n" +

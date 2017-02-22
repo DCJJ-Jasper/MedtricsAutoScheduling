@@ -106,19 +106,20 @@ Rotation.prototype.set_rotation_demands = function(min1, max1, min2, max2, min3,
 //////////////////
 // GRAPHIC CLASSES
 //////////////////
-function Square(x, y, color, rot_name, id, renderer, rotations_texture = ROTATIONS_TEXTURE) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
-        this.rot_name = rot_name;
-        this.id = id;
-        this.renderer = renderer;
+function Square(x, y, color, rot_name, id, role, renderer, rotations_texture = ROTATIONS_TEXTURE) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.rot_name = rot_name;
+    this.id = id;
+    this.renderer = renderer;
 
-        this.sprite = new PIXI.Sprite();
-        this.sprite.x = this.x;
-        this.sprite.y = this.y;
-        this.sprite.interactive = true;
-        this.sprite.rot_id = id;
+    this.sprite = new PIXI.Sprite();
+    this.sprite.x = this.x;
+    this.sprite.y = this.y;
+    this.sprite.interactive = true;
+    this.sprite.rot_id = id;
+    this.sprite.role = role;
 }
 
 Square.prototype.draw = function() {
