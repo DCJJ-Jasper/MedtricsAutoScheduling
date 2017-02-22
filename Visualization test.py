@@ -10,7 +10,6 @@ def push_trainees():
 
 @app.route('/requestToSchedule', methods = ['GET'])
 def request_schedule():
-    print("SHIT")
     return "SHIT"
 
 @app.route('/')

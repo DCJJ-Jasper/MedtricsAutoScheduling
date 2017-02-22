@@ -51,6 +51,8 @@ var chart_bars;
 var squares_dict = {};
 var underdone_bars = {};
 
+var schedule_button;
+
 ///////////////////
 // OBJECTS CREATION
 ///////////////////
@@ -94,6 +96,37 @@ rot_squares_list = [];
 
 // Hold all underdone bars
 underdone_list = [];
+
+// Schedule button
+schedule_button = new PIXI.Container();
+var temp_graphic = new PIXI.Graphics();
+temp_graphic.beginFill(BUTTON_COLOR);
+
+var x1 = BUTTON_TOP_LEFT_X;
+var y1 = BUTTON_TOP_LEFT_Y;
+var x2 = BUTTON_TOP_LEFT_X + BUTTON_WIDTH;
+var y2 = BUTTON_TOP_LEFT_Y + BUTTON_HEIGHT;
+
+temp_graphic.moveTo(x1, y1);
+temp_graphic.lineTo(x1, y2);
+temp_graphic.lineTo(x2, y2);
+temp_graphic.lineTo(x2, y1);
+temp_graphic.lineTo(x1, y1);
+temp_graphic.endFill();
+
+schedule_button.addChild(temp_graphic);
+
+var button_title = new PIXI.Text("Schedule", {
+    fontSize: BUTTON_TEXT_SIZE,
+});
+button_title.x = BUTTON_TOP_LEFT_X + BUTTON_PADDING;
+button_title.y = BUTTON_TOP_LEFT_Y + BUTTON_PADDING;
+button_title.style.fill = "0xFFFFFF";
+
+schedule_button.addChild(button_title);
+app.stage.addChild(schedule_button);
+
+schedule_button.on('mousedown', onSchedulePressed);
 
 /**
  * Call pushTrainees in the python server, which sends a bunch of text for processing
@@ -455,6 +488,10 @@ function onSquarePressed() {
 function onButtonOut() {
     this.isOver = false;
     this.visible = true;
+}
+
+function onSchedulePressed() {
+
 }
 
 /**
