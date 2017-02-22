@@ -126,7 +126,7 @@ button_title.style.fill = "0xFFFFFF";
 schedule_button.addChild(button_title);
 app.stage.addChild(schedule_button);
 
-schedule_button.on('mousedown', onSchedulePressed);
+// schedule_button.on('mousedown', onSchedulePressed);
 
 /**
  * Call pushTrainees in the python server, which sends a bunch of text for processing
@@ -404,9 +404,9 @@ $.getJSON('/pushTrainees', function (data) {
     }
 });
 
-$.getJSON('/requestToSchedule', function (data) {
-    console.log(data)
-});
+// $.getJSON('/requestToSchedule', function (data) {
+//     console.log(data)
+// });
 
 /////////////////////
 // INTERACTION HELPER
@@ -467,7 +467,7 @@ function onSquarePressed() {
             base_y = chart_pgy3_top_left_y;
             break;
     }
-    chart_bars.clear()
+    chart_bars.clear();
     chart_bars.beginFill(color);
 
     for (var i = 0; i < num_block; i++) {
@@ -490,9 +490,6 @@ function onButtonOut() {
     this.visible = true;
 }
 
-function onSchedulePressed() {
-
-}
 
 /**
  * All animation lives here
@@ -500,3 +497,16 @@ function onSchedulePressed() {
 function animate() {
 
 }
+
+$('#test_btn').click(function onSchedulePressed() {
+        $.ajax({
+            type: "POST",
+            url: "/requestToSchedule",
+            data: JSON.stringify({title: 'hello'}),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function () {
+                alert('JSON sent');
+            }
+        })
+});
