@@ -269,13 +269,13 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "Elective,0\n" +
     "Emergency Medicine,0\n" +
     "Inpatient Wards,0\n" +
-    'Medical Intensive Care Unit,0\n" +
-    'Neurology,0\n" +
-    'PGY3_REQUIREMENT,8\n" +
-    'Ambulatory Medicine Blocks,0\n" +
-    'Backup Staffing / Urgent Visit,0\n" +
-    'Coronary Care Unit,0\n" +
-    'Elective,0\n" +
+    "Medical Intensive Care Unit,0\n" +
+    "Neurology,0\n" +
+    "PGY3_REQUIREMENT,8\n" +
+    "Ambulatory Medicine Blocks,0\n" +
+    "Backup Staffing / Urgent Visit,0\n" +
+    "Coronary Care Unit,0\n" +
+    "Elective,0\n" +
     "Emergency Medicine,0\n" +
     "Inpatient Wards,0\n" +
     "Medical Intensive Care Unit,0\n" +
