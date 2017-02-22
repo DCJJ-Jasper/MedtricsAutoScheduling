@@ -132,4 +132,5 @@ function read_in_data(input_text) {
     for (var i = num_pgy1 + num_pgy2; i < num_trainees ; i++) {
         trainees[i].set_requirements(pgy3_reqs)
     }
+    console.log(pgy1_reqs, pgy2_reqs, pgy3_reqs)
 }

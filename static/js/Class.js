@@ -103,6 +103,25 @@ Rotation.prototype.set_rotation_demands = function(min1, max1, min2, max2, min3,
     this.processed_max3 = [max3] * num_block;
 };
 
+function Schedule(trainees, rotations, num_block) {
+    this.trainees = trainees;
+    this.rotations = rotations;
+    this.num_block = num_block;
+}
+
+Schedule.prototype.get_block_info_role_id = function(role, id) {
+    var info_arr = Array(num_block).fill(0);
+    var id_str = id.toString();
+    for (t of this.trainees) {
+        if (t.role == role) {
+            for (var i = 0; i < num_block; i++) {
+                if (t.scheduled_blocks[i] == id_str) info_arr[i] += 1;
+            }
+        }
+    }
+    return info_arr;
+}
+
 //////////////////
 // GRAPHIC CLASSES
 //////////////////
