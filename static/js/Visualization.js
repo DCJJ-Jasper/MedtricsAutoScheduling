@@ -502,7 +502,7 @@ $('#test_btn').click(function onSchedulePressed() {
         $.ajax({
             type: "POST",
             url: "/requestToSchedule",
-            data: JSON.stringify({title: 'hello'}),
+            data: JSON.stringify({title: FAKE_TEXT}),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function () {

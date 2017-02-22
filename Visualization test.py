@@ -12,7 +12,7 @@ def push_trainees():
 def request_schedule():
     if request.method == 'POST':
         data = json.dumps(request.json)
-        print(request.json)
+        print(data)
         return data
     else:
         return 'SHIT'
