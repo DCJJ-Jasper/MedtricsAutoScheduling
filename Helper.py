@@ -3,6 +3,7 @@
 # ---------------------------------
 
 import random
+import math
 import operator
 import copy
 import pyglet
@@ -27,7 +28,7 @@ def search_trainee(n, role, rot_name, trainees, i):
     trainee_list = []
 
     # TODO: Randomize the trainee list
-    #random.shuffle(trainees)
+    random.shuffle(trainees)
 
     # Search for appropriate trainees
     for trainee in trainees:
@@ -472,3 +473,4 @@ def draw_animated_bars(bars, steps):
 def draw_legends(squares):
     for square in squares:
         square.draw()
+
