@@ -3,6 +3,7 @@
 # ---------------------------------
 
 import random
+import math
 import operator
 import copy
 import pyglet
@@ -472,3 +473,4 @@ def draw_animated_bars(bars, steps):
 def draw_legends(squares):
     for square in squares:
         square.draw()
+
