@@ -11,7 +11,7 @@ def push_trainees():
 @app.route('/requestToSchedule', methods = ['POST'])
 def request_schedule():
     if request.method == 'POST':
-        data = json.dumps(request.json)
+        data = request.json['title']
         print(data)
         return data
     else:

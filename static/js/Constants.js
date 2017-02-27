@@ -30,7 +30,7 @@ var LABEL_SIZE = 14;
 var LABEL_HEIGHT = 18;
 var LABEL_ROLE_SIZE = 26;
 var LABEL_ROLE_HEIGHT = 26; // Role name label height
-var ROLE_LABEL_TRAINEE_DIST = 5; // Distance between role name and trainees' names
+var ROLE_LABEL_TRAINEE_DIST = 5; // Distance between role name and trainees" names
 
 var SQUARE_TOP_LEFT = [300, 40 + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST];
 var SQUARE_SIZE = 14;
@@ -58,34 +58,34 @@ var SQUARE_BLUR = 0.2;
 var OTHER_ROLE_BLUR = 0.08;
 
 var ROTATIONS_COLOR = {
-    '-2': [50.0, 50.0, 50.0],
-    '-1': [230.0, 230.0, 230.0],
-    '0': [117.0, 215.0, 23.0],
-    '1': [63.0, 31.0, 166.0],
-    '2': [225.0, 42.0, 96.0],
-    '3': [215.0, 105.0, 38.0],
-    '4': [225.0, 56.0, 39.0],
-    '5': [215.0, 82.0, 154.0],
-    '6': [40.0, 123.0, 215.0],
-    '7': [222.0, 200.0, 49.0],
-    '8': [82.0, 50.0, 225.0],
-    '9': [50.0, 225.0, 136],
-    '10': [195.0, 184.0, 243.0],
-    '11': [139.0, 143.0, 203.0],
-    '12': [66.0, 31.0, 215.0],
-    '13': [164.0, 47.0, 189.0],
-    '14': [211.0, 246.0, 111.0],
-    '15': [177.0, 130.0, 167.0],
-    '16': [102.0, 252.0, 171.0],
-    '17': [251.0, 253.0, 238.0],
-    '18': [214.0, 170.0, 210.0],
-    '19': [24.0, 192.0, 229.0],
-    '20': [107.0, 113.0, 13.0],
-    '21': [247.0, 121.0, 206.0],
-    '22': [209.0, 108.0, 117.0],
-    '23': [139.0, 53.0, 211.0],
-    '24': [95.0, 203.0, 17.0],
-    '25': [132.0, 231.0, 82.0]
+    "-2": [50.0, 50.0, 50.0],
+    "-1": [230.0, 230.0, 230.0],
+    "0": [117.0, 215.0, 23.0],
+    "1": [63.0, 31.0, 166.0],
+    "2": [225.0, 42.0, 96.0],
+    "3": [215.0, 105.0, 38.0],
+    "4": [225.0, 56.0, 39.0],
+    "5": [215.0, 82.0, 154.0],
+    "6": [40.0, 123.0, 215.0],
+    "7": [222.0, 200.0, 49.0],
+    "8": [82.0, 50.0, 225.0],
+    "9": [50.0, 225.0, 136],
+    "10": [195.0, 184.0, 243.0],
+    "11": [139.0, 143.0, 203.0],
+    "12": [66.0, 31.0, 215.0],
+    "13": [164.0, 47.0, 189.0],
+    "14": [211.0, 246.0, 111.0],
+    "15": [177.0, 130.0, 167.0],
+    "16": [102.0, 252.0, 171.0],
+    "17": [251.0, 253.0, 238.0],
+    "18": [214.0, 170.0, 210.0],
+    "19": [24.0, 192.0, 229.0],
+    "20": [107.0, 113.0, 13.0],
+    "21": [247.0, 121.0, 206.0],
+    "22": [209.0, 108.0, 117.0],
+    "23": [139.0, 53.0, 211.0],
+    "24": [95.0, 203.0, 17.0],
+    "25": [132.0, 231.0, 82.0]
 };
 
 // Texture dictionary
@@ -269,13 +269,13 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "Elective,0\n" +
     "Emergency Medicine,0\n" +
     "Inpatient Wards,0\n" +
-    'Medical Intensive Care Unit,0\n" +
-    'Neurology,0\n" +
-    'PGY3_REQUIREMENT,8\n" +
-    'Ambulatory Medicine Blocks,0\n" +
-    'Backup Staffing / Urgent Visit,0\n" +
-    'Coronary Care Unit,0\n" +
-    'Elective,0\n" +
+    "Medical Intensive Care Unit,0\n" +
+    "Neurology,0\n" +
+    "PGY3_REQUIREMENT,8\n" +
+    "Ambulatory Medicine Blocks,0\n" +
+    "Backup Staffing / Urgent Visit,0\n" +
+    "Coronary Care Unit,0\n" +
+    "Elective,0\n" +
     "Emergency Medicine,0\n" +
     "Inpatient Wards,0\n" +
     "Medical Intensive Care Unit,0\n" +
@@ -311,4 +311,4 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "Neurology,10\n" +
     "---\n" +
     "Prefilled,0\n" +
-    "USERID,BLOCK,ROTATION,WHERE_IN_BLOCK_RANGE"
+    "USERID,BLOCK,ROTATION,WHERE_IN_BLOCK_RANGE";

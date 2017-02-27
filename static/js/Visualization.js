@@ -504,9 +504,6 @@ $('#test_btn').click(function onSchedulePressed() {
             url: "/requestToSchedule",
             data: JSON.stringify({title: FAKE_TEXT}),
             contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function () {
-                alert('JSON sent');
-            }
+            dataType: "json"
         })
 });
