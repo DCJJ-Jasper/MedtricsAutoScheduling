@@ -232,35 +232,35 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "---\n" +
     "Num_rotations,8\n" +
     "ROTATION_ID, ROTATION,WORK_WITH_ALLOWED_VACATION,MINIMUM_BLOCK_LENGTH,MAX_BLOCKS_PER_YEAR,TYPE\n" +
-    "0,Ambulatory Medicine Blocks,Yes,1,6,Core\n" +
-    "1,Backup Staffing / Urgent Visit,No,1,6,Core\n" +
-    "2,Coronary Care Unit,Yes,1,6,Core\n" +
-    "3,Elective,No,0.25,1,Core\n" +
-    "4,Emergency Medicine,No,1,6,Core\n" +
+    "0,Ambulatory Medicine Blocks,Yes,0.25,6,Core\n" +
+    "1,Backup Staffing / Urgent Visit,No,0.25,6,Core\n" +
+    "2,Coronary Care Unit,Yes,0.5,6,Core\n" +
+    "3,Elective,No,1,6,Core\n" +
+    "4,Emergency Medicine,No,0.25,6,Core\n" +
     "5,Inpatient Wards,No,1,6,Core\n" +
     "6,Medical Intensive Care Unit,No,1,6,Core\n" +
     "7,Neurology,Yes,1,6,Core\n" +
     "---\n" +
     "Workforce_requirements,8\n" +
     "ROTATION_ID,ROTATION,MIN1,MAX1,MIN2,MAX2,MIN3,MAX3\n" +
-    "0,Ambulatory Medicine Blocks,1,5,0,0,0,0\n" +
-    "1,Backup Staffing / Urgent Visit,1,5,0,0,0,0\n" +
-    "2,Coronary Care Unit,1,7,0,0,0,0\n" +
-    "3,Elective,2,7,0,0,0,0\n" +
-    "4,Emergency Medicine,1,5,0,0,0,0\n" +
-    "5,Inpatient Wards,3,7,0,0,0,0\n" +
+    "0,Ambulatory Medicine Blocks,1,8,0,0,0,0\n" +
+    "1,Backup Staffing / Urgent Visit,1,8,0,0,0,0\n" +
+    "2,Coronary Care Unit,3,8,0,0,0,0\n" +
+    "3,Elective,2,8,0,0,0,0\n" +
+    "4,Emergency Medicine,1,8,0,0,0,0\n" +
+    "5,Inpatient Wards,3,8,0,0,0,0\n" +
     "6,Medical Intensive Care Unit,1,6,0,0,0,0\n" +
-    "7,Neurology,1,5,0,0,0,0\n" +
+    "7,Neurology,1,8,0,0,0,0\n" +
     "---\n" +
     "ROTATION,MIN_BLOCKS_REQUIRED\n" +
     "PGY1_REQUIREMENT,8\n" +
     "Ambulatory Medicine Blocks,1.25\n" +
     "Backup Staffing / Urgent Visit,1\n" +
-    "Coronary Care Unit,2\n" +
+    "Coronary Care Unit,2.5\n" +
     "Elective,2\n" +
-    "Emergency Medicine,1\n" +
-    "Inpatient Wards,2\n" +
-    "Medical Intensive Care Unit,1.5\n" +
+    "Emergency Medicine,1.75\n" +
+    "Inpatient Wards,1\n" +
+    "Medical Intensive Care Unit,1\n" +
     "Neurology,1\n" +
     "PGY2_REQUIREMENT,8\n" +
     "Ambulatory Medicine Blocks,0\n" +
