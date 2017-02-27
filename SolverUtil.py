@@ -39,6 +39,9 @@ def pruneSchedule(currentSchedule, seed, rotations):
     for rot in rotations:
         min_length_rotation_local.append((rot.name, rot.min_block_length))
 
+    print(rotations_list_local)
+    print(min_length_rotation_local)
+
     # Deep copy the input schedule
     currentSchedule = copy.deepcopy(currentSchedule)
     # Transpose the schedule to be block based

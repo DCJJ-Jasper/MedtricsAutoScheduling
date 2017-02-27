@@ -135,7 +135,7 @@ def request_schedule():
                 # Create rotation
                 new_rotation = Class.Rotation(rot_name, rot_id,
                                               vacation_allowed,
-                                              max_block_per_year,
+                                              min_block_length,
                                               type,
                                               num_block=num_block)
 
@@ -365,70 +365,75 @@ def request_schedule():
         # CREATE SCHEDULE WITH AVAILABLE INFORMATION FOR GREEDY ALGORITHM
         # ---------------------------------------------------------------
 
-        # schedule = Class.Schedule(trainees, rotations, num_block=num_block, rotations_id=rotations_id)
-        # #schedule.greedy_step0_4()
-        # schedule.greedy_step1_4()
-        # schedule.greedy_step2_4()
-        # schedule.greedy_step3_4()
-        # schedule.greedy_step4_4()
-        # schedule.greedy_step5_4()
-        # schedule.greedy_step6_4()
-        # schedule.greedy_step7_4()
-        # schedule.greedy_step8_4()
-        # schedule.sort_trainees()
+        schedule = Class.Schedule(trainees, rotations, num_block=num_block, rotations_id=rotations_id)
+        #schedule.greedy_step0_4()
+        schedule.greedy_step1_4()
+        schedule.greedy_step2_4()
+        schedule.greedy_step3_4()
+        schedule.greedy_step4_4()
+        schedule.greedy_step5_4()
+        schedule.greedy_step6_4()
+        schedule.greedy_step7_4()
+        schedule.greedy_step8_4()
+        schedule.sort_trainees()
 
         # ---------------------------
         # CREATE SCHEDULE FOR SOLVERS
         # ---------------------------
 
-        # Create blank prefilled schedule
-        def create_blank_schedule(num_trainees, num_block):
-            return [[-1 for i in range(num_block)] for j in range(num_trainees)]
-
-        prefilled_schedule = create_blank_schedule(num_trainees, num_block)
-
-        pgy1_req_full = {}
-        pgy1_req_half = {}
-        pgy1_req_quarter = {}
-        for k in pgy1_req.keys():
-            full_half_quarter = SolverUtil.generateFullHalfQuarter(pgy1_req[k])
-            pgy1_req_full[k] = full_half_quarter[0]
-            pgy1_req_half[k] = full_half_quarter[1]
-            pgy1_req_quarter[k] = full_half_quarter[2]
-
-        pgy1_lim_full = {}
-        pgy1_lim_half = {}
-        pgy1_lim_quarter = {}
-        for k in pgy1_lim.keys():
-            full_half_quarter = SolverUtil.generateFullHalfQuarter(pgy1_lim[k])
-            pgy1_lim_full[k] = full_half_quarter[0]
-            pgy1_lim_half[k] = full_half_quarter[1]
-            pgy1_lim_quarter[k] = full_half_quarter[2]
-
-        seed = 100
-
-        resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block, num_pgy1, rotations,
-                                    pgy1_req_full, pgy1_lim_full)
-
-        # Double to halves
-        prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed, rotations)
-        resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block * 2, num_pgy1, rotations,
-                                               pgy1_req_half, pgy1_lim_half)
-
-        # Double again to quarters
-        prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed, rotations)
-        resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block * 4, num_pgy1, rotations,
-                                               pgy1_req_quarter, pgy1_lim_quarter)
-
-        print(resultArray)
-
-        schedule = Class.Schedule(trainees, rotations)
-
-        # Fill in using idiomatic way
-        for trainee_num in range(num_pgy1):
-            for block_num in range(num_block * 4):
-                # print rotations_dict[resultArray[trainee_num][block_num]]
-                schedule.fill_in(trainees[trainee_num], block_num, rotations_dict[resultArray[trainee_num][block_num]])
+        # # Create blank prefilled schedule
+        # def create_blank_schedule(num_trainees, num_block):
+        #     return [[-1 for i in range(num_block)] for j in range(num_trainees)]
+        #
+        # prefilled_schedule = create_blank_schedule(num_trainees, num_block)
+        #
+        # print(pgy1_req)
+        #
+        # pgy1_req_full = {}
+        # pgy1_req_half = {}
+        # pgy1_req_quarter = {}
+        # for k in pgy1_req.keys():
+        #     full_half_quarter = SolverUtil.generateFullHalfQuarter(pgy1_req[k])
+        #     pgy1_req_full[k] = full_half_quarter[0]
+        #     pgy1_req_half[k] = full_half_quarter[1]
+        #     pgy1_req_quarter[k] = full_half_quarter[2]
+        #
+        # pgy1_lim_full = {}
+        # pgy1_lim_half = {}
+        # pgy1_lim_quarter = {}
+        # for k in pgy1_lim.keys():
+        #     full_half_quarter = SolverUtil.generateFullHalfQuarter(pgy1_lim[k])
+        #     pgy1_lim_full[k] = full_half_quarter[0]
+        #     pgy1_lim_half[k] = full_half_quarter[1]
+        #     pgy1_lim_quarter[k] = full_half_quarter[2]
+        #
+        # seed = 100
+        #
+        # resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block // 4, num_pgy1, rotations,
+        #                             pgy1_req_full, pgy1_lim_full)
+        #
+        # # Double to halves
+        # prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed, rotations)
+        # resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block // 2, num_pgy1, rotations,
+        #                                        pgy1_req_half, pgy1_lim_half)
+        #
+        # # Double again to quarters
+        # prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed, rotations)
+        # resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block, num_pgy1, rotations,
+        #                                        pgy1_req_quarter, pgy1_lim_quarter)
+        #
+        # print(resultArray)
+        #
+        # schedule = Class.Schedule(trainees, rotations)
+        #
+        # # A hack to allow vis to work for solver.
+        # rotations_dict[-1] = Class.Rotation("Blank", -1)
+        #
+        # # Fill in using idiomatic way
+        # for trainee_num in range(num_pgy1):
+        #     for block_num in range(num_block):
+        #         # print rotations_dict[resultArray[trainee_num][block_num]]
+        #         schedule.fill_in(trainees[trainee_num], block_num, rotations_dict[resultArray[trainee_num][block_num]])
 
         # -------------
         # VISUALIZATION

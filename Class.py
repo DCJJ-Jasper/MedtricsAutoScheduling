@@ -381,6 +381,12 @@ class Schedule:
 
     def fill_in(self, trainee, i, rotation):
         trainee.block[i] = rotation
+
+        # Ignore the process if the rotation ID is -1 (no rotation)
+        if (rotation.id == -1): return
+        # Ignore the process if the rotation ID is -2 (Vacation allowed)
+        if (rotation.id == -2): return
+
         if (trainee.role == "PGY1"):
             rotation.processed_min1[i] -= 1
             rotation.processed_max1[i] -= 1
