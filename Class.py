@@ -480,6 +480,10 @@ class Schedule:
         #
         # print('test min1 end')
 
+
+        print("before loop in step 1-4")
+        print(self.num_block)
+
         for i in range(int(self.num_block/4)):
 
 
@@ -602,7 +606,6 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
-                        # random.shuffle(trainees)
                         # print(trainee.processed_limits)
                         if ((trainee.role == "PGY1") and (trainee.block[4 * i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
@@ -620,7 +623,6 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
-                        # random.shuffle(trainees)
                         if ((trainee.role == "PGY2") and (trainee.block[4 * i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
                                     4 * i + 3].id == -1 and (trainee.processed_limits[rot_name] > 3)):
@@ -637,7 +639,6 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
-                        # random.shuffle(trainees)
 
                         if ((trainee.role == "PGY3") and (trainee.block[4 * i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
@@ -656,7 +657,6 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
-                        # random.shuffle(trainees)
                         # print(trainee.processed_limits)
                         if ((trainee.role == "PGY1") and ((trainee.block[4 * i].id == -1) or (trainee.block[4 * i].id == -2)) and
                                 ((trainee.block[4 * i + 1].id == -1) or (trainee.block[4 * i + 1].id == -2)) and
@@ -676,7 +676,6 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
-                        # random.shuffle(trainees)
                         if ((trainee.role == "PGY2") and (
                             (trainee.block[4 * i].id == -1) or (trainee.block[4 * i].id == -2)) and
                                 ((trainee.block[4 * i + 1].id == -1) or (trainee.block[4 * i + 1].id == -2)) and
@@ -696,7 +695,6 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
-                        # random.shuffle(trainees)
 
                         if ((trainee.role == "PGY3") and (
                             (trainee.block[4 * i].id == -1) or (trainee.block[4 * i].id == -2)) and
@@ -744,7 +742,6 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
-                        # random.shuffle(trainees)
                         if ((trainee.role == "PGY1") and (trainee.block[i].id == -1)):
                             self.fill_in(trainee, i, rotation)
                             min_PGY1 -= 1
@@ -756,7 +753,6 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
-                        # random.shuffle(trainees)
                         if ((trainee.role == "PGY2") and (trainee.block[i].id == -1)):
                             self.fill_in(trainee, i, rotation)
                             min_PGY2 -= 1
@@ -768,7 +764,6 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
-                        # random.shuffle(trainees)
 
                         if ((trainee.role == "PGY3") and (trainee.block[i].id == -1)):
                             self.fill_in(trainee, i, rotation)

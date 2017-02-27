@@ -27,7 +27,7 @@ def search_trainee(n, role, rot_name, trainees, i):
     trainee_list = []
 
     # TODO: Randomize the trainee list
-    #random.shuffle(trainees)
+    random.shuffle(trainees)
 
     # Search for appropriate trainees
     for trainee in trainees:

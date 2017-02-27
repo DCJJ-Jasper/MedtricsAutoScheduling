@@ -249,7 +249,7 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "3,Elective,2,7,0,0,0,0\n" +
     "4,Emergency Medicine,1,5,0,0,0,0\n" +
     "5,Inpatient Wards,3,7,0,0,0,0\n" +
-    "6,Medical Intensive Care Unit,1,5,0,0,0,0\n" +
+    "6,Medical Intensive Care Unit,1,6,0,0,0,0\n" +
     "7,Neurology,1,5,0,0,0,0\n" +
     "---\n" +
     "ROTATION,MIN_BLOCKS_REQUIRED\n" +
@@ -261,7 +261,7 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "Emergency Medicine,1\n" +
     "Inpatient Wards,2\n" +
     "Medical Intensive Care Unit,1.5\n" +
-    "Neurology,4\n" +
+    "Neurology,1\n" +
     "PGY2_REQUIREMENT,8\n" +
     "Ambulatory Medicine Blocks,0\n" +
     "Backup Staffing / Urgent Visit,0\n" +
