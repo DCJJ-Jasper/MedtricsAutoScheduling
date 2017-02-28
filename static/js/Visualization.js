@@ -51,6 +51,9 @@ var chart_bars;
 var squares_dict = {};
 var underdone_bars = {};
 
+var rotation_info_label = new PIXI.Text('', {fontSize: LABEL_SIZE});
+rotation_info_label.visible = false;
+
 var schedule_button;
 
 ///////////////////
@@ -125,6 +128,7 @@ button_title.style.fill = "0xFFFFFF";
 
 schedule_button.addChild(button_title);
 app.stage.addChild(schedule_button);
+
 
 // schedule_button.on('mousedown', onSchedulePressed);
 
@@ -485,9 +489,17 @@ function onSquarePressed() {
     
 }
 
+function onButtonOver() {
+    rotation_info_label.visible = true;
+    rotation_info_label.text = this.rot_id;
+    rotation_info_label.position.set(SQUARE_TOP_LEFT[0], 50);
+    app.stage.addChild(rotation_info_label);
+}
+
 function onButtonOut() {
-    this.isOver = false;
-    this.visible = true;
+    rotation_info_label.visible = false;
+    rotation_info_label.text = '';
+    app.stage.removeChild(rotation_info_label);
 }
 
 
@@ -567,12 +579,6 @@ $('#schedule_btn').click(function onSchedulePressed() {
                     var start_x = SQUARE_TOP_LEFT[0];
                     var start_y = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
 
-                    var msg = new PIXI.Text('Rotation id');
-                    msg.visible = false;
-                    // msg.position.set(num_block * (SQUARE_SIZE + SQUARE_DISTANCE), start_y);
-
-                    // create an array to store all the sprites
-                    var maggots = [];
                     var trainee_count = 0;
 
                     num_trainees = num_pgy1 + num_pgy2 + num_pgy3;
@@ -709,6 +715,8 @@ $('#schedule_btn').click(function onSchedulePressed() {
 
                             newSquare.sprite
                                 .on('mousedown', onSquarePressed);
+                            newSquare.sprite.on('mouseover', onButtonOver);
+                            newSquare.sprite.on('mouseout', onButtonOut);
 
                             squares_dict[id.toString()].addChild(newSquare.sprite);
 
