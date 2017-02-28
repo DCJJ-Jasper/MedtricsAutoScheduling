@@ -49,12 +49,18 @@ rotations_list = []
 
 app = Flask(__name__)
 
+isScheduled = False
+scheduleText = ''
+
 @app.route('/pushTrainees', methods=['GET'])
 def push_trainees():
-    data = {'sample_text': "13,3\n" + "29,7,4\n" + "Student, Role, Schedule\n" + "In Weatherly,0,PGY1,3.3.5.5.6.1.2.7.4.0.-1.2.-1\n" + "Bong Dubre,1,PGY1,3.3.5.5.2.1.6.-1.0.7.2.4.-1\n" + "Aleisha Platero,2,PGY1,5.1.4.3.3.2.5.6.2.-1.7.-1.0\n" + "Adria Guth,3,PGY1,5.5.2.3.2.1.3.-1.6.0.4.7.-1\n" + "Merlyn Mccarley,4,PGY1,5.5.2.4.3.3.7.-1.-1.2.1.0.6\n" + "Brady Teper,5,PGY1,6.2.3.5.1.0.4.3.5.-1.-1.2.7\n" + "Andy Kandoll,6,PGY1,7.5.3.0.1.4.3.5.2.6.2.-1.-1\n" + "Donetta Grafe,7,PGY1,-1.0.5.6.5.4.7.2.3.2.3.1.-1\n" + "Herbert Cendana,8,PGY1,2.0.6.1.5.2.5.4.3.3.-1.7.-1\n" + "Darron Linney,9,PGY1,4.0.7.-1.5.1.5.3.2.3.6.2.-1\n" + "Leroy Degroat,10,PGY1,-1.2.-1.0.7.3.6.2.5.5.1.3.4\n" + "Faviola Tullio,11,PGY1,-1.0.-1.7.6.5.2.5.3.3.2.4.1\n" + "Anette Simmions,12,PGY1,-1.6.2.7.3.0.-1.5.5.4.2.3.1\n" + "Mallory Kirley,13,PGY1,-1.7.1.3.2.5.4.2.-1.5.0.6.3\n" + "Toi Ehlen,14,PGY1,2.6.-1.1.0.5.4.-1.7.2.3.5.3\n" + "Louisa Botellio,15,PGY1,-1.7.0.-1.3.6.2.1.3.2.5.5.4\n" + "Kiesha Menlove,16,PGY1,0.7.1.-1.6.2.3.3.-1.4.5.2.5\n" + "Joella Middaugh,17,PGY1,-1.-1.3.3.2.2.7.6.4.1.0.5.5\n" + "Janean Skomsky,18,PGY2,1.2.4.-1.3.7.6.3.-1.2.5.0.5\n" + "Ramonita Gryniuk,19,PGY2,6.3.-1.2.5.0.-1.7.1.4.3.5.2\n" + "Teisha Stunkard,20,PGY3,6.5.-1.1.4.2.2.-1.7.5.0.3.3\n" + "Latesha Conteras,21,PGY2,4.5.7.3.5.0.-1.2.3.-1.2.6.1\n" + "Paris Sachse,22,PGY1,3.4.2.-1.3.5.-1.7.0.6.5.1.2\n" + "Tyisha Vandenacre,23,PGY3,1.4.5.6.5.2.3.7.0.-1.2.3.-1\n" + "Dewitt Petricone,24,PGY2,3.2.0.-1.3.4.-1.2.7.1.5.6.5\n" + "Trinidad Dunmead,25,PGY2,-1.7.3.4.2.-1.5.1.2.5.6.3.0\n" + "Lanette Schnitzler,26,PGY1,2.4.2.3.-1.7.1.-1.3.0.6.5.5\n" + "Jarod Schille,27,PGY1,3.1.2.-1.-1.4.5.5.6.3.0.2.7\n" + "Annemarie Warnecke,28,PGY3,7.4.1.6.-1.0.5.2.3.2.3.5.-1\n" + "Carla Tylor,29,PGY2,2.6.5.3.-1.5.1.3.2.-1.4.7.0\n" + "Randy Solas,30,PGY2,6.3.7.2.1.5.2.0.-1.-1.3.4.5\n" + "Cassie Mercy,31,PGY1,2.5.6.4.0.3.1.3.-1.2.7.5.-1\n" + "Gilberte Rezendes,32,PGY3,4.2.0.-1.5.5.2.1.-1.7.3.6.3\n" + "Tony Rizzio,33,PGY1,5.3.0.1.2.6.5.2.-1.-1.3.4.7\n" + "Roxann Schwanbeck,34,PGY1,1.5.3.5.-1.4.3.0.7.6.2.2.-1\n" + "Fran Schifo,35,PGY1,5.2.2.0.1.-1.-1.3.6.5.4.7.3\n" + "Tawna Roehrs,36,PGY1,2.3.5.-1.1.3.7.-1.2.0.5.4.6\n" + "Evelynn Sharp,37,PGY1,7.2.4.0.1.3.2.6.-1.5.-1.3.5\n" + "Tawana Vonbank,38,PGY1,2.7.3.-1.2.3.1.5.4.5.0.6.-1\n" + "Barb Tua,39,PGY1,7.4.5.5.-1.3.0.6.2.-1.1.2.3\n" + "Rotations,8\n" + "ID, Name, Min1, Max1, Min2, Max2, Min3, Max3\n" + "0,Ambulatory Medicine Blocks,1,5,0,0,0,0\n" + "1,Backup Staffing / Urgent Visit,1,6,0,0,0,0\n" + "2,Coronary Care Unit,1,7,0,0,0,0\n" + "3,Elective,2,7,0,0,0,0\n" + "4,Emergency Medicine,1,5,0,0,0,0\n" + "5,Inpatient Wards,3,7,0,0,0,0\n" + "6,Medical Intensive Car Unit,1,5,0,0,0,0\n" + "7,Neurology,1,5,0,0,0,0\n" + "Rotation ID, Name, Requirement\n" + "PGY1 Requirements\n" + "0,Ambulatory Medicine Blocks,1\n" + "1,Backup Staffing / Urgent Visit,1\n" + "2,Coronary Care Unit,2\n" + "3,Elective,2\n" + "4,Emergency Medicine,1\n" + "5,Inpatient Wards,2\n" + "6,Medical Intensive Car Unit,1\n" + "7,Neurology,1\n" + "PGY2 Requirements\n" + "0,Ambulatory Medicine Blocks,0\n" + "1,Backup Staffing / Urgent Visit,0\n" + "2,Coronary Care Unit,0\n" + "3,Elective,0\n" + "4,Emergency Medicine,0\n" + "5,Inpatient Wards,0\n" + "6,Medical Intensive Car Unit,0\n" + "7,Neurology,0\n" + "PGY3 Requirements\n" + "0,Ambulatory Medicine Blocks,0\n" + "1,Backup Staffing / Urgent Visit,0\n" + "2,Coronary Care Unit,0\n" + "3,Elective,0\n" + "4,Emergency Medicine,0\n" + "5,Inpatient Wards,0\n" + "6,Medical Intensive Car Unit,0\n" + "7,Neurology,0\n"}
-    return json.dumps(data)
+    if isScheduled:
+        data = {'data': scheduleText}
+        return json.dumps(data)
+    else:
+        return json.dumps({'data': -1})
 
-@app.route('/requestToSchedule', methods = ['POST'])
+@app.route('/requestToSchedule', methods = ['POST', 'GET'])
 def request_schedule():
     if request.method == 'POST':
         data = request.json["title"]
@@ -376,6 +382,11 @@ def request_schedule():
         schedule.greedy_step7_4()
         schedule.greedy_step8_4()
         schedule.sort_trainees()
+        schedule.generate_info_file()
+        global scheduleText, isScheduled
+        scheduleText = schedule.generate_info_file()
+        isScheduled = True
+        return json.dumps({'data': scheduleText})
 
         # ---------------------------
         # CREATE SCHEDULE FOR SOLVERS
@@ -441,173 +452,173 @@ def request_schedule():
 
         # IMPORT
 
-        import pyglet
-        from pyglet.gl import gl
-
-        # ADAPT THE CONSTANTS
-        # Some graphic constants in the Constants file no longer apply to this case
-
-        legend_top_left = [40, 40 + LABEL_HEIGHT * num_trainees + 40]
-        legend_label_top_left = [66, HEIGHT - (40 + LABEL_HEIGHT * num_trainees + 40)]
-
-        print("SHIT22222")
-
-        underdone_top_left = UNDERDONE_TOP_LEFT = [300 + UNIT_RANGE * num_block + 40, 40]
-
-        chart_top_left = [300, 40 + LABEL_HEIGHT * num_trainees + 40]
-
-        below_mark_top_left = [300, HEIGHT - (40 + LABEL_HEIGHT * num_trainees + 40)]
-        right_mark_top_left = [300 + UNIT_RANGE * num_block + 40, HEIGHT - 40]
-
-        # WINDOW AND SETTINGS
-
-        window = Window(width=WIDTH, height=HEIGHT)
-        gl.glClearColor(*BACKGROUND_COLOR)
-
-        # Trainee and rotation labels
-        trainee_labels = create_trainee_labels(schedule.trainees, LABEL_TOP_LEFT, LABEL_SIZE, LABEL_HEIGHT)
-        rotation_labels = create_labels(core_rotations, legend_label_top_left, LEGEND_SIZE, LEGEND_HEIGHT)
-        rotation_legends = create_legends(core_rotations, legend_top_left=legend_top_left)
-        rotation_legends_click_space = create_click_space(core_rotations, legend_top_left=legend_top_left)
-
-        # Unit squares
-        rot_squares = create_squares(schedule.trainees, num_block)
-        square_dict = create_square_dict(rot_squares)
-        super_quad_dict = {}
-        super_quads = []
-        for key in square_dict.keys():
-            quad = create_superquad(square_dict[key])
-            super_quad_dict[key] = quad
-            super_quads.append(quad)
-
-        # All squares: This is used to find appropriate rotation when a square is clicked
-        squares = rot_squares + rotation_legends + rotation_legends_click_space
-
-        # Height chart
-        chart_bars = create_chart_bars(num_block, chart_top_left=chart_top_left)
-
-        # Underdone chart
-        underdone_quads = create_underdone_bars(schedule.trainees, schedule.rotations,
-                                                underdone_top_left=underdone_top_left)
-
-        # Mark lines
-        mark_lines = create_superline(num_trainees, num_block,
-                                      below_mark_top_left=below_mark_top_left,
-                                      right_mark_top_left=right_mark_top_left)
-
-        # Min lines
-        min_line = create_mark_line(num_block, below_mark_top_left=below_mark_top_left)
-        max_line = create_mark_line(num_block, below_mark_top_left=below_mark_top_left)
-
-        def draw_begin_state():
-            window.clear()
-            draw_labels(trainee_labels)
-            draw_super_quads(super_quads)
-            draw_bars(chart_bars)
-            draw_bars(underdone_quads)
-            mark_lines.draw()
-            min_line.draw()
-            max_line.draw()
-            draw_legends(rotation_legends)
-            draw_labels(rotation_labels)
-
-        def draw_animation():
-            window.clear()
-            draw_labels(trainee_labels)
-            draw_animated_quads(super_quads, ANIMATION_STEPS - window.steps)
-            draw_animated_bars(chart_bars, ANIMATION_STEPS - window.steps)
-            draw_animated_bars(underdone_quads, ANIMATION_STEPS - window.steps)
-            window.steps -= 1
-            if window.steps == 0:
-                window.state = STATE_IDLE
-                for quad in super_quads:
-                    quad.current_blur = quad.target_blur
-
-                for bar in chart_bars:
-                    bar.current_height = bar.target_height
-                    bar.current_color = bar.target_color
-
-                for quad in underdone_quads:
-                    quad.current_points_array = quad.target_points_array
-
-                min_line.current_height = min_line.target_height
-                max_line.current_height = max_line.target_height
-            mark_lines.draw()
-            min_line.draw_animated(ANIMATION_STEPS - window.steps)
-            max_line.draw_animated(ANIMATION_STEPS - window.steps)
-            draw_legends(rotation_legends)
-            draw_labels(rotation_labels)
-
-        @window.event
-        def on_draw():
-            if (window.state == STATE_BEGIN):
-                window.state = STATE_IDLE
-                draw_begin_state()
-            elif window.state == STATE_IDLE:
-                draw_begin_state()
-            elif window.state == STATE_ANIMATION:
-                draw_animation()
-                pass
-
-        @window.event
-        def on_mouse_press(x, y, button, modifiers):
-            curr_square = find_curr_square(squares, x, y)
-            if curr_square:
-                rot_id = curr_square.id
-                rot_color = curr_square.color
-                for quad in super_quads:
-                    if quad.id == rot_id:
-                        quad.target_blur = NO_BLUR
-                    else:
-                        quad.target_blur = UNCHOSEN_BLUR
-
-                for bar in chart_bars:
-                    bar.target_color = rot_color
-                    bar.target_height = schedule.sum_rot_at_block(bar.col_num, rot_id) * CHART_UNIT_HEIGHT
-
-                temporary_quads = create_temporary_bars(schedule.trainees, schedule.rotations, rot_id,
-                                                        underdone_top_left=underdone_top_left)
-                for i in range(len(underdone_quads)):
-                    underdone_quads[i].target_points_array = temporary_quads[i].base_points_array
-
-                min_line.target_height = (schedule.rotations[rot_id].min1 + \
-                                          schedule.rotations[rot_id].min2 + \
-                                          schedule.rotations[rot_id].min3) * CHART_UNIT_HEIGHT
-
-                max_line.target_height = (schedule.rotations[rot_id].max1 + \
-                                          schedule.rotations[rot_id].max2 + \
-                                          schedule.rotations[rot_id].max3) * CHART_UNIT_HEIGHT
-
-            else:
-                for quad in super_quads:
-                    quad.target_blur = NO_BLUR
-
-                for bar in chart_bars:
-                    bar.target_color = to_decimal_color(ROTATIONS_COLOR[-1])
-                    bar.target_height = 0
-
-                for quad in underdone_quads:
-                    quad.target_points_array = quad.base_points_array
-
-                min_line.target_height = 0
-                max_line.target_height = 0
-
-            window.steps = ANIMATION_STEPS
-            window.state = STATE_ANIMATION
-
-        @window.event
-        def update(dt):
-            pass
-
-        @window.event
-        def on_show():
-            state = STATE_BEGIN
-
-        pyglet.clock.schedule_interval(update, 1.0 / 60)
-        pyglet.app.run()
-        return data
-    else:
-        return 'SHIT'
+    #     import pyglet
+    #     from pyglet.gl import gl
+    #
+    #     # ADAPT THE CONSTANTS
+    #     # Some graphic constants in the Constants file no longer apply to this case
+    #
+    #     legend_top_left = [40, 40 + LABEL_HEIGHT * num_trainees + 40]
+    #     legend_label_top_left = [66, HEIGHT - (40 + LABEL_HEIGHT * num_trainees + 40)]
+    #
+    #     print("SHIT22222")
+    #
+    #     underdone_top_left = UNDERDONE_TOP_LEFT = [300 + UNIT_RANGE * num_block + 40, 40]
+    #
+    #     chart_top_left = [300, 40 + LABEL_HEIGHT * num_trainees + 40]
+    #
+    #     below_mark_top_left = [300, HEIGHT - (40 + LABEL_HEIGHT * num_trainees + 40)]
+    #     right_mark_top_left = [300 + UNIT_RANGE * num_block + 40, HEIGHT - 40]
+    #
+    #     # WINDOW AND SETTINGS
+    #
+    #     window = Window(width=WIDTH, height=HEIGHT)
+    #     gl.glClearColor(*BACKGROUND_COLOR)
+    #
+    #     # Trainee and rotation labels
+    #     trainee_labels = create_trainee_labels(schedule.trainees, LABEL_TOP_LEFT, LABEL_SIZE, LABEL_HEIGHT)
+    #     rotation_labels = create_labels(core_rotations, legend_label_top_left, LEGEND_SIZE, LEGEND_HEIGHT)
+    #     rotation_legends = create_legends(core_rotations, legend_top_left=legend_top_left)
+    #     rotation_legends_click_space = create_click_space(core_rotations, legend_top_left=legend_top_left)
+    #
+    #     # Unit squares
+    #     rot_squares = create_squares(schedule.trainees, num_block)
+    #     square_dict = create_square_dict(rot_squares)
+    #     super_quad_dict = {}
+    #     super_quads = []
+    #     for key in square_dict.keys():
+    #         quad = create_superquad(square_dict[key])
+    #         super_quad_dict[key] = quad
+    #         super_quads.append(quad)
+    #
+    #     # All squares: This is used to find appropriate rotation when a square is clicked
+    #     squares = rot_squares + rotation_legends + rotation_legends_click_space
+    #
+    #     # Height chart
+    #     chart_bars = create_chart_bars(num_block, chart_top_left=chart_top_left)
+    #
+    #     # Underdone chart
+    #     underdone_quads = create_underdone_bars(schedule.trainees, schedule.rotations,
+    #                                             underdone_top_left=underdone_top_left)
+    #
+    #     # Mark lines
+    #     mark_lines = create_superline(num_trainees, num_block,
+    #                                   below_mark_top_left=below_mark_top_left,
+    #                                   right_mark_top_left=right_mark_top_left)
+    #
+    #     # Min lines
+    #     min_line = create_mark_line(num_block, below_mark_top_left=below_mark_top_left)
+    #     max_line = create_mark_line(num_block, below_mark_top_left=below_mark_top_left)
+    #
+    #     def draw_begin_state():
+    #         window.clear()
+    #         draw_labels(trainee_labels)
+    #         draw_super_quads(super_quads)
+    #         draw_bars(chart_bars)
+    #         draw_bars(underdone_quads)
+    #         mark_lines.draw()
+    #         min_line.draw()
+    #         max_line.draw()
+    #         draw_legends(rotation_legends)
+    #         draw_labels(rotation_labels)
+    #
+    #     def draw_animation():
+    #         window.clear()
+    #         draw_labels(trainee_labels)
+    #         draw_animated_quads(super_quads, ANIMATION_STEPS - window.steps)
+    #         draw_animated_bars(chart_bars, ANIMATION_STEPS - window.steps)
+    #         draw_animated_bars(underdone_quads, ANIMATION_STEPS - window.steps)
+    #         window.steps -= 1
+    #         if window.steps == 0:
+    #             window.state = STATE_IDLE
+    #             for quad in super_quads:
+    #                 quad.current_blur = quad.target_blur
+    #
+    #             for bar in chart_bars:
+    #                 bar.current_height = bar.target_height
+    #                 bar.current_color = bar.target_color
+    #
+    #             for quad in underdone_quads:
+    #                 quad.current_points_array = quad.target_points_array
+    #
+    #             min_line.current_height = min_line.target_height
+    #             max_line.current_height = max_line.target_height
+    #         mark_lines.draw()
+    #         min_line.draw_animated(ANIMATION_STEPS - window.steps)
+    #         max_line.draw_animated(ANIMATION_STEPS - window.steps)
+    #         draw_legends(rotation_legends)
+    #         draw_labels(rotation_labels)
+    #
+    #     @window.event
+    #     def on_draw():
+    #         if (window.state == STATE_BEGIN):
+    #             window.state = STATE_IDLE
+    #             draw_begin_state()
+    #         elif window.state == STATE_IDLE:
+    #             draw_begin_state()
+    #         elif window.state == STATE_ANIMATION:
+    #             draw_animation()
+    #             pass
+    #
+    #     @window.event
+    #     def on_mouse_press(x, y, button, modifiers):
+    #         curr_square = find_curr_square(squares, x, y)
+    #         if curr_square:
+    #             rot_id = curr_square.id
+    #             rot_color = curr_square.color
+    #             for quad in super_quads:
+    #                 if quad.id == rot_id:
+    #                     quad.target_blur = NO_BLUR
+    #                 else:
+    #                     quad.target_blur = UNCHOSEN_BLUR
+    #
+    #             for bar in chart_bars:
+    #                 bar.target_color = rot_color
+    #                 bar.target_height = schedule.sum_rot_at_block(bar.col_num, rot_id) * CHART_UNIT_HEIGHT
+    #
+    #             temporary_quads = create_temporary_bars(schedule.trainees, schedule.rotations, rot_id,
+    #                                                     underdone_top_left=underdone_top_left)
+    #             for i in range(len(underdone_quads)):
+    #                 underdone_quads[i].target_points_array = temporary_quads[i].base_points_array
+    #
+    #             min_line.target_height = (schedule.rotations[rot_id].min1 + \
+    #                                       schedule.rotations[rot_id].min2 + \
+    #                                       schedule.rotations[rot_id].min3) * CHART_UNIT_HEIGHT
+    #
+    #             max_line.target_height = (schedule.rotations[rot_id].max1 + \
+    #                                       schedule.rotations[rot_id].max2 + \
+    #                                       schedule.rotations[rot_id].max3) * CHART_UNIT_HEIGHT
+    #
+    #         else:
+    #             for quad in super_quads:
+    #                 quad.target_blur = NO_BLUR
+    #
+    #             for bar in chart_bars:
+    #                 bar.target_color = to_decimal_color(ROTATIONS_COLOR[-1])
+    #                 bar.target_height = 0
+    #
+    #             for quad in underdone_quads:
+    #                 quad.target_points_array = quad.base_points_array
+    #
+    #             min_line.target_height = 0
+    #             max_line.target_height = 0
+    #
+    #         window.steps = ANIMATION_STEPS
+    #         window.state = STATE_ANIMATION
+    #
+    #     @window.event
+    #     def update(dt):
+    #         pass
+    #
+    #     @window.event
+    #     def on_show():
+    #         state = STATE_BEGIN
+    #
+    #     pyglet.clock.schedule_interval(update, 1.0 / 60)
+    #     pyglet.app.run()
+    #     return data
+    # else:
+    #     return 'SHIT'
 
 @app.route('/')
 def hello_world():
