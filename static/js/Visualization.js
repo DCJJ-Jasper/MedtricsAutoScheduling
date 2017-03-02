@@ -463,6 +463,7 @@ function onSquarePressed() {
         chart_bars.lineTo(x1, y1);
     }
     chart_bars.endFill();
+    app.stage.addChild(chart_bars);
     }
     
 }
