@@ -23,6 +23,7 @@ var pgy3_reqs = {};
 
 var trainees = [];
 var rotations = [];
+var rotations_dict = {};
 var id_list = [];
 
 var schedule;
@@ -53,8 +54,11 @@ var underdone_bars = {};
 
 var rotation_info_label = new PIXI.Text('', {fontSize: LABEL_SIZE});
 rotation_info_label.visible = false;
+var rotation_info_window = new PIXI.Container();
+var temp_graphic = new PIXI.Graphics();
+var temp_line = new PIXI.Graphics();
 
-var schedule_button;
+var colorPressed = '';
 
 ///////////////////
 // OBJECTS CREATION
@@ -100,37 +104,6 @@ rot_squares_list = [];
 // Hold all underdone bars
 underdone_list = [];
 
-// Schedule button
-schedule_button = new PIXI.Container();
-var temp_graphic = new PIXI.Graphics();
-temp_graphic.beginFill(BUTTON_COLOR);
-
-var x1 = BUTTON_TOP_LEFT_X;
-var y1 = BUTTON_TOP_LEFT_Y;
-var x2 = BUTTON_TOP_LEFT_X + BUTTON_WIDTH;
-var y2 = BUTTON_TOP_LEFT_Y + BUTTON_HEIGHT;
-
-temp_graphic.moveTo(x1, y1);
-temp_graphic.lineTo(x1, y2);
-temp_graphic.lineTo(x2, y2);
-temp_graphic.lineTo(x2, y1);
-temp_graphic.lineTo(x1, y1);
-temp_graphic.endFill();
-
-schedule_button.addChild(temp_graphic);
-
-var button_title = new PIXI.Text("Schedule", {
-    fontSize: BUTTON_TEXT_SIZE,
-});
-button_title.x = BUTTON_TOP_LEFT_X + BUTTON_PADDING;
-button_title.y = BUTTON_TOP_LEFT_Y + BUTTON_PADDING;
-button_title.style.fill = "0xFFFFFF";
-
-schedule_button.addChild(button_title);
-app.stage.addChild(schedule_button);
-
-
-// schedule_button.on('mousedown', onSchedulePressed);
 
 /**
  * Call pushTrainees in the python server, which sends a bunch of text for processing
@@ -417,11 +390,15 @@ app.stage.addChild(schedule_button);
 /////////////////////
 
 function onSquarePressed() {
-    this.isOver = true;
-    //this.visible = false;
     var rot_id = this.rot_id;
     var role = this.role;
-    for (key in squares_dict) squares_dict[key].alpha = SQUARE_BLUR;
+
+    if (colorPressed == this.color) {
+        resetBlur();
+        colorPressed = '';
+    } else {
+        colorPressed = this.color;
+        for (key in squares_dict) squares_dict[key].alpha = SQUARE_BLUR;
     switch (role) {
         case "PGY1":
             for (var square of pgy1_squares_list) square.alpha = 1;
@@ -448,7 +425,7 @@ function onSquarePressed() {
             pgy3_container.alpha = 1;
             break;
     }
-    squares_dict[rot_id].alpha = 1
+    squares_dict[rot_id].alpha = 1;
 
     // Draw out chart bars under the role by using PIXI.Graphics
     var base_x = 300;
@@ -486,20 +463,68 @@ function onSquarePressed() {
         chart_bars.lineTo(x1, y1);
     }
     chart_bars.endFill();
+    }
     
 }
 
+
 function onButtonOver() {
+
+    temp_line.clear();
+
+    temp_line.lineStyle(1, 0x000000, 1);
+    temp_line.moveTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
+    temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y - SQUARE_DISTANCE / 2);
+    temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
+    temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
+    temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
+    app.stage.addChild(temp_line);
+
+    rotation_info_window.visible = false;
+    temp_graphic.clear();
+    temp_graphic.beginFill(0xFFFFFF);
+    temp_graphic.lineStyle(1, '0x000000', 1);
+
+    var x1 = this.x + 20;
+    var y1 = this.y - 20;
+    var x2 = x1 + BUTTON_WIDTH;
+    var y2 = y1 + BUTTON_HEIGHT;
+
+    temp_graphic.moveTo(x1, y1);
+    temp_graphic.lineTo(x1, y2);
+    temp_graphic.lineTo(x2, y2);
+    temp_graphic.lineTo(x2, y1);
+    temp_graphic.lineTo(x1, y1);
+    temp_graphic.endFill();
+
+    rotation_info_window.addChild(temp_graphic);
+
+    rotation_info_label.x = x1 + 10;
+    rotation_info_label.y = y1 + 5;
+    rotation_info_label.text = 'Rotation name:  ' + this.rot_name;
     rotation_info_label.visible = true;
-    rotation_info_label.text = this.rot_id;
-    rotation_info_label.position.set(SQUARE_TOP_LEFT[0], 50);
-    app.stage.addChild(rotation_info_label);
+    rotation_info_label.style.fill = "0x000000";
+    rotation_info_window.addChild(rotation_info_label);
+    rotation_info_window.visible = true;
+
+    app.stage.addChild(rotation_info_window);
 }
 
 function onButtonOut() {
+    rotation_info_window.visible = false;
     rotation_info_label.visible = false;
     rotation_info_label.text = '';
-    app.stage.removeChild(rotation_info_label);
+    rotation_info_window.removeChild(rotation_info_label);
+    app.stage.removeChild(rotation_info_window);
+    app.stage.removeChild(temp_line);
+}
+
+function resetBlur() {
+    for (key in squares_dict) squares_dict[key].alpha = 1;
+    pgy1_container.alpha = 1;
+    pgy2_container.alpha = 1;
+    pgy3_container.alpha = 1;
+    app.stage.removeChild(chart_bars);
 }
 
 
@@ -710,12 +735,18 @@ $('#schedule_btn').click(function onSchedulePressed() {
                             var x = start_x + rot_count * UNIT_RANGE;
                             var y = start_name_label_y + trainee_count * UNIT_RANGE;
 
-                            var newSquare = new Square(x, y, color, '', id, role, app.renderer);
+
+                            var rot = rotations_dict[id];
+                            var rot_name = '';
+                            if (rot) {
+                                rot_name = rot.name;
+                            }
+                            var newSquare = new Square(x, y, color, rot_name, id, role, app.renderer);
                             newSquare.draw();
 
                             newSquare.sprite
                                 .on('mousedown', onSquarePressed);
-                            newSquare.sprite.on('mouseover', onButtonOver);
+                            newSquare.sprite.on('mouseover',onButtonOver);
                             newSquare.sprite.on('mouseout', onButtonOut);
 
                             squares_dict[id.toString()].addChild(newSquare.sprite);
@@ -803,6 +834,7 @@ $('#schedule_btn').click(function onSchedulePressed() {
                             graphic.lineTo(x2, y1);
                             graphic.lineTo(x1, y1);
                             graphic.endFill();
+
                         }
                     }
                 }    }

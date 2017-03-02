@@ -76,6 +76,7 @@ function read_in_data(input_text) {
         new_rotation = new Rotation(name, id, num_block = num_block);
         new_rotation.set_rotation_demands(min1, max1, min2, max2, min3, max3);
         rotations.push(new_rotation);
+        rotations_dict[id] = new_rotation;
         id_list.push(id);
     }
 
