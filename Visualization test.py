@@ -184,6 +184,8 @@ def request_schedule():
                 min3 = int(line_data[6])
                 max3 = int(line_data[7])
 
+                #
+
                 # Assign min max to rotation if is a core rotation
                 if rot_id in rotations_dict:
                     rotations_dict[rot_id].set_min(min1, min2, min3)
