@@ -138,7 +138,9 @@ function Square(x, y, color, rot_name, id, role, renderer, rotations_texture = R
     this.sprite.y = this.y;
     this.sprite.interactive = true;
     this.sprite.rot_id = id;
+    this.sprite.rot_name = rot_name;
     this.sprite.role = role;
+    this.sprite.color = color;
 }
 
 Square.prototype.draw = function() {
