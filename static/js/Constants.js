@@ -13,8 +13,8 @@ var NUM_TRAINEE = 40;
 
 var BUTTON_TOP_LEFT_X = 40;
 var BUTTON_TOP_LEFT_Y = 15;
-var BUTTON_WIDTH = 300;
-var BUTTON_HEIGHT = 50;
+var BUTTON_WIDTH = 150;
+var BUTTON_HEIGHT = 40;
 var BUTTON_DISTANCE = 15;
 var BUTTON_TEXT_SIZE = 14;
 var BUTTON_PADDING = (BUTTON_HEIGHT - BUTTON_TEXT_SIZE) / 2
@@ -27,20 +27,30 @@ var LABEL_ROLE_TOP_LEFT_Y = 30 + TOP_BAR_RANGE;
 var LABEL_TOP_LEFT_X = 40;
 var LABEL_TOP_LEFT_Y = 40 + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
 var LABEL_SIZE = 14;
-var LABEL_HEIGHT = 18;
+var LABEL_HEIGHT = 17;
 var LABEL_ROLE_SIZE = 26;
 var LABEL_ROLE_HEIGHT = 26; // Role name label height
 var ROLE_LABEL_TRAINEE_DIST = 5; // Distance between role name and trainees" names
 
+var POPUP_LABEL_SIZE = 14;
+var POPUP_LABEL_HEIGHT = 22;
+var POPUP_SQUARE_SIZE = 14;
+var POPUP_INFO_X_OFFSET = 85;
+var POPUP_PADDING = 7;
+var POPUP_WIDTH = 300;
+var POPUP_WEIGHT = 124;
+
 var SQUARE_TOP_LEFT = [300, 40 + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST];
 var SQUARE_SIZE = 14;
 var SQUARE_HEIGHT = LABEL_HEIGHT;
-var SQUARE_DISTANCE = 4;
+var BLOCK_DISTANCE = 0;
+var SQUARE_DISTANCE = 3;
 var UNIT_RANGE = SQUARE_SIZE + SQUARE_DISTANCE;
 
 var CHART_SIZE = SQUARE_SIZE;
 var CHART_UNIT = SQUARE_SIZE;
 var CHART_DISTANCE = SQUARE_DISTANCE;
+var CHART_BLOCK_DISTANCE = BLOCK_DISTANCE;
 var CHART_RANGE = UNIT_RANGE;
 
 var UNDERDONE_UNIT_LENGTH = SQUARE_SIZE;
@@ -89,13 +99,23 @@ var ROTATIONS_COLOR = {
 };
 
 // Texture dictionary
-var ROTATIONS_TEXTURE = {}
+var ROTATIONS_SQUARE_TEXTURE = {}
 for (var key in ROTATIONS_COLOR) {
     var texture = new PIXI.Graphics();
     texture.beginFill(convert_to_color_code(ROTATIONS_COLOR[key]));
     texture.drawRect(0, 0, SQUARE_SIZE, SQUARE_SIZE);
     texture.endFill();
-    ROTATIONS_TEXTURE[key] = texture;
+    ROTATIONS_SQUARE_TEXTURE[key] = texture;
+}
+
+// Texture dictionary
+var ROTATIONS_LONG_SQUARE_TEXTURE = {}
+for (var key in ROTATIONS_COLOR) {
+    var texture = new PIXI.Graphics();
+    texture.beginFill(convert_to_color_code(ROTATIONS_COLOR[key]));
+    texture.drawRect(0, 0, UNIT_RANGE, SQUARE_SIZE);
+    texture.endFill();
+    ROTATIONS_LONG_SQUARE_TEXTURE[key] = texture;
 }
 
 //////////////////////

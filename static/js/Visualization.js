@@ -52,12 +52,6 @@ var chart_bars;
 var squares_dict = {};
 var underdone_bars = {};
 
-var rotation_info_label = new PIXI.Text('', {fontSize: LABEL_SIZE});
-rotation_info_label.visible = false;
-var rotation_info_window = new PIXI.Container();
-var temp_graphic = new PIXI.Graphics();
-var temp_line = new PIXI.Graphics();
-
 var colorPressed = '';
 
 ///////////////////
@@ -98,12 +92,35 @@ pgy3_container.width = 1080;
 pgy3_container.height = 1920;
 app.stage.addChild(pgy3_container);
 
+// Popup stuffs
+var popup_label1 = new PIXI.Text('Rotation:', {fontStyle: "bold", fontSize: POPUP_LABEL_SIZE});
+var popup_label2 = new PIXI.Text('When:', {fontStyle: "bold", fontSize: POPUP_LABEL_SIZE});
+var popup_label3 = new PIXI.Text('Duration:', {fontStyle: "bold", fontSize: POPUP_LABEL_SIZE});
+var popup_label4 = new PIXI.Text('Trainee', {fontStyle: "bold", fontSize: POPUP_LABEL_SIZE});
+var popup_info1 = new PIXI.Text('', {fontSize: LABEL_SIZE});
+var popup_info2 = new PIXI.Text('', {fontSize: LABEL_SIZE});
+var popup_info3 = new PIXI.Text('', {fontSize: LABEL_SIZE});
+var popup_info4 = new PIXI.Text('', {fontSize: LABEL_SIZE});
+var popup_click_to_view = new PIXI.Text('Click to change this rotation', {fontStyle: "italic", fill: 0x3D78BD, fontSize: LABEL_SIZE});
+popup_label1.visible = false;
+popup_label2.visible = false;
+popup_label3.visible = false;
+popup_label4.visible = false;
+popup_info1.visible = false;
+popup_info2.visible = false;
+popup_info3.visible = false;
+popup_info4.visible = false;
+popup_click_to_view.visible = false;
+var temp_graphic = new PIXI.Graphics();
+var temp_line = new PIXI.Graphics();
+
 // Hold all squares graphics
 rot_squares_list = [];
 
 // Hold all underdone bars
 underdone_list = [];
 
+// All stuffs related to the popup info window
 
 /**
  * Call pushTrainees in the python server, which sends a bunch of text for processing
@@ -454,7 +471,7 @@ function onSquarePressed() {
     for (var i = 0; i < num_block; i++) {
         var x1 = base_x + i * CHART_RANGE;
         var y1 = base_y;
-        var x2 = base_x + i * CHART_RANGE + CHART_SIZE;
+        var x2 = base_x + i * CHART_RANGE + CHART_SIZE + Math.floor(i / 4) * BLOCK_DISTANCE;
         var y2 = base_y + info_arr[i] * CHART_UNIT;
         chart_bars.moveTo(x1, y1);
         chart_bars.lineTo(x1, y2);
@@ -479,17 +496,15 @@ function onButtonOver() {
     temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
     temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
     temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
-    app.stage.addChild(temp_line);
 
-    rotation_info_window.visible = false;
     temp_graphic.clear();
     temp_graphic.beginFill(0xFFFFFF);
-    temp_graphic.lineStyle(1, '0x000000', 1);
+    temp_graphic.lineStyle(1, '0xDEDDDD', 1);
 
     var x1 = this.x + 20;
-    var y1 = this.y - 20;
-    var x2 = x1 + BUTTON_WIDTH;
-    var y2 = y1 + BUTTON_HEIGHT;
+    var y2 = this.y;
+    var x2 = x1 + POPUP_WIDTH;
+    var y1 = y2 - POPUP_WEIGHT;
 
     temp_graphic.moveTo(x1, y1);
     temp_graphic.lineTo(x1, y2);
@@ -498,26 +513,83 @@ function onButtonOver() {
     temp_graphic.lineTo(x1, y1);
     temp_graphic.endFill();
 
-    rotation_info_window.addChild(temp_graphic);
+    var start_x = x1 + POPUP_PADDING;
+    var start_y = y1 + POPUP_PADDING;
 
-    rotation_info_label.x = x1 + 10;
-    rotation_info_label.y = y1 + 5;
-    rotation_info_label.text = 'Rotation name:  ' + this.rot_name;
-    rotation_info_label.visible = true;
-    rotation_info_label.style.fill = "0x000000";
-    rotation_info_window.addChild(rotation_info_label);
-    rotation_info_window.visible = true;
+    popup_label1.visible = true;
+    popup_label2.visible = true;
+    popup_label3.visible = true;
+    popup_label4.visible = true;
+    popup_info1.visible = true;
+    popup_info2.visible = true;
+    popup_info3.visible = true;
+    popup_info4.visible = true;
+    popup_click_to_view.visible = true;
 
-    app.stage.addChild(rotation_info_window);
+    popup_label1.x = start_x;
+    popup_label1.y = start_y;
+
+    popup_label2.x = start_x;
+    popup_label2.y = start_y + POPUP_LABEL_HEIGHT;
+
+    popup_label3.x = start_x;
+    popup_label3.y = start_y + POPUP_LABEL_HEIGHT * 2;
+
+    popup_label4.x = start_x;
+    popup_label4.y = start_y + POPUP_LABEL_HEIGHT * 3;
+
+    popup_click_to_view.x = start_x;
+    popup_click_to_view.y = start_y + POPUP_LABEL_HEIGHT * 4;
+
+    popup_info1.x = start_x + POPUP_INFO_X_OFFSET;
+    popup_info1.y = start_y;
+    popup_info1.text = this.rot_name;
+
+    popup_info2.x = start_x + POPUP_INFO_X_OFFSET;
+    popup_info2.y = start_y + POPUP_LABEL_HEIGHT;
+
+    popup_info3.x = start_x + POPUP_INFO_X_OFFSET;
+    popup_info3.y = start_y + POPUP_LABEL_HEIGHT * 2;
+
+    popup_info4.x = start_x + POPUP_INFO_X_OFFSET;
+    popup_info4.y = start_y + POPUP_LABEL_HEIGHT * 3;
+    popup_info4.text = this.trainee_name;
+
+    app.stage.addChild(temp_line);
+    app.stage.addChild(temp_graphic);
+    app.stage.addChild(popup_label1);
+    app.stage.addChild(popup_label2);
+    app.stage.addChild(popup_label3);
+    app.stage.addChild(popup_label4);
+    app.stage.addChild(popup_info1);
+    app.stage.addChild(popup_info2);
+    app.stage.addChild(popup_info3);
+    app.stage.addChild(popup_info4);
+    app.stage.addChild(popup_click_to_view);
 }
 
 function onButtonOut() {
-    rotation_info_window.visible = false;
-    rotation_info_label.visible = false;
-    rotation_info_label.text = '';
-    rotation_info_window.removeChild(rotation_info_label);
-    app.stage.removeChild(rotation_info_window);
+    popup_label1.visible = false;
+    popup_label2.visible = false;
+    popup_label3.visible = false;
+    popup_label4.visible = false;
+    popup_info1.visible = false;
+    popup_info2.visible = false;
+    popup_info3.visible = false;
+    popup_info4.visible = false;
+    popup_click_to_view.visible = false;
+
     app.stage.removeChild(temp_line);
+    app.stage.removeChild(temp_graphic);
+    app.stage.removeChild(popup_label1);
+    app.stage.removeChild(popup_label2);
+    app.stage.removeChild(popup_label3);
+    app.stage.removeChild(popup_label4);
+    app.stage.removeChild(popup_info1);
+    app.stage.removeChild(popup_info2);
+    app.stage.removeChild(popup_info3);
+    app.stage.removeChild(popup_info4);
+    app.stage.removeChild(popup_click_to_view);
 }
 
 function resetBlur() {
@@ -529,16 +601,12 @@ function resetBlur() {
 }
 
 
-/**
- * All animation lives here
- */
-function animate() {
-
-}
-
 var isShown = false;
 var isScheduled = false;
 
+/**
+ * When schedule button is clicked
+ */
 $('#schedule_btn').click(function onSchedulePressed() {
         if (!isScheduled) {
 
@@ -725,24 +793,31 @@ $('#schedule_btn').click(function onSchedulePressed() {
                                 break;
                         }
 
-                        var rot_count = 0;
-                        for (var j = 0; j < num_block; j++) {
-                            var id = t.scheduled_blocks[j];
+                        for (var rot_count = 0; rot_count < num_block; rot_count++) {
+                            var id = t.scheduled_blocks[rot_count];
 
                             t.base_reqs[id] -= 1;
 
                             color = convert_to_color_code(ROTATIONS_COLOR[id]);
 
-                            var x = start_x + rot_count * UNIT_RANGE;
-                            var y = start_name_label_y + trainee_count * UNIT_RANGE;
-
+                            var x = start_x + rot_count * UNIT_RANGE + Math.floor(rot_count / 4) * BLOCK_DISTANCE;
+                            var y = start_name_label_y + trainee_count * LABEL_HEIGHT;
 
                             var rot = rotations_dict[id];
                             var rot_name = '';
+                            var trainee_name = t.name;
+                            var block_num = rot_count;
+
                             if (rot) {
                                 rot_name = rot.name;
                             }
-                            var newSquare = new Square(x, y, color, rot_name, id, role, app.renderer);
+
+                            var newSquare;
+                            if ((rot_count % 4 != 3) && (t.scheduled_blocks[rot_count] == t.scheduled_blocks[rot_count + 1])) {
+                                newSquare = new LongSquare(x, y, color, app.renderer, rot_name, id, role, trainee_name, block_num);
+                            } else {
+                                newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, trainee_name, block_num);
+                            }
                             newSquare.draw();
 
                             newSquare.sprite
@@ -763,8 +838,6 @@ $('#schedule_btn').click(function onSchedulePressed() {
                                     pgy3_squares_list.push(newSquare.sprite);
                                     break;
                             }
-
-                            rot_count += 1;
                         }
                     }
 

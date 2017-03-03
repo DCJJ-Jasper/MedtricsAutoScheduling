@@ -125,12 +125,27 @@ Schedule.prototype.get_block_info_role_id = function(role, id) {
 //////////////////
 // GRAPHIC CLASSES
 //////////////////
-function Square(x, y, color, rot_name, id, role, renderer, rotations_texture = ROTATIONS_TEXTURE) {
+
+/**
+ * Square of each indepdent thing
+ * @param x
+ * @param y
+ * @param color
+ * @param rot_name
+ * @param id
+ * @param role
+ * @param renderer
+ * @param rotations_texture
+ * @constructor
+ */
+function Square(x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
     this.x = x;
     this.y = y;
     this.color = color;
     this.rot_name = rot_name;
     this.id = id;
+    this.trainee_name = trainee_name;
+    this.block_num = block_num;
     this.renderer = renderer;
 
     this.sprite = new PIXI.Sprite();
@@ -140,13 +155,54 @@ function Square(x, y, color, rot_name, id, role, renderer, rotations_texture = R
     this.sprite.rot_id = id;
     this.sprite.rot_name = rot_name;
     this.sprite.role = role;
+    this.sprite.trainee_name = trainee_name;
+    this.sprite.block_num = block_num;
+
     this.sprite.color = color;
 }
 
 Square.prototype.draw = function() {
-    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_TEXTURE[this.id]);
+    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[this.id]);
 };
 
+/**
+ * Longer square that connects toe the next square
+ * @param x
+ * @param y
+ * @param color
+ * @param rot_name
+ * @param id
+ * @param role
+ * @param renderer
+ * @param rotations_texture
+ * @constructor
+ */
+function LongSquare(x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.rot_name = rot_name;
+    this.id = id;
+    this.trainee_name = trainee_name;
+    this.block_num = block_num;
+    this.renderer = renderer;
+
+    this.sprite = new PIXI.Sprite();
+    this.sprite.x = this.x;
+    this.sprite.y = this.y;
+    this.sprite.interactive = true;
+    this.sprite.rot_id = id;
+    this.sprite.rot_name = rot_name;
+    this.sprite.role = role;
+    this.sprite.trainee_name = trainee_name;
+    this.sprite.block_num = block_num;
+
+    this.sprite.color = color;
+}
+
+LongSquare.prototype.draw = function() {
+    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[this.id]);
+};
 
 /**
  * ChartBars show information about the number of people at a given rotation at anytime
