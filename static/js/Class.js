@@ -14,7 +14,7 @@
  * @param num_block
  * @constructor
  */
-function Trainee(name, role, id, num_block, id_list) {
+function Trainee(name, role, id, num_block) {
     this.name = name;
     this.role = role;
     this.id = id;
@@ -33,7 +33,7 @@ Trainee.prototype.set_requirements = function(reqs) {
 
 Trainee.prototype.set_scheduled_blocks = function(scheduled_blocks) {
     this.scheduled_blocks = scheduled_blocks;
-}
+};
 
 Trainee.prototype.get_underdone_array = function() {
     var underdone_arr = [];
