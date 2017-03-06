@@ -327,7 +327,6 @@ function resetBlur() {
 
 var isShown = false;
 var isScheduled = false;
-
 /**
  * When schedule button is clicked
  */
@@ -426,6 +425,22 @@ $('#schedule_btn').click(function onSchedulePressed() {
                     pgy3_label.position.set(LABEL_ROLE_TOP_LEFT_X, pgy2_top_left_y + num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE);
                     pgy3_top_left_y = pgy2_top_left_y + num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
                     pgy3_container.addChild(pgy3_label);
+
+                    // Draw block number labels
+                    var blockNumberLabelPositions = new Array(13);
+                    blockNumberLabelPositions[0] = SQUARE_TOP_LEFT[0] + SQUARE_SIZE * 4 / 2;
+                    for (var i = 1; i < (num_block + 1) / 4; i++) {
+                        if (i < 10) {
+                            blockNumberLabelPositions[i] = blockNumberLabelPositions[i - 1] + SQUARE_SIZE * 4 / 2 + SQUARE_SIZE * 4 / 2 + SQUARE_DISTANCE + (LABEL_SIZE - 1) / 2;
+                        } else {
+                            blockNumberLabelPositions[i] = blockNumberLabelPositions[i - 1] + SQUARE_SIZE * 4 / 2 + SQUARE_SIZE * 4 / 2 + SQUARE_DISTANCE + (LABEL_SIZE - 2) / 2;
+                        }
+                        var blockNumberLabel = new PIXI.Text(i, {fontSize: LABEL_SIZE});
+                        blockNumberLabel.position.set(blockNumberLabelPositions[i - 1], SQUARE_TOP_LEFT[1] - SQUARE_DISTANCE);
+                        app.stage.addChild(blockNumberLabel);
+                    }
+
+                    console.log(blockNumberLabelPositions);
 
                     var pgy1_count = 0;
                     var pgy2_count = 0;
