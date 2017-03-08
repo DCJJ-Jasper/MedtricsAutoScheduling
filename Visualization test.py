@@ -189,13 +189,28 @@ def request_schedule():
                 max2 = int(line_data[5])
                 min3 = int(line_data[6])
                 max3 = int(line_data[7])
+                min12 = int(line_data[8])
+                max12 = int(line_data[9])
+                min13 = int(line_data[10])
+                max13 = int(line_data[11])
+                min23 = int(line_data[12])
+                max23 = int(line_data[13])
+                mintotal = int(line_data[14])
+                maxtotal = int(line_data[15])
 
-                #
+                if (max1 == -1): max1 = num_trainees
+                if (max2 == -1): max1 = num_trainees
+                if (max3 == -1): max1 = num_trainees
+                if (max12 == -1): max1 = num_trainees
+                if (max13 == -1): max1 = num_trainees
+                if (max23 == -1): max1 = num_trainees
+                if (maxtotal == -1): max1 = num_trainees
 
                 # Assign min max to rotation if is a core rotation
                 if rot_id in rotations_dict:
-                    rotations_dict[rot_id].set_min(min1, min2, min3)
-                    rotations_dict[rot_id].set_max(max1, max2, max3)
+                    rotations_dict[rot_id].set_min(min1, min2, min3, min12, min13, min23, mintotal)
+                    rotations_dict[rot_id].set_max(max1, max2, max3, max12, max13, max23, maxtotal)
+
                 else:
                     elec_min1 += min1
                     elec_max1 += max1

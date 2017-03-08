@@ -184,21 +184,21 @@ class Rotation:
         self._sites = {}
 
         # Min, max cap for the rotation
-        self.min1 = 0
-        self.min2 = 0
-        self.min3 = 0
-        self.min12 = 0
-        self.min13 = 0
-        self.min23 = 0
-        self.mintotal = 0
+        self.min1 = -1
+        self.min2 = -1
+        self.min3 = -1
+        self.min12 = -1
+        self.min13 = -1
+        self.min23 = -1
+        self.mintotal = -1
 
-        self.max1 = 0
-        self.max2 = 0
-        self.max3 = 0
-        self.max12 = 0
-        self.max13 = 0
-        self.max23 = 0
-        self.maxtotal = 0
+        self.max1 = -1
+        self.max2 = -1
+        self.max3 = -1
+        self.max12 = -1
+        self.max13 = -1
+        self.max23 = -1
+        self.maxtotal = -1
 
         # Processed, min, max cap
         self.processed_min1 = [0] * self.num_block
@@ -260,21 +260,39 @@ class Rotation:
     def get_maxtotal(self):
         return self.maxtotal
 
-    def set_min(self, min1, min2, min3):
+    def set_min(self, min1, min2, min3, min12, min13, min23, mintotal):
         self.min1 = min1
         self.min2 = min2
         self.min3 = min3
+        self.min12 = min12
+        self.min13 = min13
+        self.min23 = min23
+        self.mintotal = mintotal
+
         self.processed_min1 = [min1] * self.num_block
         self.processed_min2 = [min2] * self.num_block
         self.processed_min3 = [min3] * self.num_block
+        self.processed_min12 = [min12] * self.num_block
+        self.processed_min13 = [min13] * self.num_block
+        self.processed_min23 = [min23] * self.num_block
+        self.processed_mintotal = [mintotal] * self.num_block
 
-    def set_max(self, max1, max2, max3):
+    def set_max(self, max1, max2, max3, max12, max13, max23, maxtotal):
         self.max1 = max1
         self.max2 = max2
         self.max3 = max3
+        self.max12 = max12
+        self.max13 = max13
+        self.max23 = max23
+        self.maxtotal = maxtotal
+
         self.processed_max1 = [max1] * self.num_block
         self.processed_max2 = [max2] * self.num_block
         self.processed_max3 = [max3] * self.num_block
+        self.processed_max12 = [max12] * self.num_block
+        self.processed_max13 = [max13] * self.num_block
+        self.processed_max23 = [max23] * self.num_block
+        self.processed_maxtotal = [maxtotal] * self.num_block
 
     def reset_cap(self):
         self.processed_min1 = [self.min1] * self.num_block
