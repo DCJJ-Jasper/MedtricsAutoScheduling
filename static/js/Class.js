@@ -35,6 +35,10 @@ Trainee.prototype.set_scheduled_blocks = function(scheduled_blocks) {
     this.scheduled_blocks = scheduled_blocks;
 };
 
+Trainee.prototype.set_empty_schedule_blocks = function () {
+    this.scheduled_blocks = new Array(this.num_block).fill(1);
+};
+
 Trainee.prototype.get_underdone_array = function() {
     var underdone_arr = [];
 
