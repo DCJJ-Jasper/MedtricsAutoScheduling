@@ -19,6 +19,17 @@ def generateFullHalfQuarter(req):
         return (floor_value_full, floor_value_half, floor_value_quarter)
     raise ValueError("Requirement has minimum resolution of 0.25")
 
+def generateFullHalfQuarterDict(trainee_req):
+    trainee_req_full = {}
+    trainee_req_half = {}
+    trainee_req_quarter = {}
+    for k in trainee_req.keys():
+        full_half_quarter = generateFullHalfQuarter(trainee_req[k])
+        trainee_req_full[k] = full_half_quarter[0]
+        trainee_req_half[k] = full_half_quarter[1]
+        trainee_req_quarter[k] = full_half_quarter[2]
+    return(trainee_req_full, trainee_req_half, trainee_req_quarter)
+
 def pruneSchedule(currentSchedule, seed, rotations):
     """
 
@@ -38,9 +49,6 @@ def pruneSchedule(currentSchedule, seed, rotations):
     min_length_rotation_local = []
     for rot in rotations:
         min_length_rotation_local.append((rot.name, rot.min_block_length))
-
-    print(rotations_list_local)
-    print(min_length_rotation_local)
 
     # Deep copy the input schedule
     currentSchedule = copy.deepcopy(currentSchedule)
@@ -96,18 +104,26 @@ def doubleSchedule(currentSchedule):
     return result_schedule
 
 
-def solveSchedule(prefilled_schedule, num_block, num_trainee, rotations, requirements_local,
-                      max_requirements_local):
-    """
-    This solves the schedule with the solver
-    :param prefilled_schedule:
-    :param num_block:
-    :param num_trainee:
-    :param rotations:
-    :param requirements_local:
-    :param max_requirements_local:
-    :return:
-    """
+def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
+                  requirements_pgy1, max_requirements_pgy1,
+                  requirements_pgy2, max_requirements_pgy2,
+                  requirements_pgy3, max_requirements_pgy3
+                  ):
+    print("TEST Print, in SolverUtil.solveSchedule")
+    print(num_block)
+    print(num_trainee_list)
+    print("PGY1")
+    print(requirements_pgy1)
+    print(max_requirements_pgy1)
+    print("PGY2")
+    print(requirements_pgy2)
+    print(max_requirements_pgy2)
+    print("PGY3")
+    print(requirements_pgy3)
+    print(max_requirements_pgy3)
+
+
+    num_trainee = sum(num_trainee_list)
     # Create vacation allowed local
     vacation_allowed_local = {}
     for rot in rotations:
@@ -119,8 +135,14 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee, rotations, require
         rotations_list_local.append((rot.name,
                                      rot.min1, rot.max1,
                                      rot.min2, rot.max2,
-                                     rot.min3, rot.max3))
-
+                                     rot.min3, rot.max3,
+                                     rot.min12, rot.max12,
+                                     rot.min13, rot.max13,
+                                     rot.min23, rot.max23,
+                                     rot.mintotal, rot.maxtotal))
+    print("Rotations")
+    print(rotations_list_local)
+    print("Done Test Print")
     num_rotation = len(rotations_list_local)
     # Instantiate a mixed-integer solver, naming it SolveIntegerProblem
     solver = pywraplp.Solver('SolveIntegerProblem',
@@ -148,24 +170,25 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee, rotations, require
     for i in range(num_trainee):
         for j in range(num_block):
             current_rotation = prefilled_schedule[i][j]
-            if current_rotation == -1:
-                for k in range(num_rotation):
+            for k in range(num_rotation):
+                if current_rotation == -1:
+                    #Plain empty block
                     attend_list[i][j][k] = solver.IntVar(0, 1, 'attend_{}_{}_{}'.format(i, j, k))
-            elif current_rotation == -2:
-                for k in range(num_rotation):
+                elif current_rotation == -2:
+                    #Vacation block
                     if k in vacation_allowed_rotations:
                         attend_list[i][j][k] = solver.IntVar(0, 1, 'attend_{}_{}_{}'.format(i, j, k))
                     else:
                         attend_list[i][j][k] = solver.IntVar(0, 0, 'attend_{}_{}_{}'.format(i, j, k))
-            else:
-                for k in range(num_rotation):
+                else:
+                    # There's a prefilled block here
                     if k == current_rotation:
                         attend_list[i][j][k] = solver.IntVar(1, 1, 'attend_{}_{}_{}'.format(i, j, k))
                     else:
                         attend_list[i][j][k] = solver.IntVar(0, 0, 'attend_{}_{}_{}'.format(i, j, k))
 
     # Set the rules
-    # A person can only present at one thing at a time
+    # A person can only be present at one thing at a time
     for i in range(num_trainee):
         for j in range(num_block):
             constraint = solver.Constraint(0, 1)
@@ -173,19 +196,62 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee, rotations, require
                 constraint.SetCoefficient(attend_list[i][j][k], 1)
 
     # A person needs a minimum number of rotations
-    for k in range(num_rotation):
-        for i in range(num_trainee):
-            constraint = solver.Constraint(requirements_local[rotations_list_local[k][0]],
-                                           max_requirements_local[rotations_list_local[k][0]])
+    for i in range(num_trainee):
+        if (i < num_trainee_list[0]):
+            # PGY1
+            needed_rotations = requirements_pgy1.keys()
+            req = requirements_pgy1
+            req_lim = max_requirements_pgy1
+        elif (i < (num_trainee_list[0] + num_trainee_list[1])):
+            # PGY2
+            needed_rotations = requirements_pgy2.keys()
+            req = requirements_pgy2
+            req_lim = max_requirements_pgy2
+        else:
+            # PGY3
+            needed_rotations = requirements_pgy3.keys()
+            req = requirements_pgy3
+            req_lim = max_requirements_pgy3
+        for k in range(num_rotation):
+            if rotations_list_local[k] not in needed_rotations:
+                continue
+            constraint = solver.Constraint(req[rotations_list_local[k][0]],
+                                           req_lim[rotations_list_local[k][0]])
             for j in range(num_block):
                 constraint.SetCoefficient(attend_list[i][j][k], 1)
 
     # A rotation must goes on (satisfying a min and max number of people)
     for k in range(num_rotation):
         for j in range(num_block):
-            constraint = solver.Constraint(rotations_list_local[k][1], rotations_list_local[k][2])
+            constraint1 = solver.Constraint(rotations_list_local[k][1], rotations_list_local[k][2])
+            constraint2 = solver.Constraint(rotations_list_local[k][3], rotations_list_local[k][4])
+            constraint3 = solver.Constraint(rotations_list_local[k][5], rotations_list_local[k][6])
+            constraint12 = solver.Constraint(rotations_list_local[k][7], rotations_list_local[k][8])
+            constraint13 = solver.Constraint(rotations_list_local[k][9], rotations_list_local[k][10])
+            constraint23 = solver.Constraint(rotations_list_local[k][11], rotations_list_local[k][12])
+            constrainttotal = solver.Constraint(rotations_list_local[k][13], rotations_list_local[k][14])
+
+            #Adding trainees to constraints
             for i in range(num_trainee):
-                constraint.SetCoefficient(attend_list[i][j][k], 1)
+                if (i < num_trainee_list[0]):
+                    # PGY1
+                    constraint1.SetCoefficient(attend_list[i][j][k], 1)
+                    constraint12.SetCoefficient(attend_list[i][j][k], 1)
+                    constraint13.SetCoefficient(attend_list[i][j][k], 1)
+                    constrainttotal.SetCoefficient(attend_list[i][j][k], 1)
+                elif (i < (num_trainee_list[0] + num_trainee_list[1])):
+                    # PGY2
+                    constraint2.SetCoefficient(attend_list[i][j][k], 1)
+                    constraint12.SetCoefficient(attend_list[i][j][k], 1)
+                    constraint23.SetCoefficient(attend_list[i][j][k], 1)
+                    constrainttotal.SetCoefficient(attend_list[i][j][k], 1)
+                else:
+                    # PGY3
+                    constraint3.SetCoefficient(attend_list[i][j][k], 1)
+                    constraint13.SetCoefficient(attend_list[i][j][k], 1)
+                    constraint23.SetCoefficient(attend_list[i][j][k], 1)
+                    constrainttotal.SetCoefficient(attend_list[i][j][k], 1)
+
 
     # Minimize number of people doing rotations
     objective = solver.Objective()
