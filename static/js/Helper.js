@@ -174,7 +174,7 @@ function read_in_data_from_medtrics(input_data) {
     var line_num = 0;
     var data = str_list[line_num].trim().split(",");
     program_name = data[1];
-    num_block = parseInt(data[2], 10);
+    num_block = parseInt(data[2], 10) * 4;
 
     // Skip a line
     line_num += 1;
@@ -271,11 +271,13 @@ function read_in_data_from_medtrics(input_data) {
         rotations_dict[rot_id] = new_rotation;
         id_list.push(rot_id);
     }
-
     // Skip a line
     line_num += 1;
 
     // Number of requirements (No need to read anything)
+    line_num += 1;
+
+    // Skip a line
     line_num += 1;
 
     // Read requirements
@@ -285,9 +287,10 @@ function read_in_data_from_medtrics(input_data) {
     var max2;
     var min3;
     var max3;
-    for (var i = 0; i < num_pgy3; i++) {
+    for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
+        console.log(data);
 
         rot_id = parseInt(data[0], 10);
         min1 = parseInt(data[2], 10);
@@ -296,7 +299,7 @@ function read_in_data_from_medtrics(input_data) {
         max2 = parseInt(data[5], 10);
         min3 = parseInt(data[6], 10);
         max3 = parseInt(data[7], 10);
-
+        console.log(rot_id);
         rotations_dict[rot_id].set_rotation_demands(min1, max1, min2, max2, min3, max3);
     }
 
@@ -413,6 +416,11 @@ function read_in_data_from_medtrics(input_data) {
     // Skip a line
     line_num += 1;
 
+    // Create empty schedule for each trainee
+    for (t of trainees) {
+        t.set_empty_schedule_blocks();
+    }
+
     // Read prefills
     var user_id;
     var block_num;
@@ -424,4 +432,6 @@ function read_in_data_from_medtrics(input_data) {
         rotation = parseInt(data[2], 10);
         quarter = parseInt(data[3], 10);
     }
+
+    //
 }
