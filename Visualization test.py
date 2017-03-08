@@ -458,6 +458,7 @@ def request_schedule():
                 # print rotations_dict[resultArray[trainee_num][block_num]]
                 schedule.fill_in(trainees[trainee_num], block_num, rotations_dict[resultArray[trainee_num][block_num]])
 
+        return schedule.generate_info_file()
         # -------------
         # VISUALIZATION
         # -------------
