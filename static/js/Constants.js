@@ -2,6 +2,12 @@
  * Created by AC on 2/10/17.
  */
 
+//////////////////////
+// SCHEDULER CONSTANTS
+//////////////////////
+
+var ROLES_LIST = ["PGY1", "PGY2", "PGY3"]
+
 /////////////////////
 // POSITION CONSTANTS
 /////////////////////
@@ -39,6 +45,12 @@ var POPUP_INFO_X_OFFSET = 85;
 var POPUP_PADDING = 7;
 var POPUP_WIDTH = 300;
 var POPUP_WEIGHT = 124;
+var POPUP_ROTATION_OFFSET = 4;
+var POPUP_ROTATION_SQUARE = 10;
+var POPUP_SQUARE_OFFSET_X = 1;
+var POPUP_SQUARE_OFFSET_Y = 3;
+var POPUP_ROTATION_LABEL_OFFSET = 18;
+var POPUP_ROTATION_SIZE = 12;
 
 var SQUARE_TOP_LEFT = [300, 40 + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST];
 var SQUARE_SIZE = 14;
@@ -97,6 +109,12 @@ var ROTATIONS_COLOR = {
     "24": [95.0, 203.0, 17.0],
     "25": [132.0, 231.0, 82.0]
 };
+
+// Some special treatment for empty block
+EMPTY_BLOCK_NAME = "Blank";
+EMPTY_BLOCK_GRAPHIC_ID = 1000;
+EMPTY_BLOCK_COLOR = [230.0, 230.0, 230.0]
+ROTATIONS_COLOR[EMPTY_BLOCK_GRAPHIC_ID] = EMPTY_BLOCK_COLOR;
 
 // Texture dictionary
 var ROTATIONS_SQUARE_TEXTURE = {}
@@ -201,7 +219,7 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "69,Amos,Heriford\n" +
     "70,Estefana,Laiche\n" +
     "71,Melvina,Rufo\n" +
-    "72,2Brigida,Doiel\n" +
+    "72,Brigida,Doiel\n" +
     "73,Cinda,Theall\n" +
     "74,Elaine,Stefanick\n" +
     "75,Shanelle,Preus\n" +
@@ -251,6 +269,129 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "118,Glen,Huppert\n" +
     "119,Lauryn,Scrudato\n" +
     "120,Troy,Homes\n" +
+    "---\n" +
+    "Num_rotations,8\n" +
+    "ROTATION_ID, ROTATION,WORK_WITH_ALLOWED_VACATION,MINIMUM_BLOCK_LENGTH,MAX_BLOCKS_PER_YEAR,TYPE\n" +
+    "0,Ambulatory Medicine Blocks,Yes,1,6,Core\n" +
+    "1,Backup Staffing / Urgent Visit,No,1,6,Core\n" +
+    "2,Coronary Care Unit,Yes,1,6,Core\n" +
+    "3,Elective,No,0.25,1,Core\n" +
+    "4,Emergency Medicine,No,1,6,Core\n" +
+    "5,Inpatient Wards,No,1,6,Core\n" +
+    "6,Medical Intensive Care Unit,No,1,6,Core\n" +
+    "7,Neurology,Yes,1,6,Core\n" +
+    "---\n" +
+    "Workforce_requirements,8\n" +
+    "ROTATION_ID,ROTATION,MIN1,MAX1,MIN2,MAX2,MIN3,MAX3,MIN12,MAX12,MIN13,MIN13,MIN23,MAX23,MIN_TOTAL,MAX_TOTAL\n" +
+    "0,Ambulatory Medicine Blocks,1,5,1,5,1,5,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "1,Backup Staffing / Urgent Visit,1,5,-1,-1,-1,-1,-1,-1,-1,-1,2,10,-1,-1\n" +
+    "2,Coronary Care Unit,1,7,1,7,1,7,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "3,Elective,2,7,-1,-1,-1,-1,-1,-1,-1,-1,4,14,-1,-1\n" +
+    "4,Emergency Medicine,1,5,1,5,1,5,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "5,Inpatient Wards,-1,-1,-1,-1,3,7,6,14,-1,-1,-1,-1,-1,-1\n" +
+    "6,Medical Intensive Care Unit,1,5,1,5,1,5,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "7,Neurology,1,5,1,5,1,5,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "---\n" +
+    "ROTATION,MIN_BLOCKS_REQUIRED\n" +
+    "PGY1_REQUIREMENT,8\n" +
+    "Ambulatory Medicine Blocks,1.25\n" +
+    "Backup Staffing / Urgent Visit,1\n" +
+    "Coronary Care Unit,2\n" +
+    "Elective,2\n" +
+    "Emergency Medicine,1\n" +
+    "Inpatient Wards,2\n" +
+    "Medical Intensive Care Unit,1.5\n" +
+    "Neurology,4\n" +
+    "PGY2_REQUIREMENT,8\n" +
+    "Ambulatory Medicine Blocks,1.25\n" +
+    "Backup Staffing / Urgent Visit,1\n" +
+    "Coronary Care Unit,2\n" +
+    "Elective,2\n" +
+    "Emergency Medicine,1\n" +
+    "Inpatient Wards,2\n" +
+    "Medical Intensive Care Unit,1.5\n" +
+    "Neurology,4\n" +
+    "PGY3_REQUIREMENT,8\n" +
+    "Ambulatory Medicine Blocks,1.25\n" +
+    "Backup Staffing / Urgent Visit,1\n" +
+    "Coronary Care Unit,2\n" +
+    "Elective,2\n" +
+    "Emergency Medicine,1\n" +
+    "Inpatient Wards,2\n" +
+    "Medical Intensive Care Unit,1.5\n" +
+    "Neurology,4\n" +
+    "---\n" +
+    "ROTATION,LIMITATION\n" +
+    "PGY1_LIMITATION,8\n" +
+    "Ambulatory Medicine Blocks,10\n" +
+    "Backup Staffing / Urgent Visit,10\n" +
+    "Coronary Care Unit,10\n" +
+    "Elective,10\n" +
+    "Emergency Medicine,10\n" +
+    "Inpatient Wards,10\n" +
+    "Medical Intensive Care Unit,10\n" +
+    "Neurology,10\n" +
+    "PGY2_LIMITATION,8\n" +
+    "Ambulatory Medicine Blocks,10\n" +
+    "Backup Staffing / Urgent Visit,10\n" +
+    "Coronary Care Unit,10\n" +
+    "Elective,10\n" +
+    "Emergency Medicine,10\n" +
+    "Inpatient Wards,10\n" +
+    "Medical Intensive Care Unit,10\n" +
+    "Neurology,10\n" +
+    "PGY3_LIMITATION,8\n" +
+    "Ambulatory Medicine Blocks,10\n" +
+    "Backup Staffing / Urgent Visit,10\n" +
+    "Coronary Care Unit,10\n" +
+    "Elective,10\n" +
+    "Emergency Medicine,10\n" +
+    "Inpatient Wards,10\n" +
+    "Medical Intensive Care Unit,10\n" +
+    "Neurology,10\n" +
+    "---\n" +
+    "Prefilled,0\n" +
+    "USERID,BLOCK,ROTATION,WHERE_IN_BLOCK_RANG\n";
+
+/**
+ * This is data sent from the javascript to the server
+ * @type {string}
+ */
+var FAKE_TEXT_SMALL = "Program,Psychiatry,13\n" +
+    "USER_ID,FIRST_NAME,LAST_NAME\n" +
+    "Num_PGY1,10\n" +
+    "1,Santhosh,Cherian\n" +
+    "2,Ron,Rivera\n" +
+    "3,Todd,Wilkinson\n" +
+    "4,Mary,Renner\n" +
+    "5,Randy,Moss\n" +
+    "6,Chris,Tokodi\n" +
+    "7,Grant,Fuhr\n" +
+    "8,Fred,Marston\n" +
+    "9,Dodie,Woodman\n" +
+    "10,Edie,Ballin\n" +
+    "Num_PGY2,10\n" +
+    "41,Wendi,Fijal\n" +
+    "42,Daisy,Gautsch\n" +
+    "43,Kathey,Lorenzana\n" +
+    "44,Marget,Dure\n" +
+    "45,Hilario,Fenbert\n" +
+    "46,Magdalene,Menesez\n" +
+    "47,Marcel,Cartwright\n" +
+    "48,Leda,Spiegle\n" +
+    "49,Rosemary,Aurelia\n" +
+    "50,Susie,Lustberg\n" +
+    "Num_PGY3,10\n" +
+    "81,Russel,Javers\n" +
+    "82,Judie,Dspain\n" +
+    "83,Dave,Rend\n" +
+    "84,Ulrike,Face\n" +
+    "85,Diedre,Jannise\n" +
+    "86,Porfirio,Garahan\n" +
+    "87,Lorene,Wisecarver\n" +
+    "88,Virgilio,Austria\n" +
+    "89,Twana,Knoeppel\n" +
+    "90,Bambi,Briagas\n" +
     "---\n" +
     "Num_rotations,8\n" +
     "ROTATION_ID, ROTATION,WORK_WITH_ALLOWED_VACATION,MINIMUM_BLOCK_LENGTH,MAX_BLOCKS_PER_YEAR,TYPE\n" +

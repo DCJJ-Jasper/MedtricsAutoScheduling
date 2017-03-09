@@ -36,7 +36,7 @@ Trainee.prototype.set_scheduled_blocks = function(scheduled_blocks) {
 };
 
 Trainee.prototype.set_empty_schedule_blocks = function () {
-    this.scheduled_blocks = new Array(this.num_block).fill(1);
+    this.scheduled_blocks = new Array(this.num_block).fill(EMPTY_BLOCK_GRAPHIC_ID);
 };
 
 Trainee.prototype.get_underdone_array = function() {
@@ -161,6 +161,7 @@ function Square(x, y, color, renderer, rot_name, id, role, trainee_name, block_n
     this.sprite.role = role;
     this.sprite.trainee_name = trainee_name;
     this.sprite.block_num = block_num;
+    this.sprite._textureID = 1;
 
     this.sprite.color = color;
 }
@@ -168,48 +169,38 @@ function Square(x, y, color, renderer, rot_name, id, role, trainee_name, block_n
 Square.prototype.draw = function() {
     this.sprite.texture = this.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[this.id]);
 };
-
 /**
- * Longer square that connects toe the next square
+ * LongSquare is a child of Square, slightly longer to connect the two same consecutive rotations within block
  * @param x
  * @param y
  * @param color
+ * @param renderer
  * @param rot_name
  * @param id
  * @param role
- * @param renderer
+ * @param trainee_name
+ * @param block_num
  * @param rotations_texture
  * @constructor
  */
 function LongSquare(x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
-    this.x = x;
-    this.y = y;
-    this.color = color;
-    this.rot_name = rot_name;
-    this.id = id;
-    this.trainee_name = trainee_name;
-    this.block_num = block_num;
-    this.renderer = renderer;
-
-    this.sprite = new PIXI.Sprite();
-    this.sprite.x = this.x;
-    this.sprite.y = this.y;
-    this.sprite.interactive = true;
-    this.sprite.rot_id = id;
-    this.sprite.rot_name = rot_name;
-    this.sprite.role = role;
-    this.sprite.trainee_name = trainee_name;
-    this.sprite.block_num = block_num;
-
-    this.sprite.color = color;
+    Square.call(this, x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture);
 }
+LongSquare.prototype = new Square();
+LongSquare.prototype.constructor = LongSquare;
 
 LongSquare.prototype.draw = function() {
-    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[this.id]);
+    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[this.id.toString()]);
 };
 
 /**
  * ChartBars show information about the number of people at a given rotation at anytime
+ * @param x
+ * @param y
+ * @param height
+ * @param color
+ * @param renderer
+ * @constructor
  */
 function ChartBars(x, y, height, color, renderer) {
     this.x = x;
@@ -225,6 +216,13 @@ ChartBars.prototype.draw = function() {
 
 /**
  * Underdone bars show information about the number of rotation needed by the trainee
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @param color
+ * @param renderer
+ * @constructor
  */
 function UnderdoneBars(x1, y1, x2, y2, color, renderer) {
     this.x1 = x1;
@@ -239,3 +237,13 @@ UnderdoneBars.prototype.draw = function() {
 
 };
 
+function RotationSquare(x, y, color, renderer) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.rot_name = rot_name;
+    this.id = id;
+    this.trainee_name = trainee_name;
+    this.block_num = block_num;
+    this.renderer = renderer;
+}

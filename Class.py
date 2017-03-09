@@ -322,7 +322,6 @@ class Rotation:
         print(Helper.pad_blank("", ROTATON_NAME_LEN) + str(self.processed_min2))
         print(Helper.pad_blank("", ROTATON_NAME_LEN) + str(self.processed_min3))
 
-
 class Schedule:
     """
     Schedule contains trainees and rotations. It also contains the scheduling method given these informations.
@@ -399,49 +398,103 @@ class Schedule:
 
     def fill_in(self, trainee, i, rotation):
         trainee.block[i] = rotation
-
-        # Ignore the process if the rotation ID is -1 (no rotation)
-        if (rotation.id == -1): return
-        # Ignore the process if the rotation ID is -2 (Vacation allowed)
-        if (rotation.id == -2): return
-
         if (trainee.role == "PGY1"):
-            rotation.processed_min1[i] -= 1
-            rotation.processed_max1[i] -= 1
+            if (rotation.min1 != -1):
+                rotation.processed_min1[i] -= 1 # Cut down min
+                rotation.processed_max1[i] -= 1 # Cut down max
+            elif (rotation.min12 != -1):
+                rotation.processed_min12[i] -= 1  # Cut down min
+                rotation.processed_max12[i] -= 1  # Cut down max
+            elif (rotation.min13 != -1):
+                rotation.processed_min13[i] -= 1  # Cut down min
+                rotation.processed_max13[i] -= 1  # Cut down max
+            elif (rotation.mintotal != -1):
+                rotation.processed_mintotal[i] -= 1  # Cut down min
+                rotation.processed_maxtotal[i] -= 1  # Cut down max
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
         elif (trainee.role == "PGY2"):
-            rotation.processed_min2[i] -= 1
-            rotation.processed_max2[i] -= 1
+            if (rotation.min2 != -1):
+                rotation.processed_min2[i] -= 1 # Cut down min
+                rotation.processed_max2[i] -= 1 # Cut down max
+            elif (rotation.min12 != -1):
+                rotation.processed_min12[i] -= 1  # Cut down min
+                rotation.processed_max12[i] -= 1  # Cut down max
+            elif (rotation.min23 != -1):
+                rotation.processed_min23[i] -= 1  # Cut down min
+                rotation.processed_max23[i] -= 1  # Cut down max
+            elif (rotation.mintotal != -1):
+                rotation.processed_mintotal[i] -= 1  # Cut down min
+                rotation.processed_maxtotal[i] -= 1  # Cut down max
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
         elif (trainee.role == "PGY3"):
-            rotation.processed_min3[i] -= 1
-            rotation.processed_max3[i] -= 1
+            if (rotation.min3 != -1):
+                rotation.processed_min3[i] -= 1 # Cut down min
+                rotation.processed_max3[i] -= 1 # Cut down max
+            elif (rotation.min23 != -1):
+                rotation.processed_min23[i] -= 1  # Cut down min
+                rotation.processed_max23[i] -= 1  # Cut down max
+            elif (rotation.min13 != -1):
+                rotation.processed_min13[i] -= 1  # Cut down min
+                rotation.processed_max13[i] -= 1  # Cut down max
+            elif (rotation.mintotal != -1):
+                rotation.processed_mintotal[i] -= 1  # Cut down min
+                rotation.processed_maxtotal[i] -= 1  # Cut down max
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
     def fill_in_PGY1(self, trainees, i, rotation):
         for trainee in trainees:
             trainee.block[i] = rotation
-            rotation.processed_min1[i] -= 1 # Cut down min
-            rotation.processed_max1[i] -= 1 # Cut down max
+            if (rotation.min1 != -1):
+                rotation.processed_min1[i] -= 1 # Cut down min
+                rotation.processed_max1[i] -= 1 # Cut down max
+            elif (rotation.min12 != -1):
+                rotation.processed_min12[i] -= 1  # Cut down min
+                rotation.processed_max12[i] -= 1  # Cut down max
+            elif (rotation.min13 != -1):
+                rotation.processed_min13[i] -= 1  # Cut down min
+                rotation.processed_max13[i] -= 1  # Cut down max
+            elif (rotation.mintotal != -1):
+                rotation.processed_mintotal[i] -= 1  # Cut down min
+                rotation.processed_maxtotal[i] -= 1  # Cut down max
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
     def fill_in_PGY2(self, trainees, i, rotation):
         for trainee in trainees:
             trainee.block[i] = rotation
-            rotation.processed_min2[i] -= 1
-            rotation.processed_max2[i] -= 1
+            if (rotation.min2 != -1):
+                rotation.processed_min2[i] -= 1 # Cut down min
+                rotation.processed_max2[i] -= 1 # Cut down max
+            elif (rotation.min12 != -1):
+                rotation.processed_min12[i] -= 1  # Cut down min
+                rotation.processed_max12[i] -= 1  # Cut down max
+            elif (rotation.min23 != -1):
+                rotation.processed_min23[i] -= 1  # Cut down min
+                rotation.processed_max23[i] -= 1  # Cut down max
+            elif (rotation.mintotal != -1):
+                rotation.processed_mintotal[i] -= 1  # Cut down min
+                rotation.processed_maxtotal[i] -= 1  # Cut down max
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
     def fill_in_PGY3(self, trainees, i, rotation):
         for trainee in trainees:
             trainee.block[i] = rotation
-            rotation.processed_min3[i] -= 1
-            rotation.processed_max3[i] -= 1
+            if (rotation.min3 != -1):
+                rotation.processed_min3[i] -= 1 # Cut down min
+                rotation.processed_max3[i] -= 1 # Cut down max
+            elif (rotation.min23 != -1):
+                rotation.processed_min23[i] -= 1  # Cut down min
+                rotation.processed_max23[i] -= 1  # Cut down max
+            elif (rotation.min13 != -1):
+                rotation.processed_min13[i] -= 1  # Cut down min
+                rotation.processed_max13[i] -= 1  # Cut down max
+            elif (rotation.mintotal != -1):
+                rotation.processed_mintotal[i] -= 1  # Cut down min
+                rotation.processed_maxtotal[i] -= 1  # Cut down max
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
@@ -490,8 +543,6 @@ class Schedule:
         print("")
         print("")
 
-
-
         # print('test min1 start')
         #
         # for i in range(self.num_block):
@@ -504,10 +555,6 @@ class Schedule:
         #
         # print('test min1 end')
 
-
-        print("before loop in step 1-4")
-        print(self.num_block)
-
         for i in range(int(self.num_block/4)):
 
 
@@ -516,31 +563,57 @@ class Schedule:
 
             for rotation in rotations:
 
+                min_PGY1 = 0
+                min_PGY2 = 0
+                min_PGY3 = 0
+
                 rot_name = rotation.name
                 rot_id = rotation.id
-                min_PGY1 = rotation.processed_min1[4*i]
-                min_PGY2 = rotation.processed_min2[4*i]
-                min_PGY3 = rotation.processed_min3[4*i]
+                if (rotation.min1 != -1):
+                    min_PGY1 = rotation.processed_min1[4 * i]
+                elif (rotation.min12 != -1):
+                    min_PGY1 = rotation.processed_min12[4 * i]
+                elif (rotation.min13 != -1):
+                    min_PGY1 = rotation.processed_min13[4 * i]
+                elif (rotation.mintotal != -1):
+                    min_PGY1 = rotation.processed_mintotal[4 * i]
 
-                #print(min_PGY1)
 
-                # print(rot_name,min_PGY1)
+                print("ISWHIWUHSWIUS",min_PGY1)
 
-                # If rotation still needs to fill in min
-                # TODO: Possibly randomize the fulfillment before assigning.
                 if (min_PGY1 > 0):
-                    avail_trainees = Helper.search_trainee(min_PGY1, "PGY1", rot_name, trainees, 4*i)
+                    avail_trainees = Helper.search_trainee(min_PGY1, "PGY1", rot_name, trainees, 4 * i)
                     # print(avail_trainees)
-                    self.fill_in_PGY1(avail_trainees, 4*i, rotation)
-                    self.fill_in_PGY1(avail_trainees, 4*i+1, rotation)
-                    self.fill_in_PGY1(avail_trainees, 4*i+2, rotation)
-                    self.fill_in_PGY1(avail_trainees, 4*i+3, rotation)
+                    self.fill_in_PGY1(avail_trainees, 4 * i, rotation)
+                    self.fill_in_PGY1(avail_trainees, 4 * i + 1, rotation)
+                    self.fill_in_PGY1(avail_trainees, 4 * i + 2, rotation)
+                    self.fill_in_PGY1(avail_trainees, 4 * i + 3, rotation)
+
+                if (rotation.min2 != -1):
+                    min_PGY2 = rotation.processed_min2[4 * i]
+                elif (rotation.min12 != -1):
+                    min_PGY2 = rotation.processed_min12[4 * i]
+                elif (rotation.min23 != -1):
+                    min_PGY2 = rotation.processed_min23[4 * i]
+                elif (rotation.mintotal != -1):
+                    min_PGY2 = rotation.processed_mintotal[4 * i]
+
                 if (min_PGY2 > 0):
                     avail_trainees = Helper.search_trainee(min_PGY2, "PGY2", rot_name, trainees, 4*i)
                     self.fill_in_PGY2(avail_trainees, 4*i, rotation)
                     self.fill_in_PGY2(avail_trainees, 4*i+1, rotation)
                     self.fill_in_PGY2(avail_trainees, 4*i+2, rotation)
                     self.fill_in_PGY2(avail_trainees, 4*i+3, rotation)
+
+                if (rotation.min3 != -1):
+                    min_PGY3 = rotation.processed_min3[4 * i]
+                elif (rotation.min23 != -1):
+                    min_PGY3 = rotation.processed_min23[4 * i]
+                elif (rotation.min13 != -1):
+                    min_PGY3 = rotation.processed_min13[4 * i]
+                elif (rotation.mintotal != -1):
+                    min_PGY3 = rotation.processed_mintotal[4 * i]
+
                 if (min_PGY3 > 0):
                     avail_trainees = Helper.search_trainee(min_PGY3, "PGY3", rot_name, trainees, 4*i)
                     self.fill_in_PGY3(avail_trainees, 4*i, rotation)
@@ -617,12 +690,20 @@ class Schedule:
             for rotation in rotations:
                 rot_name = rotation.name
                 rot_id = rotation.id
-                min_PGY1 = rotation.processed_min1[4*i]
-                min_PGY2 = rotation.processed_min2[4*i]
-                min_PGY3 = rotation.processed_min3[4*i]
 
-                # If rotation is still not satisfied
-                # TODO: Possibly randomize the fulfillment
+                min_PGY1 = 0
+                min_PGY2 = 0
+                min_PGY3 = 0
+
+                if (rotation.min1 != -1):
+                    min_PGY1 = rotation.processed_min1[4 * i]
+                elif (rotation.min12 != -1):
+                    min_PGY1 = rotation.processed_min12[4 * i]
+                elif (rotation.min13 != -1):
+                    min_PGY1 = rotation.processed_min13[4 * i]
+                elif (rotation.mintotal != -1):
+                    min_PGY1 = rotation.processed_mintotal[4 * i]
+
                 if (min_PGY1 > 0):
 
                     # TODO: Possibly randomize the trainees
@@ -630,6 +711,7 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
+                        # random.shuffle(trainees)
                         # print(trainee.processed_limits)
                         if ((trainee.role == "PGY1") and (trainee.block[4 * i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
@@ -641,12 +723,23 @@ class Schedule:
                             min_PGY1 -= 1
                             if (min_PGY1 == 0): break
 
+
+                if (rotation.min2 != -1):
+                    min_PGY2 = rotation.processed_min2[4 * i]
+                elif (rotation.min12 != -1):
+                    min_PGY2 = rotation.processed_min12[4 * i]
+                elif (rotation.min23 != -1):
+                    min_PGY2 = rotation.processed_min23[4 * i]
+                elif (rotation.mintotal != -1):
+                    min_PGY2 = rotation.processed_mintotal[4 * i]
+
                 if (min_PGY2 > 0):
                     # TODO: Possibly randomize the trainees
                     random.shuffle(trainees)
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
+                        # random.shuffle(trainees)
                         if ((trainee.role == "PGY2") and (trainee.block[4 * i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
                                     4 * i + 3].id == -1 and (trainee.processed_limits[rot_name] > 3)):
@@ -657,12 +750,23 @@ class Schedule:
                             min_PGY2 -= 1
                             if (min_PGY2 == 0): break
 
+
+                if (rotation.min3 != -1):
+                    min_PGY3 = rotation.processed_min3[4 * i]
+                elif (rotation.min23 != -1):
+                    min_PGY3 = rotation.processed_min23[4 * i]
+                elif (rotation.min13 != -1):
+                    min_PGY3 = rotation.processed_min13[4 * i]
+                elif (rotation.mintotal != -1):
+                    min_PGY3 = rotation.processed_mintotal[4 * i]
+
                 if (min_PGY3 > 0):
                     # TODO: Possibly randomize the trainees
                     random.shuffle(trainees)
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
+                        # random.shuffle(trainees)
 
                         if ((trainee.role == "PGY3") and (trainee.block[4 * i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
@@ -674,6 +778,15 @@ class Schedule:
                             min_PGY3 -= 1
                             if (min_PGY3 == 0): break
 
+                if (rotation.min1 != -1):
+                    min_PGY1 = rotation.processed_min1[4 * i]
+                elif (rotation.min12 != -1):
+                    min_PGY1 = rotation.processed_min12[4 * i]
+                elif (rotation.min13 != -1):
+                    min_PGY1 = rotation.processed_min13[4 * i]
+                elif (rotation.mintotal != -1):
+                    min_PGY1 = rotation.processed_mintotal[4 * i]
+
                 if (min_PGY1 > 0):
 
                     # TODO: Possibly randomize the trainees
@@ -681,6 +794,7 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
+                        # random.shuffle(trainees)
                         # print(trainee.processed_limits)
                         if ((trainee.role == "PGY1") and ((trainee.block[4 * i].id == -1) or (trainee.block[4 * i].id == -2)) and
                                 ((trainee.block[4 * i + 1].id == -1) or (trainee.block[4 * i + 1].id == -2)) and
@@ -694,12 +808,23 @@ class Schedule:
                             min_PGY1 -= 1
                             if (min_PGY1 == 0): break
 
+
+                if (rotation.min2 != -1):
+                    min_PGY2 = rotation.processed_min2[4 * i]
+                elif (rotation.min12 != -1):
+                    min_PGY2 = rotation.processed_min12[4 * i]
+                elif (rotation.min23 != -1):
+                    min_PGY2 = rotation.processed_min23[4 * i]
+                elif (rotation.mintotal != -1):
+                    min_PGY2 = rotation.processed_mintotal[4 * i]
+
                 if (min_PGY2 > 0):
                     # TODO: Possibly randomize the trainees
                     random.shuffle(trainees)
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
+                        # random.shuffle(trainees)
                         if ((trainee.role == "PGY2") and (
                             (trainee.block[4 * i].id == -1) or (trainee.block[4 * i].id == -2)) and
                                 ((trainee.block[4 * i + 1].id == -1) or (trainee.block[4 * i + 1].id == -2)) and
@@ -713,12 +838,23 @@ class Schedule:
                             min_PGY2 -= 1
                             if (min_PGY2 == 0): break
 
+
+                if (rotation.min3 != -1):
+                    min_PGY3 = rotation.processed_min3[4 * i]
+                elif (rotation.min23 != -1):
+                    min_PGY3 = rotation.processed_min23[4 * i]
+                elif (rotation.min13 != -1):
+                    min_PGY3 = rotation.processed_min13[4 * i]
+                elif (rotation.mintotal != -1):
+                    min_PGY3 = rotation.processed_mintotal[4 * i]
+
                 if (min_PGY3 > 0):
                     # TODO: Possibly randomize the trainees
                     random.shuffle(trainees)
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
+                        # random.shuffle(trainees)
 
                         if ((trainee.role == "PGY3") and (
                             (trainee.block[4 * i].id == -1) or (trainee.block[4 * i].id == -2)) and
@@ -766,6 +902,7 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
+                        # random.shuffle(trainees)
                         if ((trainee.role == "PGY1") and (trainee.block[i].id == -1)):
                             self.fill_in(trainee, i, rotation)
                             min_PGY1 -= 1
@@ -777,6 +914,7 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
+                        # random.shuffle(trainees)
                         if ((trainee.role == "PGY2") and (trainee.block[i].id == -1)):
                             self.fill_in(trainee, i, rotation)
                             min_PGY2 -= 1
@@ -788,6 +926,7 @@ class Schedule:
 
                     # TODO: Randomize within the group
                     for trainee in trainees:
+                        # random.shuffle(trainees)
 
                         if ((trainee.role == "PGY3") and (trainee.block[i].id == -1)):
                             self.fill_in(trainee, i, rotation)
@@ -832,6 +971,9 @@ class Schedule:
 
                     id = self.rotations_id[req]
                     rotation = self.rotations[id]
+
+                    if (rotation.min_block_length != 1):
+                        break
 
                     if (trainee.role == "PGY1"):
                         # for i in range(self.num_block):
@@ -914,6 +1056,10 @@ class Schedule:
                     id = self.rotations_id[req]
                     rotation = self.rotations[id]
 
+
+                    if (rotation.min_block_length != 0.5):
+                        break
+
                     if (trainee.role == "PGY1"):
                         # for i in range(self.num_block):
                         #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
@@ -979,6 +1125,9 @@ class Schedule:
 
                     id = self.rotations_id[req]
                     rotation = self.rotations[id]
+
+                    if (rotation.min_block_length != 0.5):
+                        break
 
                     if (trainee.role == "PGY1"):
                         # for i in range(self.num_block):
@@ -1047,6 +1196,9 @@ class Schedule:
                     id = self.rotations_id[req]
                     rotation = self.rotations[id]
 
+                    if (rotation.min_block_length != 0.25):
+                        break
+
                     if (trainee.role == "PGY1"):
                         # for i in range(self.num_block):
                         #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
@@ -1109,6 +1261,9 @@ class Schedule:
 
                     id = self.rotations_id[req]
                     rotation = self.rotations[id]
+
+                    if (rotation.min_block_length != 1):
+                        break
 
                     if (trainee.role == "PGY1"):
                         # for i in range(self.num_block):
@@ -1190,6 +1345,9 @@ class Schedule:
                     id = self.rotations_id[req]
                     rotation = self.rotations[id]
 
+                    if (rotation.min_block_length != 0.5):
+                        break
+
                     if (trainee.role == "PGY1"):
                         # for i in range(self.num_block):
                         #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
@@ -1255,6 +1413,9 @@ class Schedule:
 
                     id = self.rotations_id[req]
                     rotation = self.rotations[id]
+
+                    if (rotation.min_block_length != 0.25):
+                        break
 
                     if (trainee.role == "PGY1"):
                         # for i in range(self.num_block):
