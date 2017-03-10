@@ -301,7 +301,7 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "Emergency Medicine,1\n" +
     "Inpatient Wards,2\n" +
     "Medical Intensive Care Unit,1.5\n" +
-    "Neurology,4\n" +
+    "Neurology,1\n" +
     "PGY2_REQUIREMENT,8\n" +
     "Ambulatory Medicine Blocks,1.25\n" +
     "Backup Staffing / Urgent Visit,1\n" +
@@ -310,7 +310,7 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "Emergency Medicine,1\n" +
     "Inpatient Wards,2\n" +
     "Medical Intensive Care Unit,1.5\n" +
-    "Neurology,4\n" +
+    "Neurology,1\n" +
     "PGY3_REQUIREMENT,8\n" +
     "Ambulatory Medicine Blocks,1.25\n" +
     "Backup Staffing / Urgent Visit,1\n" +
@@ -319,7 +319,7 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "Emergency Medicine,1\n" +
     "Inpatient Wards,2\n" +
     "Medical Intensive Care Unit,1.5\n" +
-    "Neurology,4\n" +
+    "Neurology,1\n" +
     "---\n" +
     "ROTATION,LIMITATION\n" +
     "PGY1_LIMITATION,8\n" +
@@ -424,7 +424,7 @@ var FAKE_TEXT_SMALL = "Program,Psychiatry,13\n" +
     "Emergency Medicine,1\n" +
     "Inpatient Wards,2\n" +
     "Medical Intensive Care Unit,1.5\n" +
-    "Neurology,4\n" +
+    "Neurology,1\n" +
     "PGY2_REQUIREMENT,8\n" +
     "Ambulatory Medicine Blocks,1.25\n" +
     "Backup Staffing / Urgent Visit,1\n" +
@@ -433,7 +433,7 @@ var FAKE_TEXT_SMALL = "Program,Psychiatry,13\n" +
     "Emergency Medicine,1\n" +
     "Inpatient Wards,2\n" +
     "Medical Intensive Care Unit,1.5\n" +
-    "Neurology,4\n" +
+    "Neurology,1\n" +
     "PGY3_REQUIREMENT,8\n" +
     "Ambulatory Medicine Blocks,1.25\n" +
     "Backup Staffing / Urgent Visit,1\n" +
@@ -442,7 +442,7 @@ var FAKE_TEXT_SMALL = "Program,Psychiatry,13\n" +
     "Emergency Medicine,1\n" +
     "Inpatient Wards,2\n" +
     "Medical Intensive Care Unit,1.5\n" +
-    "Neurology,4\n" +
+    "Neurology,1\n" +
     "---\n" +
     "ROTATION,LIMITATION\n" +
     "PGY1_LIMITATION,8\n" +

@@ -140,6 +140,7 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
                                      rot.min13, rot.max13,
                                      rot.min23, rot.max23,
                                      rot.mintotal, rot.maxtotal))
+    print("Num trainee ", num_trainee)
     print("Rotations")
     print(rotations_list_local)
     print("Done Test Print")
@@ -212,8 +213,9 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
             needed_rotations = requirements_pgy3.keys()
             req = requirements_pgy3
             req_lim = max_requirements_pgy3
+
         for k in range(num_rotation):
-            if rotations_list_local[k] not in needed_rotations:
+            if rotations_list_local[k][0] not in needed_rotations:
                 continue
             constraint = solver.Constraint(req[rotations_list_local[k][0]],
                                            req_lim[rotations_list_local[k][0]])
@@ -260,6 +262,9 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
             for k in range(num_rotation):
                 objective.SetCoefficient(attend_list[i][j][k], 1)
     objective.SetMinimization()
+
+    #Start solving
+    print("Constraints inputted. Solving")
     result_status = solver.Solve()
 
     # Check if the problem has an optimal solution

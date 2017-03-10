@@ -411,8 +411,6 @@ class Schedule:
             elif (rotation.mintotal != -1):
                 rotation.processed_mintotal[i] -= 1  # Cut down min
                 rotation.processed_maxtotal[i] -= 1  # Cut down max
-            trainee.processed_reqs[rotation.name] -= 1
-            trainee.processed_limits[rotation.name] -= 1
         elif (trainee.role == "PGY2"):
             if (rotation.min2 != -1):
                 rotation.processed_min2[i] -= 1 # Cut down min
@@ -426,8 +424,6 @@ class Schedule:
             elif (rotation.mintotal != -1):
                 rotation.processed_mintotal[i] -= 1  # Cut down min
                 rotation.processed_maxtotal[i] -= 1  # Cut down max
-            trainee.processed_reqs[rotation.name] -= 1
-            trainee.processed_limits[rotation.name] -= 1
         elif (trainee.role == "PGY3"):
             if (rotation.min3 != -1):
                 rotation.processed_min3[i] -= 1 # Cut down min
@@ -441,6 +437,8 @@ class Schedule:
             elif (rotation.mintotal != -1):
                 rotation.processed_mintotal[i] -= 1  # Cut down min
                 rotation.processed_maxtotal[i] -= 1  # Cut down max
+        # TODO: Magic number here, fix this.
+        if (rotation.name != "Blank"):
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
