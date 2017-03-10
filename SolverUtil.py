@@ -72,6 +72,7 @@ def pruneSchedule(currentSchedule, seed, rotations):
         if (rotation < 0):
             continue
         # If the rotation is at min requirement to run, we can't prune
+        # TODO: Needs to fix pruning to work with PGY2, 3 and "or" requirements
         if (currentSchedule_t[block].count(rotation) <= rotations_list_local[rotation][1]):
             continue
         # If the current rotation length is at min, we can't prune
