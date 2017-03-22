@@ -127,7 +127,7 @@ for (var key in ROTATIONS_COLOR) {
 }
 
 // Texture dictionary
-var ROTATIONS_LONG_SQUARE_TEXTURE = {}
+var ROTATIONS_LONG_SQUARE_TEXTURE = {};
 for (var key in ROTATIONS_COLOR) {
     var texture = new PIXI.Graphics();
     texture.beginFill(convert_to_color_code(ROTATIONS_COLOR[key]));
@@ -139,6 +139,7 @@ for (var key in ROTATIONS_COLOR) {
 // Color for popup
 var POPUP_BACKGROUND = [233.0, 233.0, 233.0];
 var POPUP_FILLED = [242.0, 246.0, 252.0];
+var POPUP_CLOSE_BTN_OFFSET = 262;
 
 //////////////////////
 // SAMPLE READ-IN TEXT
