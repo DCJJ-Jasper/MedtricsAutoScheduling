@@ -139,7 +139,6 @@ for (var key in ROTATIONS_COLOR) {
 // Color for popup
 var POPUP_BACKGROUND = [233.0, 233.0, 233.0];
 var POPUP_FILLED = [242.0, 246.0, 252.0];
-var POPUP_CLOSE_BTN_OFFSET = 262;
 
 //////////////////////
 // SAMPLE READ-IN TEXT

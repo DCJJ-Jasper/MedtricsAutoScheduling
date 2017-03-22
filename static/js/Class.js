@@ -40,16 +40,19 @@ Trainee.prototype.set_empty_schedule_blocks = function () {
 };
 
 Trainee.prototype.get_underdone_array = function() {
+
+    console.log(this.id_list);
+    console.log(this.base_reqs);
     var underdone_arr = [];
 
     // Add the remain requirements for the first rotation
-    var num_req = this.base_reqs[this.id_list[0]];
+    var num_req = this.processed_reqs[this.id_list[0]];
     if (num_req < 0) underdone_arr.push(0);
     else underdone_arr.push(num_req);
 
     // Add the remaining require for the rest of the rotation
-    for (var i = 1; i < this.id_list.length; i++) {
-        num_req = this.base_reqs[this.id_list[i]];
+    for (var i = 1; i < num_rotations; i++) {
+        num_req = this.processed_reqs[this.id_list[i]];
         if (num_req < 0) underdone_arr.push(underdone_arr[i-1]);
         else underdone_arr.push(underdone_arr[i-1] + num_req);
     }

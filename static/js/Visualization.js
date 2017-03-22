@@ -55,6 +55,7 @@ var pgy2_squares_list;
 var pgy3_squares_list;
 var underdone_list;
 var chart_bars;
+var chart_line;
 
 var squares_sprites_list = [];
 var squares_dict = {};
@@ -257,6 +258,8 @@ function onSquarePressed() {
                 base_y = chart_pgy3_top_left_y;
                 break;
         }
+
+        // Draw chart bars
         chart_bars.clear();
         chart_bars.beginFill(color);
 
@@ -271,8 +274,30 @@ function onSquarePressed() {
             chart_bars.lineTo(x2, y1);
             chart_bars.lineTo(x1, y1);
         }
+
+        // Draw chart lines
+        chart_bars.lineStyle(2, "0xFF0000", 1);
+        x1 = base_x;
+        x2 = base_x + SQUARE_SIZE * num_block * 4 + SQUARE_DISTANCE * (num_block * 4 - 1);
+        switch (role) {
+            case "PGY1":
+                y1 = chart_pgy1_top_left_y + rotations_dict[rot_id].min1 * CHART_UNIT;
+                break;
+            case "PGY2":
+                y1 = chart_pgy2_top_left_y + rotations_dict[rot_id].min2 * CHART_UNIT;
+                break;
+            case "PGY3":
+                y1 = chart_pgy3_top_left_y + rotations_dict[rot_id].min3 * CHART_UNIT;
+                break;
+        }
+        chart_bars.moveTo(x1, y1);
+        chart_bars.lineTo(x2, y1);
+        chart_bars.lineStyle(0);
         chart_bars.endFill();
+
         app.stage.addChild(chart_bars);
+
+        // Draw Popup
 
         var x1 = this.x + 20;
         var y1 = this.y - POPUP_WEIGHT;
@@ -377,6 +402,10 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
                     read_in_data(sample_text);
                     reset_app();
                     visualize_data();
+
+                    for (t of trainees) {
+                        console.log(t.name + ":" + t.get_underdone_array());
+                    }
                 }
             }
         });}
@@ -405,6 +434,8 @@ $('#solver_schedule_btn').click(function onGreedySchedulePressed() {
                     read_in_data(sample_text);
                     reset_app();
                     visualize_data();
+
+
                 }
             }
         });}

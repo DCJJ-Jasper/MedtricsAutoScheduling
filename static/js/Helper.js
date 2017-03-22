@@ -34,6 +34,8 @@ function reset_variables() {
  * @param input_text
  */
 function read_in_data(input_text) {
+    console.log(input_text);
+
     reset_variables();
     var str_list = input_text.split("\n");
 
@@ -138,7 +140,7 @@ function read_in_data(input_text) {
         id = parseInt(data[0], 10);
         amount = parseInt(data[2], 10);
 
-        // Input the requirement for pgy1
+        // Input the requirement for pgy2
         pgy2_reqs[id] = amount
     }
 
@@ -150,7 +152,7 @@ function read_in_data(input_text) {
         id = parseInt(data[0], 10);
         amount = parseInt(data[2], 10);
 
-        // Input the requirement for pgy1
+        // Input the requirement for pgy1=3
         pgy3_reqs[id] = amount
     }
 
@@ -645,7 +647,7 @@ function visualize_data() {
         for (var rot_count = 0; rot_count < num_block; rot_count++) {
             var id = t.scheduled_blocks[rot_count];
 
-            t.base_reqs[id] -= 1;
+            t.processed_reqs[id] -= 1;
 
             color = convert_to_color_code(ROTATIONS_COLOR[id]);
 
