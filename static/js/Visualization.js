@@ -157,16 +157,18 @@ function create_objects(width, height) {
 
         // Click field
         var texture = new PIXI.Graphics();
-        texture.beginFill(convert_to_color_code(POPUP_BACKGROUND));
+        texture.beginFill(convert_to_color_code(POPUP_FILLED));
         texture.drawRect(0, 0, POPUP_WIDTH - POPUP_PADDING * 2, POPUP_LABEL_HEIGHT - 2);
         texture.endFill();
         var sprite = new PIXI.Sprite();
+        sprite.interactive = true;
+        sprite.alpha = 0;
         sprite.texture = app.renderer.generateTexture(texture);
         sprite.rot_id = rot.id;
         sprite.on('mouseover',onPopupOver);
         sprite.on('mouseout', onPopupOut);
-        rotation_click_fields.push(sprite)
-        rotation_click_fields_container.addChild(sprite)
+        rotation_click_fields.push(sprite);
+        rotation_click_fields_container.addChild(sprite);
 
         // Label
         var label = new PIXI.Text(rot.name, {fontSize: POPUP_ROTATION_SIZE})
@@ -305,23 +307,26 @@ function onButtonOut() {
 
 function onPopupOver() {
     console.log("SHIT");
-    temp_popup.clear();
 
-    temp_popup.beginFill(convert_to_color_code(POPUP_FILLED));
-    var x1 = this.x;
-    var y1 = this.y;
-    var x2 = this.x + POPUP_WIDTH - POPUP_PADDING * 2
-    var y2 = this.y + POPUP_LABEL_HEIGHT - 2;
-
-    temp_popup.moveTo(x1, y1);
-    temp_popup.lineTo(x2, y1);
-    temp_popup.lineTo(x2, y2);
-    temp_popup.lineTo(x1, y2);
-    temp_popup.lineTo(x1, y1);
-    temp_popup.endFill();
+    this.alpha = 1;
+    // temp_popup.clear();
+    //
+    // temp_popup.beginFill(convert_to_color_code(POPUP_FILLED));
+    // var x1 = this.x;
+    // var y1 = this.y;
+    // var x2 = this.x + POPUP_WIDTH - POPUP_PADDING * 2
+    // var y2 = this.y + POPUP_LABEL_HEIGHT - 2;
+    //
+    // temp_popup.moveTo(x1, y1);
+    // temp_popup.lineTo(x2, y1);
+    // temp_popup.lineTo(x2, y2);
+    // temp_popup.lineTo(x1, y2);
+    // temp_popup.lineTo(x1, y1);
+    // temp_popup.endFill();
 }
 
 function onPopupOut() {
+    this.alpha = 0;
 }
 
 function resetBlur() {

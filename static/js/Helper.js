@@ -663,9 +663,9 @@ function visualize_data() {
 
             var newSquare;
             if ((rot_count % 4 != 3) && (t.scheduled_blocks[rot_count] == t.scheduled_blocks[rot_count + 1])) {
-                newSquare = new LongSquare(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
+                newSquare = new LongSquare(x, y, color, app.renderer, rot_name, id, role, trainee_name, block_num);
             } else {
-                newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
+                newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, trainee_name, block_num);
             }
 
             newSquare.draw();
@@ -830,7 +830,7 @@ function draw_full_popup(x1, y1, trainee_name, rot_name) {
     var square;
     var click_field;
     for (var i = 0; i < num_rotations + 1; i++) {
-        click_field = rotation_click_fields[i]
+        click_field = rotation_click_fields[i];
         square = rotation_squares[i];
         label = rotation_labels[i];
 
