@@ -99,7 +99,7 @@ var ROTATIONS_COLOR = {
     "14": [211.0, 246.0, 111.0],
     "15": [177.0, 130.0, 167.0],
     "16": [102.0, 252.0, 171.0],
-    "17": [251.0, 253.0, 238.0],
+    "17": [151.0, 253.0, 238.0],
     "18": [214.0, 170.0, 210.0],
     "19": [24.0, 192.0, 229.0],
     "20": [107.0, 113.0, 13.0],
@@ -139,6 +139,7 @@ for (var key in ROTATIONS_COLOR) {
 // Color for popup
 var POPUP_BACKGROUND = [233.0, 233.0, 233.0];
 var POPUP_FILLED = [242.0, 246.0, 252.0];
+var COLOR_CHART_LINE = [255.0, 1, 1];
 
 //////////////////////
 // SAMPLE READ-IN TEXT
@@ -549,13 +550,13 @@ var PROBLEM_TEXT = "Program,Psychiatry,13\n" +
     "Workforce_requirements,24\n" +
     "ROTATION_ID,ROTATION,LEVEL,MIN1,MAX1,MIN2,MAX2,MIN3,MAX3\n" +
     "0,Inpatient Psychiatry at VCUHS,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
-    "1,Neurology,1,10,0,0,1,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "1,Neurology,1,10,0,10,1,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "2,Emergency Medicine,1,10,1,10,1,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "3,Night Float,1,10,1,10,1,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "4,Inpatient Psychiatry at VAMC,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "5,Inpatient Psychiatry with Substance Abuse at VAMC,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "6,Inpatient Medicine,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
-    "7,Pediatrics,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "7,Pediatrics,0,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "8,Child and Adolescent Elective,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "9,Consult Liaison at VCUHS,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "10,ECT,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
@@ -599,6 +600,7 @@ var PROBLEM_TEXT = "Program,Psychiatry,13\n" +
     "Inpatient Psychiatry at VAMC,1\n" +
     "Inpatient Psychiatry with Substance Abuse at VAMC,1\n" +
     "Elective,2\n" +
+
     "PGY2_REQUIREMENT,24\n" +
     "Inpatient Medicine,1\n" +
     "Pediatrics,2\n" +
@@ -624,6 +626,7 @@ var PROBLEM_TEXT = "Program,Psychiatry,13\n" +
     "Inpatient Psychiatry at VAMC,0\n" +
     "Inpatient Psychiatry with Substance Abuse at VAMC,0\n" +
     "Elective,2\n" +
+
     "PGY3_REQUIREMENT,24\n" +
     "Inpatient Medicine,1\n" +
     "Pediatrics,1\n" +
@@ -650,82 +653,85 @@ var PROBLEM_TEXT = "Program,Psychiatry,13\n" +
     "Inpatient Psychiatry with Substance Abuse at VAMC,0\n" +
     "Elective,0\n" +
     "---\n" +
-    "ROTATION,LIMITATION\n" +
+     "ROTATION,LIMITATION\n" +
     "PGY1_LIMITATION, 24\n" +
-    "Inpatient Medicine,52\n" +
-    "Pediatrics,52\n" +
-    "Child and Adolescent Elective,52\n" +
-    "Consult Liaison at VCUHS,52\n" +
-    "ECT,52\n" +
-    "Eastern State Hospital/Forensics,52\n" +
-    "Outpatient Psychotherapy Clinic,52\n" +
-    "ER Psychiatry Night Float,52\n" +
-    "VAMC Night Float,52\n" +
-    "General Psychiatry,52\n" +
-    "Emergency Psychiatry,52\n" +
-    "Didactics,52\n" +
-    "Child and Adolescent,52\n" +
-    "Psychotherapy,52\n" +
-    "Grand Rounds,52\n" +
-    "Consultation and Liaison Psychiatry,52\n" +
-    "Community Psychiatry,52\n" +
+    "Inpatient Medicine,13\n" +
+    "Pediatrics,13\n" +
+    "Child and Adolescent Elective,13\n" +
+    "Consult Liaison at VCUHS,13\n" +
+    "ECT,13\n" +
+    "Eastern State Hospital/Forensics,13\n" +
+    "Outpatient Psychotherapy Clinic,13\n" +
+    "ER Psychiatry Night Float,13\n" +
+    "VAMC Night Float,13\n" +
+    "General Psychiatry,13\n" +
+    "Emergency Psychiatry,13\n" +
+    "Didactics,13\n" +
+    "Child and Adolescent,13\n" +
+    "Psychotherapy,13\n" +
+    "Grand Rounds,13\n" +
+    "Consultation and Liaison Psychiatry,13\n" +
+    "Community Psychiatry,13\n" +
     "Inpatient Psychiatry at VCUHS,4\n" +
     "Neurology,3\n" +
     "Emergency Medicine,1\n" +
     "Night Float,2\n" +
-    "Inpatient Psychiatry at VAMC,520\n" +
-    "Inpatient Psychiatry with Substance Abuse at VAMC,52\n" +
-    "Elective,52\n" +
+    "Inpatient Psychiatry at VAMC,13\n" +
+    "Inpatient Psychiatry with Substance Abuse at VAMC,13\n" +
+    "Elective,13\n" +
+
     "PGY2_LIMITATION, 24\n" +
-    "Inpatient Medicine,0\n" +
-    "Pediatrics,52\n" +
-    "Child and Adolescent Elective,52\n" +
-    "Consult Liaison at VCUHS,52\n" +
-    "ECT,52\n" +
-    "Eastern State Hospital/Forensics,52\n" +
-    "Outpatient Psychotherapy Clinic,52\n" +
-    "ER Psychiatry Night Float,52\n" +
-    "VAMC Night Float,52\n" +
-    "General Psychiatry,52\n" +
-    "Emergency Psychiatry,52\n" +
-    "Didactics,52\n" +
-    "Child and Adolescent,52\n" +
-    "Psychotherapy,52\n" +
-    "Grand Rounds,52\n" +
-    "Consultation and Liaison Psychiatry,52\n" +
-    "Community Psychiatry,52\n" +
-    "Inpatient Psychiatry at VCUHS,52\n" +
-    "Neurology,52\n" +
-    "Emergency Medicine,52\n" +
-    "Night Float,52\n" +
-    "Inpatient Psychiatry at VAMC,0\n" +
-    "Inpatient Psychiatry with Substance Abuse at VAMC,0\n" +
-    "Elective,52\n" +
+    "Inpatient Medicine,13\n" +
+    "Pediatrics,13\n" +
+    "Child and Adolescent Elective,13\n" +
+    "Consult Liaison at VCUHS,13\n" +
+    "ECT,13\n" +
+    "Eastern State Hospital/Forensics,13\n" +
+    "Outpatient Psychotherapy Clinic,13\n" +
+    "ER Psychiatry Night Float,13\n" +
+    "VAMC Night Float,13\n" +
+    "General Psychiatry,13\n" +
+    "Emergency Psychiatry,13\n" +
+    "Didactics,13\n" +
+    "Child and Adolescent,13\n" +
+    "Psychotherapy,13\n" +
+    "Grand Rounds,13\n" +
+    "Consultation and Liaison Psychiatry,13\n" +
+    "Community Psychiatry,13\n" +
+    "Inpatient Psychiatry at VCUHS,13\n" +
+    "Neurology,13\n" +
+    "Emergency Medicine,13\n" +
+    "Night Float,13\n" +
+    "Inpatient Psychiatry at VAMC,13\n" +
+    "Inpatient Psychiatry with Substance Abuse at VAMC,13\n" +
+    "Elective,13\n" +
+
     "PGY3_LIMITATION,24\n" +
-    "Inpatient Medicine,0\n" +
-    "Pediatrics,24\n" +
-    "Child and Adolescent Elective,52\n" +
-    "Consult Liaison at VCUHS,52\n" +
-    "ECT,52\n" +
-    "Eastern State Hospital/Forensics,52\n" +
-    "Outpatient Psychotherapy Clinic,52\n" +
-    "ER Psychiatry Night Float,52\n" +
-    "VAMC Night Float,52\n" +
-    "General Psychiatry,52\n" +
-    "Emergency Psychiatry,52\n" +
-    "Didactics,52\n" +
+    "Inpatient Medicine,13\n" +
+    "Pediatrics,13\n" +
+    "Child and Adolescent Elective,13\n" +
+    "Consult Liaison at VCUHS,13\n" +
+    "ECT,13\n" +
+    "Eastern State Hospital/Forensics,13\n" +
+    "Outpatient Psychotherapy Clinic,13\n" +
+    "ER Psychiatry Night Float,13\n" +
+    "VAMC Night Float,13\n" +
+    "General Psychiatry,13\n" +
+    "Emergency Psychiatry,13\n" +
+    "Didactics,13\n" +
     "Child and Adolescent,1\n" +
-    "Psychotherapy,52\n" +
-    "Grand Rounds,52\n" +
-    "Consultation and Liaison Psychiatry,52\n" +
-    "Community Psychiatry,52\n" +
-    "Inpatient Psychiatry at VCUHS,52\n" +
-    "Neurology,52\n" +
-    "Emergency Medicine,52\n" +
-    "Night Float,52\n" +
-    "Inpatient Psychiatry at VAMC,0\n" +
-    "Inpatient Psychiatry with Substance Abuse at VAMC,0\n" +
-    "Elective,52\n" +
+    "Psychotherapy,13\n" +
+    "Grand Rounds,13\n" +
+    "Consultation and Liaison Psychiatry,13\n" +
+    "Community Psychiatry,13\n" +
+    "Inpatient Psychiatry at VCUHS,13\n" +
+    "Neurology,13\n" +
+    "Emergency Medicine,13\n" +
+    "Night Float,13\n" +
+    "Inpatient Psychiatry at VAMC,13\n" +
+    "Inpatient Psychiatry with Substance Abuse at VAMC,13\n" +
+    "Elective,13\n" +
+
     "---\n" +
     "Prefilled,0\n" +
     "USERID,BLOCK,ROTATION,WHERE_IN_BLOCK_RANGE\n"
