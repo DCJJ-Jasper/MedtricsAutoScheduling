@@ -455,6 +455,7 @@ function read_in_data_from_medtrics(input_data) {
 ///////////////////////
 
 function visualize_data() {
+
     schedule = new Schedule(trainees, rotations, num_block);
 
     // Clear out all containers
@@ -831,7 +832,7 @@ function draw_full_popup(x1, y1, trainee_name, rot_name) {
     var square;
     var click_field;
     for (var i = 0; i < num_rotations + 1; i++) {
-        click_field = rotation_click_fields[i]
+        click_field = rotation_click_fields[i];
         square = rotation_squares[i];
         label = rotation_labels[i];
 
@@ -907,7 +908,7 @@ function draw_partial_popup(x1, y1, trainee_name, rot_name) {
 
     popup_click_to_view.x = start_x;
     popup_click_to_view.y = start_y + POPUP_LABEL_HEIGHT * 4;
-    popup_click_to_view.text = 'Click to change rotation'
+    popup_click_to_view.text = 'Click to change rotation';
 
     popup_info1.x = start_x + POPUP_INFO_X_OFFSET;
     popup_info1.y = start_y;
@@ -962,4 +963,14 @@ function remove_popup() {
  */
 function reset_app() {
     for (var i = app.stage.children.length - 1; i >= 0; i--) {	app.stage.removeChild(app.stage.children[i]);};
+}
+
+function openModal() {
+    var ele = document.getElementById('modal')
+    if (ele)
+      ele.style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
 }
