@@ -177,7 +177,7 @@ function onSquarePressed() {
     var rot_id = this.rot_id;
     var role = this.role;
 
-    if ((id_pressed == rot_id) & (role_pressed == role)) {
+    if ((id_pressed == rot_id) && (role_pressed == role)) {
         resetBlur();
         id_pressed = -3;
         role_pressed = "";
@@ -239,7 +239,7 @@ function onSquarePressed() {
         var y1 = this.y - POPUP_WEIGHT;
 
         // Draw popup;
-        draw_full_popup(x1, y1, this.trainee_name, this.rot_name);
+        draw_full_popup(x1, y1, this.trainee_name, this.rot_name, this.color);
     }
 }
 
@@ -291,6 +291,7 @@ var isScheduled = false;
  * When schedule button is clicked
  */
 $('#schedule_btn').click(function onSchedulePressed() {
+        openModal();
         if (!isScheduled) {
             $.ajax({
             type: "POST",
@@ -302,7 +303,6 @@ $('#schedule_btn').click(function onSchedulePressed() {
                 if (!isShown) {
                     isShown = true;
                     isScheduled = true;
-                    alert('Scheduling');
                     // Read in the data
                     var sample_text = data['data'];
 
@@ -313,9 +313,11 @@ $('#schedule_btn').click(function onSchedulePressed() {
             }
         });}
         else {alert('Scheduled');}
+        closeModal();
 });
 
 $(document).ready(function () {
+    openModal();
     read_in_data_from_medtrics(FAKE_TEXT);
     app_height = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
         num_pgy1 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
@@ -323,5 +325,6 @@ $(document).ready(function () {
         num_pgy3 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
     create_objects(app_width, app_height);
     visualize_data();
+    closeModal();
 });
 

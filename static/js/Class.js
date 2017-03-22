@@ -124,7 +124,7 @@ Schedule.prototype.get_block_info_role_id = function(role, id) {
         }
     }
     return info_arr;
-}
+};
 
 //////////////////
 // GRAPHIC CLASSES
@@ -142,12 +142,13 @@ Schedule.prototype.get_block_info_role_id = function(role, id) {
  * @param rotations_texture
  * @constructor
  */
-function Square(x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
+function Square(x, y, color, renderer, rot_name, id, role, trainee, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
     this.x = x;
     this.y = y;
     this.color = color;
     this.rot_name = rot_name;
     this.id = id;
+    this.trainee = trainee;
     this.trainee_name = trainee_name;
     this.block_num = block_num;
     this.renderer = renderer;
@@ -161,6 +162,7 @@ function Square(x, y, color, renderer, rot_name, id, role, trainee_name, block_n
     this.sprite.role = role;
     this.sprite.trainee_name = trainee_name;
     this.sprite.block_num = block_num;
+
     this.sprite._textureID = 1;
 
     this.sprite.color = color;
@@ -183,8 +185,8 @@ Square.prototype.draw = function() {
  * @param rotations_texture
  * @constructor
  */
-function LongSquare(x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
-    Square.call(this, x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture);
+function LongSquare(x, y, color, renderer, rot_name, id, role, trainee, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
+    Square.call(this, x, y, color, renderer, rot_name, id, role, trainee, trainee_name, block_num, rotations_texture);
 }
 LongSquare.prototype = new Square();
 LongSquare.prototype.constructor = LongSquare;
