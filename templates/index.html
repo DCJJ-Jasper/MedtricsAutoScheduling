@@ -3,7 +3,10 @@
 <head>
 </head>
 <body>
-<button type="button" id="schedule_btn">Schedule</button>
+<button type="button" id="upload_btn">Upload data</button>
+<button type="button" id="greedy_schedule_btn">Greedy Schedule</button>
+<button type="button" id="solver_schedule_btn">Solver Schedule</button>
+<button type="button" id="save_btn">Save CSV</button>
 <!-- Load the pixi.js library -->
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.balloon.min.js') }}"></script>
@@ -14,5 +17,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/Constants.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/Class.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/Visualization.js') }}"></script>
+<div id="modal">Loading data...<br>
+                  <img id="loader" src="{{ url }}/static/images/ajax-loader.gif"/> </div>
 </body>
 </html>

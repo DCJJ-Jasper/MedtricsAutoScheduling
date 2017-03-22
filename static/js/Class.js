@@ -107,6 +107,13 @@ Rotation.prototype.set_rotation_demands = function(min1, max1, min2, max2, min3,
     this.processed_max3 = [max3] * num_block;
 };
 
+/**
+ * A Schedule that contains trainees and rotations
+ * @param trainees
+ * @param rotations
+ * @param num_block
+ * @constructor
+ */
 function Schedule(trainees, rotations, num_block) {
     this.trainees = trainees;
     this.rotations = rotations;
@@ -116,7 +123,7 @@ function Schedule(trainees, rotations, num_block) {
 Schedule.prototype.get_block_info_role_id = function(role, id) {
     var info_arr = Array(num_block).fill(0);
     var id_str = id.toString();
-    for (t of this.trainees) {
+    for (var t of this.trainees) {
         if (t.role == role) {
             for (var i = 0; i < num_block; i++) {
                 if (t.scheduled_blocks[i] == id_str) info_arr[i] += 1;
@@ -124,7 +131,35 @@ Schedule.prototype.get_block_info_role_id = function(role, id) {
         }
     }
     return info_arr;
-}
+};
+
+Schedule.prototype.get_schedule_info = function() {
+    var s = "";
+    for (var t of trainees) {
+        s += String(t.id) + "," + String(t.name) + "," + String(t.role) + ",";
+        var subs = "";
+        for (id of t.scheduled_blocks) {
+            subs += String(id) + "."
+        }
+        subs.substring(0, subs.length - 1);
+        s += subs + "\n"
+    }
+    return s
+};
+
+Schedule.prototype.get_schedule_info_csv = function() {
+    var s = "";
+    for (var t of trainees) {
+        s += String(t.id) + "," + String(t.name) + "," + String(t.role) + ",";
+        var subs = "";
+        for (id of t.scheduled_blocks) {
+            subs += String(id) + ","
+        }
+        subs.substring(0, subs.length - 1);
+        s += subs + "\n"
+    }
+    return s
+};
 
 //////////////////
 // GRAPHIC CLASSES

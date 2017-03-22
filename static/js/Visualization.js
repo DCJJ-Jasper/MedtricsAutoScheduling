@@ -68,6 +68,11 @@ var popup_info2;
 var popup_info3;
 var popup_info4;
 var popup_click_to_view;
+var temp_popup;
+var rot_top_left_x;
+var rot_top_left_y;
+var rotation_click_fields;
+var rotation_click_fields_container;
 var rotation_labels;
 var rotation_labels_container;
 var rotation_squares;
@@ -138,16 +143,39 @@ function create_objects(width, height) {
     popup_info3.visible = false;
     popup_info4.visible = false;
     popup_click_to_view.visible = false;
+    temp_popup = new PIXI.Graphics();
     temp_graphic = new PIXI.Graphics();
 
     rotation_labels = [];
     rotation_squares = [];
+    rotation_click_fields = [];
     rotation_labels_container = new PIXI.Container();
     rotation_squares_container = new PIXI.Container();
+    rotation_click_fields_container = new PIXI.Container();
+
     for (var rot of rotations) {
+
+        // Click field
+        var texture = new PIXI.Graphics();
+        texture.beginFill(convert_to_color_code(POPUP_FILLED));
+        texture.drawRect(0, 0, POPUP_WIDTH - POPUP_PADDING * 2, POPUP_LABEL_HEIGHT - 2);
+        texture.endFill();
+        var sprite = new PIXI.Sprite();
+        sprite.interactive = true;
+        sprite.alpha = 0;
+        sprite.texture = app.renderer.generateTexture(texture);
+        sprite.rot_id = rot.id;
+        sprite.on('mouseover',onPopupOver);
+        sprite.on('mouseout', onPopupOut);
+        rotation_click_fields.push(sprite);
+        rotation_click_fields_container.addChild(sprite);
+
+        // Label
         var label = new PIXI.Text(rot.name, {fontSize: POPUP_ROTATION_SIZE})
         rotation_labels.push(label);
         rotation_labels_container.addChild(label);
+
+        // Square
         var texture = new PIXI.Graphics();
         texture.beginFill(convert_to_color_code(ROTATIONS_COLOR[rot.id]));
         texture.drawRect(0, 0, POPUP_ROTATION_SQUARE, POPUP_ROTATION_SQUARE);
@@ -246,7 +274,6 @@ function onSquarePressed() {
 function onButtonOver() {
 
     temp_line.clear();
-
     temp_line.lineStyle(1, 0x000000, 1);
     temp_line.moveTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
     temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y - SQUARE_DISTANCE / 2);
@@ -274,9 +301,32 @@ function onButtonOut() {
         popup_info3.visible = false;
         popup_info4.visible = false;
         popup_click_to_view.visible = false;
-
         remove_popup();
     }
+}
+
+function onPopupOver() {
+    console.log("SHIT");
+
+    this.alpha = 1;
+    // temp_popup.clear();
+    //
+    // temp_popup.beginFill(convert_to_color_code(POPUP_FILLED));
+    // var x1 = this.x;
+    // var y1 = this.y;
+    // var x2 = this.x + POPUP_WIDTH - POPUP_PADDING * 2
+    // var y2 = this.y + POPUP_LABEL_HEIGHT - 2;
+    //
+    // temp_popup.moveTo(x1, y1);
+    // temp_popup.lineTo(x2, y1);
+    // temp_popup.lineTo(x2, y2);
+    // temp_popup.lineTo(x1, y2);
+    // temp_popup.lineTo(x1, y1);
+    // temp_popup.endFill();
+}
+
+function onPopupOut() {
+    this.alpha = 0;
 }
 
 function resetBlur() {
@@ -290,12 +340,19 @@ var isScheduled = false;
 /**
  * When schedule button is clicked
  */
-$('#schedule_btn').click(function onSchedulePressed() {
+$('#save_btn').click(function onSavePressed() {
+    download(schedule.get_schedule_info_csv(), "schedule.csv", "text/plain")
+});
+
+/**
+ * When schedule button is clicked
+ */
+$('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
         if (!isScheduled) {
             $.ajax({
             type: "POST",
             url: "/requestToSchedule",
-            data: JSON.stringify({title: FAKE_TEXT}),
+            data: JSON.stringify({title: PROBLEM_TEXT, method: "greedy"}),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
@@ -315,8 +372,37 @@ $('#schedule_btn').click(function onSchedulePressed() {
         else {alert('Scheduled');}
 });
 
+/**
+ * When schedule button is clicked
+ */
+$('#solver_schedule_btn').click(function onGreedySchedulePressed() {
+        if (!isScheduled) {
+            $.ajax({
+            type: "POST",
+            url: "/requestToSchedule",
+            data: JSON.stringify({title: PROBLEM_TEXT, method: "solver"}),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (!isShown) {
+                    isShown = true;
+                    isScheduled = true;
+                    alert('Scheduling');
+                    // Read in the data
+                    var sample_text = data['data'];
+
+                    read_in_data(sample_text);
+                    reset_app();
+                    visualize_data();
+                }
+            }
+        });}
+        else {alert('Scheduled');}
+});
+
+
 $(document).ready(function () {
-    read_in_data_from_medtrics(FAKE_TEXT);
+    read_in_data_from_medtrics(PROBLEM_TEXT);
     app_height = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
         num_pgy1 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
         num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
