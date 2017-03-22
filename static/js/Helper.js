@@ -669,7 +669,7 @@ function visualize_data() {
             }
 
             newSquare.draw();
-
+            squares_sprites_list.push(newSquare.sprite);
             newSquare.sprite.on('mousedown', onSquarePressed);
             newSquare.sprite.on('mouseover',onButtonOver);
             newSquare.sprite.on('mouseout', onButtonOut);
@@ -783,6 +783,8 @@ function draw_full_popup(x1, y1, trainee_name, rot_name) {
     var start_x = x1 + POPUP_PADDING;
     var start_y = y1 + POPUP_PADDING;
 
+    popup_close_btn.visible = true;
+    popup_close_btn.interactive = true;
     popup_label1.visible = true;
     popup_label2.visible = true;
     popup_label3.visible = true;
@@ -792,6 +794,9 @@ function draw_full_popup(x1, y1, trainee_name, rot_name) {
     popup_info3.visible = true;
     popup_info4.visible = true;
     popup_click_to_view.visible = true;
+
+    popup_close_btn.x = start_x + POPUP_CLOSE_BTN_OFFSET;
+    popup_close_btn.y = start_y;
 
     popup_label1.x = start_x;
     popup_label1.y = start_y;
@@ -845,6 +850,7 @@ function draw_full_popup(x1, y1, trainee_name, rot_name) {
 
     app.stage.addChild(temp_line);
     app.stage.addChild(temp_graphic);
+    app.stage.addChild(popup_close_btn);
     app.stage.addChild(popup_label1);
     app.stage.addChild(popup_label2);
     app.stage.addChild(popup_label3);
@@ -941,6 +947,7 @@ function draw_partial_popup(x1, y1, trainee_name, rot_name) {
 function remove_popup() {
     app.stage.removeChild(temp_line);
     app.stage.removeChild(temp_graphic);
+    app.stage.removeChild(popup_close_btn);
     app.stage.removeChild(popup_label1);
     app.stage.removeChild(popup_label2);
     app.stage.removeChild(popup_label3);
@@ -971,4 +978,16 @@ function openModal() {
 
 function closeModal() {
     document.getElementById('modal').style.display = 'none';
+}
+
+function disableSquaresInteractivity() {
+    for (var s of squares_sprites_list) {
+        s.interactive = false;
+    }
+}
+
+function enableSquaresInteractivity() {
+    for (var s of squares_sprites_list) {
+        s.interactive = true;
+    }
 }

@@ -56,9 +56,11 @@ var pgy3_squares_list;
 var underdone_list;
 var chart_bars;
 
+var squares_sprites_list = [];
 var squares_dict = {};
 var underdone_bars = {};
 
+var popup_close_btn;
 var popup_label1;
 var popup_label2;
 var popup_label3;
@@ -125,6 +127,7 @@ function create_objects(width, height) {
     app.stage.addChild(pgy3_container);
 
     // Popup stuffs
+    popup_close_btn = new PIXI.Sprite.fromImage("static/images/Close Window-25.png");
     popup_label1 = new PIXI.Text('Rotation:', {fontStyle: "bold", fontSize: POPUP_LABEL_SIZE});
     popup_label2 = new PIXI.Text('When:', {fontStyle: "bold", fontSize: POPUP_LABEL_SIZE});
     popup_label3 = new PIXI.Text('Duration:', {fontStyle: "bold", fontSize: POPUP_LABEL_SIZE});
@@ -134,6 +137,12 @@ function create_objects(width, height) {
     popup_info3 = new PIXI.Text('', {fontSize: LABEL_SIZE});
     popup_info4 = new PIXI.Text('', {fontSize: LABEL_SIZE});
     popup_click_to_view = new PIXI.Text('Click to change this rotation', {fontStyle: "italic", fill: 0x3D78BD, fontSize: LABEL_SIZE});
+    popup_close_btn.visible = false;
+    popup_close_btn.alpha = 0.5;
+    popup_close_btn.on('mousedown', onPopupCloseBtnPressed);
+    popup_close_btn.on('mouseover', onPopupCloseBtnOver);
+    popup_close_btn.on('mouseout', onPopupCloseBtnOut);
+
     popup_label1.visible = false;
     popup_label2.visible = false;
     popup_label3.visible = false;
@@ -167,6 +176,7 @@ function create_objects(width, height) {
         sprite.rot_id = rot.id;
         sprite.on('mouseover',onPopupOver);
         sprite.on('mouseout', onPopupOut);
+        sprite.on('mousedown', onPopupPressed);
         rotation_click_fields.push(sprite);
         rotation_click_fields_container.addChild(sprite);
 
@@ -202,6 +212,7 @@ function create_objects(width, height) {
 /////////////////////
 
 function onSquarePressed() {
+
     var rot_id = this.rot_id;
     var role = this.role;
 
@@ -306,27 +317,27 @@ function onButtonOut() {
 }
 
 function onPopupOver() {
-    console.log("SHIT");
-
     this.alpha = 1;
-    // temp_popup.clear();
-    //
-    // temp_popup.beginFill(convert_to_color_code(POPUP_FILLED));
-    // var x1 = this.x;
-    // var y1 = this.y;
-    // var x2 = this.x + POPUP_WIDTH - POPUP_PADDING * 2
-    // var y2 = this.y + POPUP_LABEL_HEIGHT - 2;
-    //
-    // temp_popup.moveTo(x1, y1);
-    // temp_popup.lineTo(x2, y1);
-    // temp_popup.lineTo(x2, y2);
-    // temp_popup.lineTo(x1, y2);
-    // temp_popup.lineTo(x1, y1);
-    // temp_popup.endFill();
 }
 
 function onPopupOut() {
     this.alpha = 0;
+}
+
+function onPopupPressed() {
+    remove_popup();
+}
+
+function onPopupCloseBtnOver() {
+    this.alpha = 0.75;
+}
+
+function onPopupCloseBtnOut() {
+    this.alpha = 0.5;
+}
+
+function onPopupCloseBtnPressed() {
+    remove_popup();
 }
 
 function resetBlur() {
