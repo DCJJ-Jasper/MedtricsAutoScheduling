@@ -298,7 +298,6 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
-        console.log(data);
 
         rot_id = parseInt(data[0], 10);
         min1 = parseInt(data[2], 10);
@@ -307,7 +306,6 @@ function read_in_data_from_medtrics(input_data) {
         max2 = parseInt(data[5], 10);
         min3 = parseInt(data[6], 10);
         max3 = parseInt(data[7], 10);
-        console.log(rot_id);
         rotations_dict[rot_id].set_rotation_demands(min1, max1, min2, max2, min3, max3);
     }
 
@@ -325,6 +323,7 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
+        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_block_required = parseFloat(data[1]);
@@ -340,6 +339,7 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
+        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_block_required = parseFloat(data[1]);
@@ -355,6 +355,7 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
+        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_block_required = parseFloat(data[1]);
@@ -376,6 +377,7 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
+        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_limit = parseFloat(data[1]);
@@ -391,6 +393,7 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
+        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_limit = parseFloat(data[1]);
@@ -406,6 +409,7 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
+        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_limit = parseFloat(data[1]);
@@ -666,8 +670,7 @@ function visualize_data() {
 
             newSquare.draw();
 
-            newSquare.sprite
-                .on('mousedown', onSquarePressed);
+            newSquare.sprite.on('mousedown', onSquarePressed);
             newSquare.sprite.on('mouseover',onButtonOver);
             newSquare.sprite.on('mouseout', onButtonOut);
 
@@ -820,15 +823,22 @@ function draw_full_popup(x1, y1, trainee_name, rot_name) {
     popup_info4.y = start_y + POPUP_LABEL_HEIGHT * 3;
     popup_info4.text = trainee_name;
 
+    rot_top_left_x = start_x;
+    rot_top_left_y = start_y + POPUP_LABEL_HEIGHT * 5;
+
     var label;
     var square;
+    var click_field;
     for (var i = 0; i < num_rotations + 1; i++) {
+        click_field = rotation_click_fields[i]
         square = rotation_squares[i];
         label = rotation_labels[i];
 
+        click_field.x = start_x;
         square.x = start_x + POPUP_SQUARE_OFFSET_X;
         square.y = start_y + POPUP_LABEL_HEIGHT * (5 + i) + POPUP_SQUARE_OFFSET_Y + POPUP_ROTATION_OFFSET;
 
+        click_field.y = start_y + POPUP_LABEL_HEIGHT * (5 + i);
         label.x = start_x + POPUP_ROTATION_LABEL_OFFSET;
         label.y = start_y + POPUP_LABEL_HEIGHT * (5 + i) + POPUP_ROTATION_OFFSET;
     }
@@ -844,8 +854,10 @@ function draw_full_popup(x1, y1, trainee_name, rot_name) {
     app.stage.addChild(popup_info3);
     app.stage.addChild(popup_info4);
     app.stage.addChild(popup_click_to_view);
+    app.stage.addChild(rotation_click_fields_container);
     app.stage.addChild(rotation_labels_container);
     app.stage.addChild(rotation_squares_container);
+    app.stage.addChild(temp_popup);
 }
 
 /**
@@ -938,8 +950,10 @@ function remove_popup() {
     app.stage.removeChild(popup_info3);
     app.stage.removeChild(popup_info4);
     app.stage.removeChild(popup_click_to_view);
+    app.stage.removeChild(rotation_click_fields_container);
     app.stage.removeChild(rotation_labels_container);
     app.stage.removeChild(rotation_squares_container);
+    app.stage.removeChild(temp_popup);
 }
 
 /**
