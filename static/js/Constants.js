@@ -136,6 +136,10 @@ for (var key in ROTATIONS_COLOR) {
     ROTATIONS_LONG_SQUARE_TEXTURE[key] = texture;
 }
 
+// Color for popup
+var POPUP_BACKGROUND = [233.0, 233.0, 233.0];
+var POPUP_FILLED = [242.0, 246.0, 252.0];
+
 //////////////////////
 // SAMPLE READ-IN TEXT
 //////////////////////
@@ -475,3 +479,253 @@ var FAKE_TEXT_SMALL = "Program,Psychiatry,13\n" +
     "---\n" +
     "Prefilled,0\n" +
     "USERID,BLOCK,ROTATION,WHERE_IN_BLOCK_RANG\n";
+
+var PROBLEM_TEXT = "Program,Psychiatry,13\n" +
+    "USER_ID,FIRST_NAME,LAST_NAME\n" +
+    "Num_PGY1,11\n" +
+    "1,Santhosh,Cherian\n" +
+    "2,Ron,Rivera\n" +
+    "3,Todd,Wilkinson\n" +
+    "4,Mary,Renner\n" +
+    "5,Randy,Moss\n" +
+    "6,Chris,Tokodi\n" +
+    "7,Grant,Fuhr\n" +
+    "8,Fred,Marston\n" +
+    "9,Dodie,Woodman\n" +
+    "10,Edie,Ballin\n" +
+    "11,Christine,Weible\n" +
+    "Num_PGY2,11\n" +
+    "12,Corina,Colwell\n" +
+    "13,Corrin,Ingersoll\n" +
+    "14,Soledad,Levey\n" +
+    "15,Ron,Dhillon\n" +
+    "16,Eileen,Telford\n" +
+    "17,In,Trimpe\n" +
+    "18,Larisa,Owen\n" +
+    "19,Gaynell,Vanleuven\n" +
+    "20,Milagros,Tanner\n" +
+    "21,Mila,Span\n" +
+    "22,Patrina,Pettaway\n" +
+    "Num_PGY3,11\n" +
+    "23,Takako,Jarrells\n" +
+    "24,Jenee,Lach\n" +
+    "25,Santina,Gwynn\n" +
+    "26,Alisia,Durbin\n" +
+    "27,Carolyne,Backes\n" +
+    "28,Reyes,Turberville\n" +
+    "29,Mignon,Jesus\n" +
+    "30,Carina,Milbourn\n" +
+    "31,Erick,Mines\n" +
+    "32,Timothy,Boyes\n" +
+    "33,Dorothea,Steckler\n" +
+    "---\n" +
+    "Num_rotations,24\n" +
+    "ROTATION_ID,ROTATION,WORK_WITH_ALLOWED_VACATION,MINIMUM_BLOCK_LENGTH,MAX_BLOCKS_PER_YEAR,TYPE\n" +
+    "0,Inpatient Psychiatry at VCUHS,Yes,1,6,Core\n" +
+    "1,Neurology,No,1,6,Core\n" +
+    "2,Emergency Medicine,Yes,1,6,Core\n" +
+    "3,Night Float,No,0.25,1,Core\n" +
+    "4,Inpatient Psychiatry at VAMC,No,1,6,Core\n" +
+    "5,Inpatient Psychiatry with Substance Abuse at VAMC,No,1,6,Core\n" +
+    "6,Inpatient Medicine,No,1,6,Elective\n" +
+    "7,Pediatrics,Yes,1,6,Elective\n" +
+    "8,Child and Adolescent Elective,No,1,6,Elective\n" +
+    "9,Consult Liaison at VCUHS,No,1,6,Elective\n" +
+    "10,ECT,No,0.25,6,Elective\n" +
+    "11,Eastern State Hospital/Forensics,Yes,1,6,Elective\n" +
+    "12,Outpatient Psychotherapy Clinic,No,1,6,Core\n" +
+    "13,ER Psychiatry Night Float,No,1,6,Core\n" +
+    "14,VAMC Night Float,No,1,6,Core\n" +
+    "15,General Psychiatry,No,1,6,Core\n" +
+    "16,Emergency Psychiatry,No,1,6,Core\n" +
+    "17,Didactics,No,1,6,Core\n" +
+    "18,Child and Adolescent,No,1,6,Core\n" +
+    "19,Psychotherapy,No,0.25,6,Core\n" +
+    "20,Grand Rounds,No,1,6,Core\n" +
+    "21,Consultation and Liaison Psychiatry,No,1,6,Core\n" +
+    "22,Community Psychiatry,No,1,6,Core\n" +
+    "23,Elective,No,0.25,6,Core\n" +
+    "---\n" +
+    "Workforce_requirements,24\n" +
+    "ROTATION_ID,ROTATION,LEVEL,MIN1,MAX1,MIN2,MAX2,MIN3,MAX3\n" +
+    "0,Inpatient Psychiatry at VCUHS,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "1,Neurology,1,10,0,0,1,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "2,Emergency Medicine,1,10,1,10,1,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "3,Night Float,1,10,1,10,1,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "4,Inpatient Psychiatry at VAMC,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "5,Inpatient Psychiatry with Substance Abuse at VAMC,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "6,Inpatient Medicine,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "7,Pediatrics,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "8,Child and Adolescent Elective,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "9,Consult Liaison at VCUHS,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "10,ECT,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "11,Eastern State Hospital/Forensics,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "12,Outpatient Psychotherapy Clinic,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "13,ER Psychiatry Night Float,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "14,VAMC Night Float,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "15,General Psychiatry,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "16,Emergency Psychiatry,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "17,Didactics,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "18,Child and Adolescent,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "19,Psychotherapy,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "20,Grand Rounds,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "21,Consultation and Liaison Psychiatry,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "22,Community Psychiatry,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "23,Elective,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "---\n" +
+    "ROTATION,MIN_BLOCKS_REQUIRED\n" +
+    "PGY1_REQUIREMENT,24\n" +
+    "Inpatient Medicine,0\n" +
+    "Pediatrics,0\n" +
+    "Child and Adolescent Elective,0\n" +
+    "Consult Liaison at VCUHS,0\n" +
+    "ECT,0\n" +
+    "Eastern State Hospital/Forensics,0\n" +
+    "Outpatient Psychotherapy Clinic,0\n" +
+    "ER Psychiatry Night Float,0\n" +
+    "VAMC Night Float,0\n" +
+    "General Psychiatry,0\n" +
+    "Emergency Psychiatry,0\n" +
+    "Didactics,0\n" +
+    "Child and Adolescent,0\n" +
+    "Psychotherapy,0\n" +
+    "Grand Rounds,0\n" +
+    "Consultation and Liaison Psychiatry,0\n" +
+    "Community Psychiatry,0\n" +
+    "Inpatient Psychiatry at VCUHS,3\n" +
+    "Neurology,2\n" +
+    "Emergency Medicine,1\n" +
+    "Night Float,0.25\n" +
+    "Inpatient Psychiatry at VAMC,1\n" +
+    "Inpatient Psychiatry with Substance Abuse at VAMC,1\n" +
+    "Elective,2\n" +
+    "PGY2_REQUIREMENT,24\n" +
+    "Inpatient Medicine,1\n" +
+    "Pediatrics,2\n" +
+    "Child and Adolescent Elective,0\n" +
+    "Consult Liaison at VCUHS,0\n" +
+    "ECT,0\n" +
+    "Eastern State Hospital/Forensics,0\n" +
+    "Outpatient Psychotherapy Clinic,1\n" +
+    "ER Psychiatry Night Float,1\n" +
+    "VAMC Night Float,1\n" +
+    "General Psychiatry,0\n" +
+    "Emergency Psychiatry,0\n" +
+    "Didactics,0\n" +
+    "Child and Adolescent,0\n" +
+    "Psychotherapy,0\n" +
+    "Grand Rounds,0\n" +
+    "Consultation and Liaison Psychiatry,0\n" +
+    "Community Psychiatry,0\n" +
+    "Inpatient Psychiatry at VCUHS,1\n" +
+    "Neurology,0\n" +
+    "Emergency Medicine,0\n" +
+    "Night Float,0\n" +
+    "Inpatient Psychiatry at VAMC,0\n" +
+    "Inpatient Psychiatry with Substance Abuse at VAMC,0\n" +
+    "Elective,2\n" +
+    "PGY3_REQUIREMENT,24\n" +
+    "Inpatient Medicine,1\n" +
+    "Pediatrics,1\n" +
+    "Child and Adolescent Elective,0\n" +
+    "Consult Liaison at VCUHS,0\n" +
+    "ECT,0\n" +
+    "Eastern State Hospital/Forensics,0\n" +
+    "Outpatient Psychotherapy Clinic,0\n" +
+    "ER Psychiatry Night Float,0\n" +
+    "VAMC Night Float,0\n" +
+    "General Psychiatry,1\n" +
+    "Emergency Psychiatry,1\n" +
+    "Didactics,2\n" +
+    "Child and Adolescent,1\n" +
+    "Psychotherapy,0.25\n" +
+    "Grand Rounds,2\n" +
+    "Consultation and Liaison Psychiatry,0\n" +
+    "Community Psychiatry,0\n" +
+    "Inpatient Psychiatry at VCUHS,0\n" +
+    "Neurology,0\n" +
+    "Emergency Medicine,0\n" +
+    "Night Float,0\n" +
+    "Inpatient Psychiatry at VAMC,0\n" +
+    "Inpatient Psychiatry with Substance Abuse at VAMC,0\n" +
+    "Elective,0\n" +
+    "---\n" +
+    "ROTATION,LIMITATION\n" +
+    "PGY1_LIMITATION, 24\n" +
+    "Inpatient Medicine,52\n" +
+    "Pediatrics,52\n" +
+    "Child and Adolescent Elective,52\n" +
+    "Consult Liaison at VCUHS,52\n" +
+    "ECT,52\n" +
+    "Eastern State Hospital/Forensics,52\n" +
+    "Outpatient Psychotherapy Clinic,52\n" +
+    "ER Psychiatry Night Float,52\n" +
+    "VAMC Night Float,52\n" +
+    "General Psychiatry,52\n" +
+    "Emergency Psychiatry,52\n" +
+    "Didactics,52\n" +
+    "Child and Adolescent,52\n" +
+    "Psychotherapy,52\n" +
+    "Grand Rounds,52\n" +
+    "Consultation and Liaison Psychiatry,52\n" +
+    "Community Psychiatry,52\n" +
+    "Inpatient Psychiatry at VCUHS,4\n" +
+    "Neurology,3\n" +
+    "Emergency Medicine,1\n" +
+    "Night Float,2\n" +
+    "Inpatient Psychiatry at VAMC,520\n" +
+    "Inpatient Psychiatry with Substance Abuse at VAMC,52\n" +
+    "Elective,52\n" +
+    "PGY2_LIMITATION, 24\n" +
+    "Inpatient Medicine,0\n" +
+    "Pediatrics,52\n" +
+    "Child and Adolescent Elective,52\n" +
+    "Consult Liaison at VCUHS,52\n" +
+    "ECT,52\n" +
+    "Eastern State Hospital/Forensics,52\n" +
+    "Outpatient Psychotherapy Clinic,52\n" +
+    "ER Psychiatry Night Float,52\n" +
+    "VAMC Night Float,52\n" +
+    "General Psychiatry,52\n" +
+    "Emergency Psychiatry,52\n" +
+    "Didactics,52\n" +
+    "Child and Adolescent,52\n" +
+    "Psychotherapy,52\n" +
+    "Grand Rounds,52\n" +
+    "Consultation and Liaison Psychiatry,52\n" +
+    "Community Psychiatry,52\n" +
+    "Inpatient Psychiatry at VCUHS,52\n" +
+    "Neurology,52\n" +
+    "Emergency Medicine,52\n" +
+    "Night Float,52\n" +
+    "Inpatient Psychiatry at VAMC,0\n" +
+    "Inpatient Psychiatry with Substance Abuse at VAMC,0\n" +
+    "Elective,52\n" +
+    "PGY3_LIMITATION,24\n" +
+    "Inpatient Medicine,0\n" +
+    "Pediatrics,24\n" +
+    "Child and Adolescent Elective,52\n" +
+    "Consult Liaison at VCUHS,52\n" +
+    "ECT,52\n" +
+    "Eastern State Hospital/Forensics,52\n" +
+    "Outpatient Psychotherapy Clinic,52\n" +
+    "ER Psychiatry Night Float,52\n" +
+    "VAMC Night Float,52\n" +
+    "General Psychiatry,52\n" +
+    "Emergency Psychiatry,52\n" +
+    "Didactics,52\n" +
+    "Child and Adolescent,1\n" +
+    "Psychotherapy,52\n" +
+    "Grand Rounds,52\n" +
+    "Consultation and Liaison Psychiatry,52\n" +
+    "Community Psychiatry,52\n" +
+    "Inpatient Psychiatry at VCUHS,52\n" +
+    "Neurology,52\n" +
+    "Emergency Medicine,52\n" +
+    "Night Float,52\n" +
+    "Inpatient Psychiatry at VAMC,0\n" +
+    "Inpatient Psychiatry with Substance Abuse at VAMC,0\n" +
+    "Elective,52\n" +
+    "---\n" +
+    "Prefilled,0\n" +
+    "USERID,BLOCK,ROTATION,WHERE_IN_BLOCK_RANGE\n"
