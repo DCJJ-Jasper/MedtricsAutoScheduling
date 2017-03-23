@@ -437,18 +437,21 @@ def request_schedule():
                                                    pgy3_req_full, pgy3_lim_full)
 
             # Double to halves
-            prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed, rotations)
+            prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed,
+                                                          num_trainee_list, rotations)
             resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block // 2, num_trainee_list, rotations,
                                                    pgy1_req_half, pgy1_lim_half,
                                                    pgy2_req_half, pgy2_lim_half,
                                                    pgy3_req_half, pgy3_lim_half)
 
             # Double again to quarters
-            prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed, rotations)
+            prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed,
+                                                          num_trainee_list, rotations)
             resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
                                                    pgy1_req_quarter, pgy1_lim_quarter,
                                                    pgy2_req_quarter, pgy2_lim_quarter,
                                                    pgy3_req_quarter, pgy3_lim_quarter)
+
 
             # print(resultArray)
 

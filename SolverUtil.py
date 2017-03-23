@@ -30,21 +30,19 @@ def generateFullHalfQuarterDict(trainee_req):
         trainee_req_quarter[k] = full_half_quarter[2]
     return(trainee_req_full, trainee_req_half, trainee_req_quarter)
 
-def pruneSchedule(currentSchedule, seed, rotations):
-    """
-
-    :param currentSchedule:
-    :param seed:
-    :param rotations;
-    :return:
-    """
+def pruneSchedule(currentSchedule, seed, num_trainee_list, rotations):
     # Create rotations_list_local and min_length_rotation_local to match the solver
+    pruneCount = 0
     rotations_list_local = []
     for rot in rotations:
-        rotations_list_local.append((rot.name,
-                                     rot.min1, rot.max1,
-                                     rot.min2, rot.max2,
-                                     rot.min3, rot.max3))
+        rotations_list_local.append((rot.min1,
+                                     rot.min2,
+                                     rot.min3,
+                                     rot.min12,
+                                     rot.min13,
+                                     rot.min23,
+                                     rot.mintotal,
+                                     ))
 
     min_length_rotation_local = []
     for rot in rotations:
@@ -52,38 +50,80 @@ def pruneSchedule(currentSchedule, seed, rotations):
 
     # Deep copy the input schedule
     currentSchedule = copy.deepcopy(currentSchedule)
-    # Transpose the schedule to be block based
-    currentSchedule_t = [list(x) for x in zip(*currentSchedule)]
 
     # Generate a list of randomly shuffled trainee x block to randomly prune
-    num_trainee = len(currentSchedule)
+    num_trainee_total = len(currentSchedule)
     num_block = len(currentSchedule[0])
-    trainee_block_list = list(range(num_trainee * num_block))
+    trainee_block_list = list(range(num_trainee_total * num_block))
 
     random.seed(seed)
     random.shuffle(trainee_block_list)
 
+    # Construct the array for counting types of trainee
+    count_array = [[[0 for typeTrainee in range(7)] for rotation in range(len(rotations_list_local))] for block in range(num_block)]
+    for trainee in range(num_trainee_total):
+        #Check these requirements for types of trainee
+        if (trainee < num_trainee_list[0]):
+            # PGY1
+            typeTraineeList = [0, 3, 4, 6]
+        elif (trainee < (num_trainee_list[0] + num_trainee_list[1])):
+            # PGY2
+            typeTraineeList = [1, 3, 5, 6]
+        else:
+            # PGY3
+            typeTraineeList = [2, 4, 5, 6]
+
+        for block in range(num_block):
+            rotation = currentSchedule[trainee][block]
+            if rotation < 0:
+                # Empty block, skip
+                continue
+            # Else, start counting for the desired type
+            for typeTrainee in typeTraineeList:
+                count_array[block][rotation][typeTrainee] += 1
+
     # Loop through each trainee-block
     for trainee_block in trainee_block_list:
+        canPrune = True
         trainee = trainee_block // num_block
         block = trainee_block % num_block
         rotation = currentSchedule[trainee][block]
+        #Check these requirements for types of trainee
+        if (trainee < num_trainee_list[0]):
+            # PGY1
+            typeTraineeList = [0, 3, 4, 6]
+        elif (trainee < (num_trainee_list[0] + num_trainee_list[1])):
+            # PGY2
+            typeTraineeList = [1, 3, 5, 6]
+        else:
+            # PGY3
+            typeTraineeList = [2, 4, 5, 6]
+
         # If the current block is empty, there's nothing to prune, skip
         if (rotation < 0):
             continue
-        # If the rotation is at min requirement to run, we can't prune
-        # TODO: Needs to fix pruning to work with PGY2, 3 and "or" requirements
-        if (currentSchedule_t[block].count(rotation) <= rotations_list_local[rotation][1]):
+        # If the rotation is at min requirement in some type to run, we can't prune
+        for typeTrainee in typeTraineeList:
+            if (count_array[block][rotation][typeTrainee] <= rotations_list_local[rotation][typeTrainee]):
+                canPrune = False
+                break
+        if not canPrune:
             continue
+
         # If the current rotation length is at min, we can't prune
         if min_length_rotation_local[rotation][1] > (13 / num_block):
             continue
 
         # If the current rotation is prefilled, we can't prune
         # TODO: Implement prevention from prefilled pruning
+        #Prune the desired block
+        pruneCount += 1
         currentSchedule[trainee][block] = -1
-        currentSchedule_t[block][trainee] = -1
+        #update the count array to reflect the pruned block
+        for typeTrainee in typeTraineeList:
+            count_array[block][rotation][typeTrainee] -= 1
 
+    print("Pruned " + str(pruneCount))
     return currentSchedule
 
 
