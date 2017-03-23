@@ -665,9 +665,9 @@ function visualize_data() {
 
             var newSquare;
             if ((rot_count % 4 != 3) && (t.scheduled_blocks[rot_count] == t.scheduled_blocks[rot_count + 1])) {
-                newSquare = new LongSquare(x, y, color, app.renderer, rot_name, id, role, trainee_name, block_num);
+                newSquare = new LongSquare(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
             } else {
-                newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, trainee_name, block_num);
+                newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
             }
 
             newSquare.draw();
@@ -711,7 +711,6 @@ function visualize_data() {
     for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
         var t = trainees[trainee_i];
         var underdone_arr = t.get_underdone_array();
-        // console.log(underdone_arr);
 
         switch (t.role) {
             case "PGY1":

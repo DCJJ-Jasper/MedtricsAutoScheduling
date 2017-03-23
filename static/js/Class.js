@@ -180,7 +180,7 @@ Schedule.prototype.get_schedule_info_csv = function() {
  * @param rotations_texture
  * @constructor
  */
-function Square(x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
+function Square(x, y, color, renderer, rot_name, id, role, trainee, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
     this.x = x;
     this.y = y;
     this.color = color;
@@ -194,12 +194,14 @@ function Square(x, y, color, renderer, rot_name, id, role, trainee_name, block_n
     this.sprite.x = this.x;
     this.sprite.y = this.y;
     this.sprite.interactive = true;
+    this.sprite.trainee = trainee;
     this.sprite.rot_id = id;
     this.sprite.rot_name = rot_name;
     this.sprite.role = role;
     this.sprite.trainee_name = trainee_name;
     this.sprite.block_num = block_num;
     this.sprite._textureID = 1;
+    this.sprite.renderer = renderer;
 
     this.sprite.color = color;
 }
@@ -207,6 +209,7 @@ function Square(x, y, color, renderer, rot_name, id, role, trainee_name, block_n
 Square.prototype.draw = function() {
     this.sprite.texture = this.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[this.id]);
 };
+
 /**
  * LongSquare is a child of Square, slightly longer to connect the two same consecutive rotations within block
  * @param x
@@ -221,8 +224,8 @@ Square.prototype.draw = function() {
  * @param rotations_texture
  * @constructor
  */
-function LongSquare(x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
-    Square.call(this, x, y, color, renderer, rot_name, id, role, trainee_name, block_num, rotations_texture);
+function LongSquare(x, y, color, renderer, rot_name, id, role, trainee, trainee_name, block_num, rotations_texture = ROTATIONS_SQUARE_TEXTURE) {
+    Square.call(this, x, y, color, renderer, rot_name, id, role, trainee, trainee_name, block_num, rotations_texture);
 }
 LongSquare.prototype = new Square();
 LongSquare.prototype.constructor = LongSquare;
