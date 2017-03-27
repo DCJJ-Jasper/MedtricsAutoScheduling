@@ -202,6 +202,7 @@ function Square(x, y, color, renderer, rot_name, id, role, trainee, trainee_name
     this.sprite.block_num = block_num;
     this.sprite._textureID = 1;
     this.sprite.renderer = renderer;
+    this.sprite.square = this;
 
     this.sprite.color = color;
 }
