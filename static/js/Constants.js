@@ -29,7 +29,8 @@ var BUTTON_COLOR = "0x006DCC"
 var TOP_BAR_RANGE = BUTTON_TOP_LEFT_Y + BUTTON_HEIGHT + BUTTON_DISTANCE
 
 var LABEL_ROLE_TOP_LEFT_X = 40;
-var LABEL_ROLE_TOP_LEFT_Y = 30 + TOP_BAR_RANGE;
+//var LABEL_ROLE_TOP_LEFT_Y = 30 + TOP_BAR_RANGE;
+var LABEL_ROLE_TOP_LEFT_Y = 30;
 var LABEL_TOP_LEFT_X = 40;
 var LABEL_TOP_LEFT_Y = 40 + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
 var LABEL_SIZE = 14;
@@ -37,13 +38,15 @@ var LABEL_HEIGHT = 17;
 var LABEL_ROLE_SIZE = 26;
 var LABEL_ROLE_HEIGHT = 26; // Role name label height
 var ROLE_LABEL_TRAINEE_DIST = 5; // Distance between role name and trainees" names
+var BLOCK_LABEL_HEIGHT = LABEL_ROLE_TOP_LEFT_Y;
 
 var POPUP_LABEL_SIZE = 14;
 var POPUP_LABEL_HEIGHT = 22;
 var POPUP_SQUARE_SIZE = 14;
+var POPUP_CLOSE_OFFSET = 35
 var POPUP_INFO_X_OFFSET = 85;
 var POPUP_PADDING = 7;
-var POPUP_WIDTH = 300;
+var POPUP_WIDTH = 350;
 var POPUP_WEIGHT = 124;
 var POPUP_ROTATION_OFFSET = 4;
 var POPUP_ROTATION_SQUARE = 10;
@@ -555,7 +558,7 @@ var PROBLEM_TEXT = "Program,Psychiatry,13\n" +
     "3,Night Float,1,10,1,10,1,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "4,Inpatient Psychiatry at VAMC,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "5,Inpatient Psychiatry with Substance Abuse at VAMC,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
-    "6,Inpatient Medicine,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
+    "6,Inpatient Medicine,0,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "7,Pediatrics,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "8,Child and Adolescent Elective,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +
     "9,Consult Liaison at VCUHS,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1\n" +

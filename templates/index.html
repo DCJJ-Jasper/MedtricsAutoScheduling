@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
 </head>
 <body>
-<button type="button" id="upload_btn">Upload data</button>
-<button type="button" id="greedy_schedule_btn">Greedy Schedule</button>
-<button type="button" id="solver_schedule_btn">Solver Schedule</button>
-<button type="button" id="save_btn">Save CSV</button>
-<!-- Load the pixi.js library -->
+<!-- Load JQuery -->
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.balloon.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.switch-button.js') }}"></script>
+<div class="w3-container top">
+    <img src="../static/images/MedtricsLogo-01.png" />
+    <div class="button-container">
+        <button type="button" id="upload_btn">Upload data</button>
+        <button type="button" id="greedy_schedule_btn">Greedy Schedule</button>
+        <button type="button" id="solver_schedule_btn">Solver Schedule</button>
+        <button type="button" id="save_btn">Save CSV</button>
+    </div>
+    <div class="switch-wrapper">
+        <input type="checkbox" value="1" checked>
+    </div>
+</div>
+<!-- Load the pixi.js library -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/pixi.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/chance.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/Utility.js') }}"></script>
@@ -17,7 +29,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/Constants.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/Class.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/Visualization.js') }}"></script>
-<div id="modal">Loading data...<br>
-                  <img id="loader" src="{{ url }}/static/images/ajax-loader.gif"/> </div>
+<!--<div id="modal">Loading data...<br>-->
+                  <!--<img id="loader" src="{{ url }}/static/images/ajax-loader.gif"/> </div>-->
 </body>
 </html>

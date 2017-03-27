@@ -295,7 +295,7 @@ function onSquarePressed() {
             // Draw chart lines
             chart_bars.lineStyle(2, "0xFF0000", 1);
             x1 = base_x;
-            x2 = base_x + SQUARE_SIZE * num_block * 4 + SQUARE_DISTANCE * (num_block * 4 - 1);
+            x2 = base_x + SQUARE_SIZE * num_block + SQUARE_DISTANCE * (num_block - 1);
             switch (role) {
                 case "PGY1":
                     y1 = chart_pgy1_top_left_y + rotations_dict[rot_id].min1 * CHART_UNIT;
@@ -327,16 +327,15 @@ function onSquarePressed() {
 
 function onButtonOver() {
 
-    temp_line.clear();
-    temp_line.lineStyle(1, 0x000000, 1);
-    temp_line.moveTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
-    temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y - SQUARE_DISTANCE / 2);
-    temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
-    temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
-    temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
-
-
     if (square_selected == false) {
+
+        temp_line.clear();
+        temp_line.lineStyle(1, 0x000000, 1);
+        temp_line.moveTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
+        temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y - SQUARE_DISTANCE / 2);
+        temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
+        temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
+        temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
 
         var x1 = this.x + 20;
         var y1 = this.y - POPUP_WEIGHT;
@@ -493,4 +492,12 @@ $(document).keyup(function(e) {
         resetBlur();
         remove_popup();
     }
+});
+
+$("input[type=checkbox]").switchButton({
+    on_label: 'Explore',
+    off_label: 'Schedule',
+    width: 60,
+    height: 25,
+    button_width: 25
 });

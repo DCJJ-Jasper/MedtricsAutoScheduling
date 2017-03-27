@@ -1,0 +1,95 @@
+.top {
+}
+
+.w3-container button {
+    vertical-align: middle;
+    background-color: #5C9ACF; /* Blue */
+    border: none;
+    color: white;
+    padding: 16px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.w3-container button:hover {
+    background-color: #337AB7;
+}
+
+.w3-container img {
+    vertical-align: middle;
+}
+
+.switch-wrapper {
+  display: inline-block;
+  margin-left: 92px;
+  position: relative;
+  top: 3px;
+    vertical-align: middle;
+}
+
+.switch-button-label {
+    margin-top: 4px;
+    float: left;
+    cursor: pointer;
+    font: 20px Arial;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.switch-button-label.off {
+    color: #adadad;
+}
+
+.switch-button-label.on {
+    color: #0088CC;
+}
+
+.switch-button-background {
+    float: left;
+    position: relative;
+
+    background: #ccc;
+    border: 1px solid #aaa;
+
+    margin: 1px 10px;
+
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    cursor: pointer;
+}
+
+.switch-button-button {
+    position: absolute;
+
+    left: -1px;
+    top : -1px;
+
+    background: #FAFAFA;
+    border: 1px solid #aaa;
+
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.w3-container {
+    padding: 0.01em 16px;
+    border-color: #e7e7e7;
+}
+
+.button-container {
+    margin-left: 95px;
+    display: inline;
+}
+
+span {
+  display: table-cell;
+}

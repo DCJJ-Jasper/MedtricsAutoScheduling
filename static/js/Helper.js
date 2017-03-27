@@ -540,12 +540,12 @@ function visualize_data() {
     blockNumberLabelPositions[0] = SQUARE_TOP_LEFT[0] + SQUARE_SIZE * 4 / 2;
     for (var i = 1; i < (num_block + 1) / 4; i++) {
         if (i < 10) {
-            blockNumberLabelPositions[i] = blockNumberLabelPositions[i - 1] + SQUARE_SIZE * 4 / 2 + SQUARE_SIZE * 4 / 2 + SQUARE_DISTANCE + (LABEL_SIZE - 1) / 2;
+            blockNumberLabelPositions[i] = SQUARE_TOP_LEFT[0] + SQUARE_SIZE * 4 * (i + 0.5) + SQUARE_DISTANCE * 4 * i - LABEL_SIZE / 2;
         } else {
-            blockNumberLabelPositions[i] = blockNumberLabelPositions[i - 1] + SQUARE_SIZE * 4 / 2 + SQUARE_SIZE * 4 / 2 + SQUARE_DISTANCE + (LABEL_SIZE - 2) / 2;
+            blockNumberLabelPositions[i] = SQUARE_TOP_LEFT[0] + SQUARE_SIZE * 4 * (i + 0.5) + SQUARE_DISTANCE * 4 * i - LABEL_SIZE / 2;
         }
         var blockNumberLabel = new PIXI.Text(i, {fontSize: LABEL_SIZE});
-        blockNumberLabel.position.set(blockNumberLabelPositions[i - 1], SQUARE_TOP_LEFT[1] - SQUARE_DISTANCE);
+        blockNumberLabel.position.set(blockNumberLabelPositions[i - 1], BLOCK_LABEL_HEIGHT);
         app.stage.addChild(blockNumberLabel);
     }
 
@@ -796,7 +796,7 @@ function draw_full_popup(x1, y1, trainee_name, rot_name) {
     popup_info4.visible = true;
     popup_click_to_view.visible = true;
 
-    popup_close_btn.x = start_x + POPUP_CLOSE_BTN_OFFSET;
+    popup_close_btn.x = start_x + POPUP_WIDTH - POPUP_CLOSE_OFFSET;
     popup_close_btn.y = start_y;
 
     popup_label1.x = start_x;
