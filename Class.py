@@ -534,6 +534,9 @@ class Schedule:
 
 
     def greedy_step1_4(self):
+        print("HAHAHAHAHAHAHA")
+        print(self.trainees[0].block[0])
+        print(self.trainees[0].block)
         trainees = self.trainees
         # TODO: Break down into 3 trainee list for the randomization
         rotations = self.rotations
@@ -1702,6 +1705,9 @@ class Schedule:
             elif trainee.role == "PGY2": pgy2_list.append(trainee)
             elif trainee.role == "PGY3": pgy3_list.append(trainee)
         self.trainees = pgy1_list + pgy2_list + pgy3_list
+
+    def blank_fill(self):
+        pass
 
     # Statistics about the schedule
     def average_blank(self):

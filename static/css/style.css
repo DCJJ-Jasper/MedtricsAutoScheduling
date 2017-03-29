@@ -3,10 +3,9 @@
 
 .w3-container button {
     vertical-align: middle;
-    background-color: #5C9ACF; /* Blue */
     border: none;
     color: white;
-    padding: 16px 16px;
+    padding: 12px 12px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -17,8 +16,20 @@
     cursor: pointer;
 }
 
-.w3-container button:hover {
+.button1 {
+    background-color: #5C9ACF
+}
+
+.button1:hover {
     background-color: #337AB7;
+}
+
+.button2 {
+    background-color: #3A8BD1;
+}
+
+.button2:hover {
+    background-color: #2C699D;
 }
 
 .w3-container img {
@@ -27,7 +38,7 @@
 
 .switch-wrapper {
   display: inline-block;
-  margin-left: 92px;
+  margin-left: 50px;
   position: relative;
   top: 3px;
     vertical-align: middle;

@@ -41,8 +41,6 @@ Trainee.prototype.set_empty_schedule_blocks = function () {
 
 Trainee.prototype.get_underdone_array = function() {
 
-    console.log(this.id_list);
-    console.log(this.base_reqs);
     var underdone_arr = [];
 
     // Add the remain requirements for the first rotation
@@ -59,6 +57,14 @@ Trainee.prototype.get_underdone_array = function() {
 
     // Return the underdone_arr
     return underdone_arr;
+};
+
+Trainee.prototype.generate_prefill_info = function() {
+    var str = "";
+    str += String(this.id) + ",";
+    str += String(this.name) + ",";
+    str += convert_to_schedule_id(this.scheduled_blocks).join(".");
+    return str;
 }
 
 /**
@@ -121,11 +127,15 @@ function Schedule(trainees, rotations, num_block) {
     this.trainees = trainees;
     this.rotations = rotations;
     this.num_block = num_block;
+
+    // Schedule text information
+    this.str_list = [];
+    this.schedule_info_mark = 0;
 }
 
 Schedule.prototype.get_block_info_role_id = function(role, id) {
     var info_arr = Array(num_block).fill(0);
-    var id_str = id.toString();
+    var id_str = String(id);
     for (var t of this.trainees) {
         if (t.role == role) {
             for (var i = 0; i < num_block; i++) {
@@ -142,7 +152,11 @@ Schedule.prototype.get_schedule_info = function() {
         s += String(t.id) + "," + String(t.name) + "," + String(t.role) + ",";
         var subs = "";
         for (id of t.scheduled_blocks) {
-            subs += String(id) + "."
+            if (String(id) == EMPTY_BLOCK_GRAPHIC_ID) {
+                subs += String(EMPTY_BLOCK_ID) + "."
+            } else {
+                subs += String(id) + "."
+            }
         }
         subs.substring(0, subs.length - 1);
         s += subs + "\n"
@@ -156,13 +170,35 @@ Schedule.prototype.get_schedule_info_csv = function() {
         s += String(t.id) + "," + String(t.name) + "," + String(t.role) + ",";
         var subs = "";
         for (id of t.scheduled_blocks) {
-            subs += String(id) + ","
+            if (String(id) == EMPTY_BLOCK_GRAPHIC_ID) {
+                subs += String(EMPTY_BLOCK_ID) + "."
+            } else {
+                subs += String(id) + "."
+            }
         }
         subs.substring(0, subs.length - 1);
         s += subs + "\n"
     }
     return s
 };
+
+Schedule.prototype.set_schedule_str_list = function(str_list) {
+    this.str_list = str_list;
+};
+
+Schedule.prototype.set_schedule_info_mark = function(mark) {
+    this.schedule_info_mark = mark;
+};
+
+Schedule.prototype.generate_problem_text = function() {
+    var line_num;
+    var data;
+    for (var i = 0; i < this.trainees.length; i++) {
+        line_num = this.schedule_info_mark + i;
+        this.str_list[line_num] = this.trainees[i].generate_prefill_info();
+    };
+    return this.str_list.join("\n");
+}
 
 //////////////////
 // GRAPHIC CLASSES
@@ -185,7 +221,7 @@ function Square(x, y, color, renderer, rot_name, id, role, trainee, trainee_name
     this.y = y;
     this.color = color;
     this.rot_name = rot_name;
-    this.id = id;
+    this.rot_id = id;
     this.trainee_name = trainee_name;
     this.block_num = block_num;
     this.renderer = renderer;
@@ -207,7 +243,7 @@ function Square(x, y, color, renderer, rot_name, id, role, trainee, trainee_name
 }
 
 Square.prototype.draw = function() {
-    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[this.id]);
+    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[this.rot_id]);
 };
 
 /**
@@ -231,7 +267,7 @@ LongSquare.prototype = new Square();
 LongSquare.prototype.constructor = LongSquare;
 
 LongSquare.prototype.draw = function() {
-    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[this.id.toString()]);
+    this.sprite.texture = this.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[this.rot_id]);
 };
 
 /**

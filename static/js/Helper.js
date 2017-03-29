@@ -24,9 +24,16 @@ function reset_variables() {
     pgy3_lims = {};
 
     trainees = [];
+    trainees_dict = {};
     rotations = [];
     rotations_dict = {};
     id_list = [];
+}
+
+function reset_schedule() {
+    for (trainee of trainees) {
+        trainee.set_empty_schedule_blocks();
+    }
 }
 
 /**
@@ -34,7 +41,6 @@ function reset_variables() {
  * @param input_text
  */
 function read_in_data(input_text) {
-    console.log(input_text);
 
     reset_variables();
     var str_list = input_text.split("\n");
@@ -77,6 +83,7 @@ function read_in_data(input_text) {
         new_trainee = new Trainee(name, role, id, num_block, id_list);
         new_trainee.set_scheduled_blocks(schedule);
         trainees.push(new_trainee);
+        trainees_dict[id] = new_trainee;
     }
 
     // Read in all the rotations
@@ -168,7 +175,6 @@ function read_in_data(input_text) {
     for (var i = num_pgy1 + num_pgy2; i < num_trainees ; i++) {
         trainees[i].set_requirements(pgy3_reqs)
     }
-    console.log(pgy1_reqs, pgy2_reqs, pgy3_reqs)
 }
 
 function read_in_data_from_medtrics(input_data) {
@@ -203,6 +209,7 @@ function read_in_data_from_medtrics(input_data) {
 
         new_trainee = new Trainee(trainee_name, 'PGY1', trainee_id, num_block, id_list);
         trainees.push(new_trainee);
+        trainees_dict[trainee_id] = new_trainee;
     }
 
     // Read PGY2
@@ -221,6 +228,7 @@ function read_in_data_from_medtrics(input_data) {
 
         new_trainee = new Trainee(trainee_name, 'PGY2', trainee_id, num_block, id_list);
         trainees.push(new_trainee);
+        trainees_dict[trainee_id] = new_trainee;
     }
 
     // Read PGY3
@@ -239,7 +247,9 @@ function read_in_data_from_medtrics(input_data) {
 
         new_trainee = new Trainee(trainee_name, 'PGY3', trainee_id, num_block, id_list);
         trainees.push(new_trainee);
+        trainees_dict[trainee_id] = new_trainee;
     }
+    num_trainees = num_pgy1 + num_pgy2 + num_pgy3;
 
     // Skip a line
     line_num += 1;
@@ -280,6 +290,10 @@ function read_in_data_from_medtrics(input_data) {
     rotations_dict[EMPTY_BLOCK_GRAPHIC_ID] = blank_rot;
     rotations.push(blank_rot);
     id_list.push(EMPTY_BLOCK_GRAPHIC_ID);
+
+    // Create the schedule
+    schedule = new Schedule(trainees, rotations, num_block);
+    schedule.set_schedule_str_list(str_list)
 
     // Skip a line
     line_num += 1;
@@ -325,7 +339,6 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
-        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_block_required = parseFloat(data[1]);
@@ -341,7 +354,6 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
-        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_block_required = parseFloat(data[1]);
@@ -357,7 +369,6 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
-        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_block_required = parseFloat(data[1]);
@@ -379,7 +390,6 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
-        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_limit = parseFloat(data[1]);
@@ -395,7 +405,6 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
-        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_limit = parseFloat(data[1]);
@@ -411,7 +420,6 @@ function read_in_data_from_medtrics(input_data) {
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
-        console.log(data);
 
         rot_id = parseInt(data[0]);
         num_limit = parseFloat(data[1]);
@@ -430,24 +438,22 @@ function read_in_data_from_medtrics(input_data) {
     // Skip a line
     line_num += 1;
 
-    // Create empty schedule for each trainee
-    for (t of trainees) {
-        t.set_empty_schedule_blocks();
-    }
+    // This mark the begin of prefill of information in the str_list
+    schedule.set_schedule_info_mark(line_num + 1);
 
-    // Read prefills
-    var user_id;
-    var block_num;
-    var rotation;
-    var quarter;
-    for (var i = 0; i < num_prefills; i++) {
-        user_id = parseInt(data[0], 10);
-        block_num = parseInt(data[1], 10);
-        rotation = parseInt(data[2], 10);
-        quarter = parseInt(data[3], 10);
-    }
+    // Read each student schedule
+    var trainee_id;
+    var trainee_schedule;
+    for (var i = 0; i < num_trainees; i++) {
+        line_num += 1;
+        data = str_list[line_num].trim().split(",");
+        trainee_id = data[0]
+        trainee_schedule = data[2].split(".");
 
-    //
+        // Assign the trainee schedule to the trainee
+        trainee_schedule = convert_to_graphic_id(trainee_schedule);
+        trainees_dict[trainee_id].set_scheduled_blocks(trainee_schedule);
+    }
 }
 
 ///////////////////////
@@ -455,8 +461,6 @@ function read_in_data_from_medtrics(input_data) {
 ///////////////////////
 
 function visualize_data() {
-
-    schedule = new Schedule(trainees, rotations, num_block);
 
     // Clear out all containers
     squares_dict = {};
@@ -494,7 +498,9 @@ function visualize_data() {
     rot_squares_list = [];
 
     // Clean all underdone container
-    app.stage.removeChild(underdone_list);
+    for (var underdone_bar of underdone_list) {
+        app.stage.removeChild(underdone_bar);
+    }
     underdone_list = [];
 
     // Clean all chart list
@@ -552,6 +558,7 @@ function visualize_data() {
     var pgy1_count = 0;
     var pgy2_count = 0;
     var pgy3_count = 0;
+
     // Create labels for all the trainees
     for (var t of trainees) {
         var trainee_label = new PIXI.Text(t.name, {
@@ -646,6 +653,7 @@ function visualize_data() {
 
         for (var rot_count = 0; rot_count < num_block; rot_count++) {
             var id = t.scheduled_blocks[rot_count];
+            if (id == -1) id = EMPTY_BLOCK_GRAPHIC_ID;
 
             t.processed_reqs[id] -= 1;
 
@@ -673,7 +681,7 @@ function visualize_data() {
             newSquare.draw();
             squares_sprites_list.push(newSquare.sprite);
             newSquare.sprite.on('mousedown', onSquarePressed);
-            newSquare.sprite.on('mouseover',onButtonOver);
+            newSquare.sprite.on('mouseover', onButtonOver);
             newSquare.sprite.on('mouseout', onButtonOut);
 
             squares_dict[role + "-" + id.toString()].addChild(newSquare.sprite);
@@ -704,7 +712,7 @@ function visualize_data() {
         underdone_bars[r.id] = new_graphic;
         underdone_list.push(new_graphic);
         app.stage.addChild(new_graphic);
-    }                    ;
+    }
 
     var base_x = underdone_top_left_x;
     var base_y;
@@ -734,8 +742,6 @@ function visualize_data() {
             var rot_id = id_list[j]
             var color = convert_to_color_code(ROTATIONS_COLOR[rot_id]);
             var graphic = underdone_bars[rot_id];
-
-            //console.log(trainee_count);
             // Calculate points
             if (j == 0) {
                 var x1 = base_x;
@@ -748,7 +754,6 @@ function visualize_data() {
                 var x2 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j];
                 var y2 = base_y + UNDERDONE_UNIT_RANGE * trainee_count + UNDERDONE_SIZE;
             }
-
             // Draw the rectangle
             graphic.beginFill(color);
             graphic.moveTo(x1, y1);
@@ -757,7 +762,6 @@ function visualize_data() {
             graphic.lineTo(x2, y1);
             graphic.lineTo(x1, y1);
             graphic.endFill();
-
         }
     }
 }
@@ -913,7 +917,12 @@ function draw_partial_popup(x1, y1, trainee_name, rot_name) {
 
     popup_click_to_view.x = start_x;
     popup_click_to_view.y = start_y + POPUP_LABEL_HEIGHT * 4;
-    popup_click_to_view.text = 'Click to change rotation';
+    if (current_mode == MODE_EXPLORE) {
+        popup_click_to_view.text = 'Click to explore additional information';
+    } else if (current_mode == MODE_SCHEDULE) {
+        popup_click_to_view.text = 'Click to change rotation';
+    }
+
 
     popup_info1.x = start_x + POPUP_INFO_X_OFFSET;
     popup_info1.y = start_y;

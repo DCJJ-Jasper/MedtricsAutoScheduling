@@ -22,6 +22,7 @@ import SolverUtil
 # -----------------------------
 
 trainees = []
+trainees_dict = {}
 rotations = []
 rotations_dict = {}
 rotations_id = {}
@@ -65,6 +66,7 @@ def request_schedule():
     if request.method == 'POST':
         data = request.json["title"]
         method = request.json["method"]
+        print(data)
 
         with io.StringIO(data) as f:
 
@@ -99,6 +101,7 @@ def request_schedule():
                 # Create trainee
                 new_trainee = Class.Trainee(first_name + " " + last_name, "PGY1", id=id, num_block=num_block)
                 trainees.append(new_trainee)
+                trainees_dict[id] = new_trainee
 
             line_data = f.readline().rstrip('\n').split(",")
             num_pgy2 = int(line_data[1])
@@ -112,6 +115,7 @@ def request_schedule():
                 # Create trainee
                 new_trainee = Class.Trainee(first_name + " " + last_name, "PGY2", id=id, num_block=num_block)
                 trainees.append(new_trainee)
+                trainees_dict[id] = new_trainee
 
             line_data = f.readline().rstrip('\n').split(",")
             num_pgy3 = int(line_data[1])
@@ -125,6 +129,7 @@ def request_schedule():
                 # Create trainee
                 new_trainee = Class.Trainee(first_name + " " + last_name, "PGY3", id=id, num_block=num_block)
                 trainees.append(new_trainee)
+                trainees_dict[id] = new_trainee
 
             num_trainees = num_pgy1 + num_pgy2 + num_pgy3
             f.readline()
@@ -333,6 +338,8 @@ def request_schedule():
             print(pgy2_lim)
             print(pgy3_lim)
 
+            # TODO: Create the prefilled code
+
             # -----------------------
             # Create greedy constants
             # -----------------------
@@ -355,7 +362,7 @@ def request_schedule():
                 pgy2_lim_greedy[rot] *= 4
                 pgy3_lim_greedy[rot] *= 4
             #
-            # # TODO: Create limitation code
+            # TODO: Create limitation code
             for trainee in trainees:
                 if trainee.role == "PGY1":
                     trainee.create_limitations(pgy1_lim_greedy)
@@ -373,6 +380,37 @@ def request_schedule():
                 elif trainee.role == "PGY3":
                     trainee.create_requirements(pgy3_req_greedy)
 
+            # -------------------
+            # Create the schedule
+            # -------------------
+
+            schedule = Class.Schedule(trainees, rotations, num_block=num_block, rotations_id=rotations_id)
+
+            # --------------------
+            # Prefill the schedule
+            # --------------------
+
+            # Skip 3 lines
+            f.readline()
+            f.readline()
+            f.readline()
+
+            # Read in number of blocks:
+            for i in range(num_trainees):
+                line_data = f.readline().rstrip("\n").split(",")
+                trainee_id = line_data[0]
+                print(trainee_id)
+                print(line_data)
+                schedule_info = line_data[2].split(".")
+
+                trainee = trainees_dict[trainee_id]
+
+                for index in range(num_block):
+                    # Schedule for the trainee using prefilled information
+                    rot_id = int(schedule_info[index])
+                    if rot_id != -1:
+                        schedule.fill_in(trainee, index, rotations_dict[rot_id])
+
             # TODO:
             # pgy1_req
             # pgy2_req
@@ -380,11 +418,6 @@ def request_schedule():
             # num_block
             # pgy1_lim, pgy2_lim, pgy3_lim
 
-            # --------------------
-            # Prefill the schedule
-            # --------------------
-
-            # TODO: Create the prefill code
             f.close()
 
         # --------------------------
@@ -396,7 +429,7 @@ def request_schedule():
         # ---------------------------------------------------------------
 
         if (method == "greedy"):
-            schedule = Class.Schedule(trainees, rotations, num_block=num_block, rotations_id=rotations_id)
+
             #schedule.greedy_step0_4()
             schedule.greedy_step1_4()
             schedule.greedy_step2_4()
@@ -414,10 +447,11 @@ def request_schedule():
         # ---------------------------
 
         else:
+            # TODO: Everything is good
+
             # Create blank prefilled schedule
             def create_blank_schedule(num_trainees, num_block):
                 return [[-1 for i in range(num_block)] for j in range(num_trainees)]
-
 
             prefilled_schedule = create_blank_schedule(num_trainees, num_block // 4)
 

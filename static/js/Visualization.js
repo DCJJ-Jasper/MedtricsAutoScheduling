@@ -26,6 +26,7 @@ var pgy2_lims = {};
 var pgy3_lims = {};
 
 var trainees = [];
+var trainees_dict = [];
 var rotations = [];
 var rotations_dict = {};
 var id_list = [];
@@ -91,6 +92,7 @@ var temp_line;
 var square_selected = false;
 var id_pressed = -3;
 var role_pressed = "";
+var current_mode = MODE_SCHEDULE;
 
 
 ///////////////////
@@ -225,11 +227,6 @@ function onSquarePressed() {
     block_num_selected = this.block_num;
     sprite_selected = this;
 
-    console.log("Before");
-    console.log(block_num_selected);
-    console.log(trainee_selected.scheduled_blocks);
-    console.log(trainee_selected.scheduled_blocks[block_num_selected]);
-
     if ((id_pressed == rot_id) && (role_pressed == role)) {
             resetBlur();
             id_pressed = -3;
@@ -248,79 +245,84 @@ function onSquarePressed() {
             id_pressed = rot_id;
             role_pressed = role;
             square_selected = true;
-            for (key in squares_dict) squares_dict[key].alpha = OTHER_ROLE_BLUR;
-            for (var id of id_list) squares_dict[role + "-" + id.toString()].alpha = SQUARE_BLUR;
 
-            squares_dict[role + "-" + rot_id].alpha = 1;
+            if (current_mode == MODE_EXPLORE) {
 
-            // Draw out chart bars under the role by using PIXI.Graphics
-            // TODO: Fail so far
-            var base_x = 300;
-            var base_y;
-            var chart_pgy1_top_left_y = pgy1_top_left_y + num_pgy1 * LABEL_HEIGHT + CHART_DISTANCE;
-            var chart_pgy2_top_left_y = pgy2_top_left_y + num_pgy2 * LABEL_HEIGHT + CHART_DISTANCE;
-            var chart_pgy3_top_left_y = pgy3_top_left_y + num_pgy3 * LABEL_HEIGHT + CHART_DISTANCE;
+                for (key in squares_dict) squares_dict[key].alpha = OTHER_ROLE_BLUR;
+                for (var id of id_list) squares_dict[role + "-" + id.toString()].alpha = SQUARE_BLUR;
 
-            var color = convert_to_color_code(ROTATIONS_COLOR[rot_id]);
-            var info_arr = schedule.get_block_info_role_id(role, rot_id);
+                squares_dict[role + "-" + rot_id].alpha = 1;
 
-            switch (role) {
-                case "PGY1":
-                    base_y = chart_pgy1_top_left_y;
-                    break;
-                case "PGY2":
-                    base_y = chart_pgy2_top_left_y;
-                    break;
-                case "PGY3":
-                    base_y = chart_pgy3_top_left_y;
-                    break;
-            }
+                // Draw out chart bars under the role by using PIXI.Graphics
+                // TODO: Fail so far
+                var base_x = 300;
+                var base_y;
+                var chart_pgy1_top_left_y = pgy1_top_left_y + num_pgy1 * LABEL_HEIGHT + CHART_DISTANCE;
+                var chart_pgy2_top_left_y = pgy2_top_left_y + num_pgy2 * LABEL_HEIGHT + CHART_DISTANCE;
+                var chart_pgy3_top_left_y = pgy3_top_left_y + num_pgy3 * LABEL_HEIGHT + CHART_DISTANCE;
 
-            // Draw chart bars
-            chart_bars.clear();
-            chart_bars.beginFill(color);
+                var color = convert_to_color_code(ROTATIONS_COLOR[rot_id]);
+                var info_arr = schedule.get_block_info_role_id(role, rot_id);
 
-            for (var i = 0; i < num_block; i++) {
-                var x1 = base_x + i * CHART_RANGE;
-                var y1 = base_y;
-                var x2 = base_x + i * CHART_RANGE + CHART_SIZE;
-                var y2 = base_y + info_arr[i] * CHART_UNIT;
+                switch (role) {
+                    case "PGY1":
+                        base_y = chart_pgy1_top_left_y;
+                        break;
+                    case "PGY2":
+                        base_y = chart_pgy2_top_left_y;
+                        break;
+                    case "PGY3":
+                        base_y = chart_pgy3_top_left_y;
+                        break;
+                }
+
+                // Draw chart bars
+                chart_bars.clear();
+                chart_bars.beginFill(color);
+
+                for (var i = 0; i < num_block; i++) {
+                    var x1 = base_x + i * CHART_RANGE;
+                    var y1 = base_y;
+                    var x2 = base_x + i * CHART_RANGE + CHART_SIZE;
+                    var y2 = base_y + info_arr[i] * CHART_UNIT;
+                    chart_bars.moveTo(x1, y1);
+                    chart_bars.lineTo(x1, y2);
+                    chart_bars.lineTo(x2, y2);
+                    chart_bars.lineTo(x2, y1);
+                    chart_bars.lineTo(x1, y1);
+                }
+
+                // Draw chart lines
+                chart_bars.lineStyle(2, "0xFF0000", 1);
+                x1 = base_x;
+                x2 = base_x + SQUARE_SIZE * num_block + SQUARE_DISTANCE * (num_block - 1);
+                switch (role) {
+                    case "PGY1":
+                        y1 = chart_pgy1_top_left_y + rotations_dict[rot_id].min1 * CHART_UNIT;
+                        break;
+                    case "PGY2":
+                        y1 = chart_pgy2_top_left_y + rotations_dict[rot_id].min2 * CHART_UNIT;
+                        break;
+                    case "PGY3":
+                        y1 = chart_pgy3_top_left_y + rotations_dict[rot_id].min3 * CHART_UNIT;
+                        break;
+                }
                 chart_bars.moveTo(x1, y1);
-                chart_bars.lineTo(x1, y2);
-                chart_bars.lineTo(x2, y2);
                 chart_bars.lineTo(x2, y1);
-                chart_bars.lineTo(x1, y1);
+                chart_bars.lineStyle(0);
+                chart_bars.endFill();
+
+                app.stage.addChild(chart_bars);
+
+            } else {
+
+                // Draw Popup
+                var x1 = this.x + 20;
+                var y1 = this.y - POPUP_WEIGHT;
+
+                // Draw popup;
+                draw_full_popup(x1, y1, this.trainee_name, this.rot_name);
             }
-
-            // Draw chart lines
-            chart_bars.lineStyle(2, "0xFF0000", 1);
-            x1 = base_x;
-            x2 = base_x + SQUARE_SIZE * num_block + SQUARE_DISTANCE * (num_block - 1);
-            switch (role) {
-                case "PGY1":
-                    y1 = chart_pgy1_top_left_y + rotations_dict[rot_id].min1 * CHART_UNIT;
-                    break;
-                case "PGY2":
-                    y1 = chart_pgy2_top_left_y + rotations_dict[rot_id].min2 * CHART_UNIT;
-                    break;
-                case "PGY3":
-                    y1 = chart_pgy3_top_left_y + rotations_dict[rot_id].min3 * CHART_UNIT;
-                    break;
-            }
-            chart_bars.moveTo(x1, y1);
-            chart_bars.lineTo(x2, y1);
-            chart_bars.lineStyle(0);
-            chart_bars.endFill();
-
-            app.stage.addChild(chart_bars);
-
-            // Draw Popup
-
-            var x1 = this.x + 20;
-            var y1 = this.y - POPUP_WEIGHT;
-
-            // Draw popup;
-            draw_full_popup(x1, y1, this.trainee_name, this.rot_name);
         }
 
 }
@@ -368,23 +370,15 @@ function onPopupOut() {
 }
 
 function onPopupPressed() {
-
-    console.log("After");
     remove_popup();
     var rot_change_to = this.rot_id.toString();
-    console.log("Rotation selected: "+ rot_change_to);
     if (trainee_selected && Number.isFinite(block_num_selected) && sprite_selected) {
         trainee_selected.scheduled_blocks[block_num_selected] = rot_change_to;
 
         // Change the square color
         sprite_selected.texture = sprite_selected.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[rot_change_to]);
-        console.log(block_num_selected);
-        console.log(trainee_selected.scheduled_blocks);
-        console.log(trainee_selected.scheduled_blocks[block_num_selected]);
     }
-
-
-
+    console.log(trainee_selected)
 }
 
 function onPopupCloseBtnOver() {
@@ -407,6 +401,21 @@ function resetBlur() {
 var isShown = false;
 var isScheduled = false;
 
+
+/**
+ * When schedule button is clicked
+ */
+$('#clear_btn').click(function onClearPressed() {
+    // isScheueld no longer true.
+    isScheduled = false;
+    isShown = false;
+
+    // Clean all schedules.
+    reset_schedule();
+    reset_app();
+    visualize_data();
+});
+
 /**
  * When schedule button is clicked
  */
@@ -418,62 +427,61 @@ $('#save_btn').click(function onSavePressed() {
  * When schedule button is clicked
  */
 $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
-        if (!isScheduled) {
-            $.ajax({
-            type: "POST",
-            url: "/requestToSchedule",
-            data: JSON.stringify({title: PROBLEM_TEXT, method: "greedy"}),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                if (!isShown) {
-                    isShown = true;
-                    isScheduled = true;
-                    alert('Scheduling');
-                    // Read in the data
-                    var sample_text = data['data'];
 
-                    read_in_data(sample_text);
-                    reset_app();
-                    visualize_data();
+    console.log(schedule.generate_problem_text());
 
-                    for (t of trainees) {
-                        console.log(t.name + ":" + t.get_underdone_array());
-                    }
-                }
+    if (!isScheduled) {
+        $.ajax({
+        type: "POST",
+        url: "/requestToSchedule",
+        data: JSON.stringify({title: schedule.generate_problem_text(), method: "greedy"}),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            if (!isShown) {
+                isShown = true;
+                isScheduled = true;
+                alert('Scheduling');
+                // Read in the data
+                var sample_text = data['data'];
+
+                read_in_data(sample_text);
+                reset_app();
+                visualize_data();
             }
-        });}
-        else {alert('Scheduled');}
+        }
+    });}
+    else {alert('Scheduled');}
 });
 
 /**
  * When schedule button is clicked
  */
 $('#solver_schedule_btn').click(function onGreedySchedulePressed() {
-        if (!isScheduled) {
-            $.ajax({
-            type: "POST",
-            url: "/requestToSchedule",
-            data: JSON.stringify({title: PROBLEM_TEXT, method: "solver"}),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                if (!isShown) {
-                    isShown = true;
-                    isScheduled = true;
-                    alert('Scheduling');
-                    // Read in the data
-                    var sample_text = data['data'];
+    if (!isScheduled) {
+        $.ajax({
+        type: "POST",
+        url: "/requestToSchedule",
+        data: JSON.stringify({title: schedule.generate_problem_text(), method: "solver"}),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            if (!isShown) {
+                isShown = true;
+                isScheduled = true;
+                alert('Scheduling');
 
-                    read_in_data(sample_text);
-                    reset_app();
-                    visualize_data();
+                // Read in the data
+                var sample_text = data['data'];
 
+                read_in_data(sample_text);
+                reset_app();
+                visualize_data();
 
-                }
             }
-        });}
-        else {alert('Scheduled');}
+        }
+    });}
+    else {alert('Scheduled');}
 });
 
 
@@ -500,4 +508,9 @@ $("input[type=checkbox]").switchButton({
     width: 60,
     height: 25,
     button_width: 25
+});
+
+$("input[type=checkbox]").on("change", function(){
+    if ($(this).is(":not(:checked)")) current_mode = MODE_SCHEDULE;
+    else if ($(this).is(":checked")) current_mode = MODE_EXPLORE;
 });

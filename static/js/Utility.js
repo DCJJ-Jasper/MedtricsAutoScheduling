@@ -18,6 +18,22 @@ function convert_to_color_code(color_tuple) {
     return "0x" + r.toString(16) + g.toString(16) + b.toString(16);
 }
 
+function convert_to_graphic_id(schedule_info) {
+    cloned_info = JSON.parse(JSON.stringify(schedule_info))
+    for (var i = 0; i < cloned_info.length; i++) {
+        if (cloned_info[i] == String(EMPTY_BLOCK_ID)) cloned_info[i] = String(EMPTY_BLOCK_GRAPHIC_ID);
+    }
+    return cloned_info;
+}
+
+function convert_to_schedule_id(schedule_info) {
+    cloned_info = JSON.parse(JSON.stringify(schedule_info))
+    for (var i = 0; i < cloned_info.length; i++) {
+        if (cloned_info[i] == String(EMPTY_BLOCK_GRAPHIC_ID)) cloned_info[i] = String(EMPTY_BLOCK_ID);
+    }
+    return cloned_info;
+}
+
 // Function to download data to a file
 function download(data, filename, type) {
     var a = document.createElement("a"),
