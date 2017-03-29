@@ -434,6 +434,31 @@ $('#save_btn').click(function onSavePressed() {
 });
 
 /**
+ * When schedule button is hovered
+ */
+$('#greedy_schedule_btn').qtip({
+   content: {
+       text: 'Greedy schedule option allows you to find a basic solution'
+   },
+    style: {
+       classes: 'qtip-light qtip-bootstrap qtip-rounded'
+    }
+});
+
+/**
+ * When schedule button is hovered
+ */
+$('#solver_schedule_btn').qtip({
+   content: {
+       text: 'Solver schedule option allows you to find an optimal solution which might not be able to be found'
+   },
+    style: {
+       classes: 'qtip-light qtip-bootstrap qtip-rounded'
+    }
+});
+
+
+/**
  * When schedule button is clicked
  */
 $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
@@ -443,8 +468,8 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
     if (!isScheduled) {
         $.ajax({
         type: "POST",
-        url: "/requestToSchedule",
-        data: JSON.stringify({title: schedule.generate_problem_text(), method: "greedy"}),
+        url: "/requestToSchedule/greedy",
+        data: JSON.stringify({title: schedule.generate_problem_text()}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
@@ -472,8 +497,8 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
     if (!isScheduled) {
         $.ajax({
         type: "POST",
-        url: "/requestToSchedule",
-        data: JSON.stringify({title: schedule.generate_problem_text(), method: "solver"}),
+        url: "/requestToSchedule/solver",
+        data: JSON.stringify({title: schedule.generate_problem_text()}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
