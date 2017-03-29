@@ -182,6 +182,7 @@ function create_objects(width, height) {
         sprite.alpha = 0;
         sprite.texture = app.renderer.generateTexture(texture);
         sprite.rot_id = rot.id;
+        sprite.rot_name = rot.name;
         sprite.on('mouseover',onPopupOver);
         sprite.on('mouseout', onPopupOut);
         sprite.on('mousedown', onPopupPressed);
@@ -374,11 +375,21 @@ function onPopupPressed() {
     var rot_change_to = this.rot_id.toString();
     if (trainee_selected && Number.isFinite(block_num_selected) && sprite_selected) {
         trainee_selected.scheduled_blocks[block_num_selected] = rot_change_to;
+        sprite_selected.rot_id = this.rot_id;
+        sprite_selected.rot_name = this.rot_name;
+        sprite_selected.square.id = this.rot_id;
+        sprite_selected.square.rot_name = this.rot_name;
+
 
         // Change the square color
         sprite_selected.texture = sprite_selected.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[rot_change_to]);
+
+        // Remove the square from the old position in squares_dict
+        squares_dict[sprite_selected.role + "-" + sprite_selected.rot_id.toString()].removeChild(sprite_selected);
+
+        // Add the square to the new position in squares_dict
+        squares_dict[sprite_selected.role+ "-" + rot_change_to].addChild(sprite_selected);
     }
-    console.log(trainee_selected)
 }
 
 function onPopupCloseBtnOver() {
