@@ -61,11 +61,10 @@ def push_trainees():
     else:
         return json.dumps({'data': -1})
 
-@app.route('/requestToSchedule', methods = ['POST', 'GET'])
-def request_schedule():
+@app.route('/requestToSchedule/<string:method>', methods = ['POST', 'GET'])
+def request_schedule(method):
     if request.method == 'POST':
         data = request.json["title"]
-        method = request.json["method"]
         print(data)
 
         with io.StringIO(data) as f:
