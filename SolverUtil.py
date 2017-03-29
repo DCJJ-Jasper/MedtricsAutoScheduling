@@ -30,7 +30,36 @@ def generateFullHalfQuarterDict(trainee_req):
         trainee_req_quarter[k] = full_half_quarter[2]
     return(trainee_req_full, trainee_req_half, trainee_req_quarter)
 
-def pruneSchedule(currentSchedule, seed, num_trainee_list, rotations):
+def generateFullHalfQuarterPrefilled(prefilledSchedule):
+    num_trainees = len(prefilledSchedule)
+    num_block = len(prefilledSchedule[0])
+    if num_block != 52:
+        print("Prefilled Schedule needs to be length 52")
+        return
+    quarterPrefilled = prefilledSchedule
+    halfPrefilled = [[-1 for i in range(num_block // 2)] for j in range(num_trainees)]
+    fullPrefilled = [[-1 for i in range(num_block // 4)] for j in range(num_trainees)]
+
+    for trainee in range(num_trainees):
+        for block in range(num_block // 2):
+            two_block = 2*block
+            if (quarterPrefilled[trainee][two_block] == quarterPrefilled[trainee][two_block+1]):
+                halfPrefilled[trainee][block] = quarterPrefilled[trainee][two_block]
+            else:
+                #There's already something there, but lower resolution
+                halfPrefilled[trainee][block] = -3
+    for trainee in range(num_trainees):
+        for block in range(num_block // 4):
+            two_block = 2 * block
+            if (halfPrefilled[trainee][two_block] == halfPrefilled[trainee][two_block+1]):
+                fullPrefilled[trainee][block] = halfPrefilled[trainee][two_block]
+            else:
+                #There's already something there, but lower resolution
+                fullPrefilled[trainee][block] = -3
+
+    return fullPrefilled, halfPrefilled, quarterPrefilled
+
+def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, rotations):
     # Create rotations_list_local and min_length_rotation_local to match the solver
     pruneCount = 0
     rotations_list_local = []
@@ -115,7 +144,8 @@ def pruneSchedule(currentSchedule, seed, num_trainee_list, rotations):
             continue
 
         # If the current rotation is prefilled, we can't prune
-        # TODO: Implement prevention from prefilled pruning
+        if prefilledSchedule[trainee][block] != -1:
+            continue
         #Prune the desired block
         pruneCount += 1
         currentSchedule[trainee][block] = -1
@@ -127,7 +157,7 @@ def pruneSchedule(currentSchedule, seed, num_trainee_list, rotations):
     return currentSchedule
 
 
-def doubleSchedule(currentSchedule):
+def doubleSchedule(currentSchedule, prefilledSchedule):
     """
 
     :param currentSchedule:
@@ -139,8 +169,12 @@ def doubleSchedule(currentSchedule):
 
     for trainee in range(num_trainee):
         for block in range(num_block):
-            result_schedule[trainee].append(currentSchedule[trainee][block])
-            result_schedule[trainee].append(currentSchedule[trainee][block])
+            if (currentSchedule[trainee][block] == -3):
+                result_schedule[trainee].append(prefilledSchedule[trainee][block])
+                result_schedule[trainee].append(prefilledSchedule[trainee][block+1])
+            else:
+                result_schedule[trainee].append(currentSchedule[trainee][block])
+                result_schedule[trainee].append(currentSchedule[trainee][block])
 
     return result_schedule
 
@@ -338,6 +372,6 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
                         row += [k]
                         break
                 if not attending:
-                    row += [-1]
+                    row += [prefilled_schedule[i][j]]
             resultArray += [row]
     return resultArray

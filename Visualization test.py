@@ -395,6 +395,12 @@ def request_schedule():
             f.readline()
             f.readline()
 
+            # Create blank prefilled schedule
+            def create_blank_schedule(num_trainees, num_block):
+                return [[-1 for i in range(num_block)] for j in range(num_trainees)]
+
+            prefilled_schedule = create_blank_schedule(num_trainees, num_block)
+
             # Read in number of blocks:
             for i in range(num_trainees):
                 line_data = f.readline().rstrip("\n").split(",")
@@ -410,6 +416,7 @@ def request_schedule():
                     rot_id = int(schedule_info[index])
                     if rot_id != -1:
                         schedule.fill_in(trainee, index, rotations_dict[rot_id])
+                        prefilled_schedule[i][index] = rot_id
 
             # TODO:
             # pgy1_req
@@ -447,14 +454,6 @@ def request_schedule():
         # ---------------------------
 
         else:
-            # TODO: Everything is good
-
-            # Create blank prefilled schedule
-            def create_blank_schedule(num_trainees, num_block):
-                return [[-1 for i in range(num_block)] for j in range(num_trainees)]
-
-            prefilled_schedule = create_blank_schedule(num_trainees, num_block // 4)
-
             (pgy1_req_full, pgy1_req_half, pgy1_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy1_req)
             (pgy1_lim_full, pgy1_lim_half, pgy1_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy1_lim)
             (pgy2_req_full, pgy2_req_half, pgy2_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy2_req)
@@ -464,24 +463,26 @@ def request_schedule():
 
             seed = 100
             num_trainee_list = (num_pgy1, num_pgy2, num_pgy3)
+            fullPrefilled, halfPrefilled, quarterPrefilled = SolverUtil.generateFullHalfQuarterPrefilled(prefilled_schedule)
 
-            resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block // 4, num_trainee_list, rotations,
+            presolve_schedule = fullPrefilled
+            resultArray = SolverUtil.solveSchedule(presolve_schedule, num_block // 4, num_trainee_list, rotations,
                                                    pgy1_req_full, pgy1_lim_full,
                                                    pgy2_req_full, pgy2_lim_full,
                                                    pgy3_req_full, pgy3_lim_full)
 
             # Double to halves
-            prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed,
-                                                          num_trainee_list, rotations)
-            resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block // 2, num_trainee_list, rotations,
+            presolve_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray, halfPrefilled),
+                                                         halfPrefilled, seed, num_trainee_list, rotations)
+            resultArray = SolverUtil.solveSchedule(presolve_schedule, num_block // 2, num_trainee_list, rotations,
                                                    pgy1_req_half, pgy1_lim_half,
                                                    pgy2_req_half, pgy2_lim_half,
                                                    pgy3_req_half, pgy3_lim_half)
 
             # Double again to quarters
-            prefilled_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray), seed,
-                                                          num_trainee_list, rotations)
-            resultArray = SolverUtil.solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
+            presolve_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray, quarterPrefilled),
+                                                         quarterPrefilled, seed, num_trainee_list, rotations)
+            resultArray = SolverUtil.solveSchedule(presolve_schedule, num_block, num_trainee_list, rotations,
                                                    pgy1_req_quarter, pgy1_lim_quarter,
                                                    pgy2_req_quarter, pgy2_lim_quarter,
                                                    pgy3_req_quarter, pgy3_lim_quarter)
