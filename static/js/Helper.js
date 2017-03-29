@@ -31,7 +31,7 @@ function reset_variables() {
 }
 
 function reset_schedule() {
-    for (trainee of trainees) {
+    for (var trainee of trainees) {
         trainee.set_empty_schedule_blocks();
     }
 }
@@ -65,8 +65,8 @@ function read_in_data(input_text) {
     // Read in all PGY1s, PGY2s, PGY3s
     var name = "";
     var id = 0;
-    var role = "PGY1";
-    var schedule = [];
+    var role = "";
+    var schedule_info = [];
     var new_trainee = null;
 
     for (var i = 0; i < num_trainees; i++) {
@@ -77,11 +77,11 @@ function read_in_data(input_text) {
         name = data[0];
         id = parseInt(data[1]);
         role = data[2];
-        schedule = data[3].split(".");
+        schedule_info = data[3].split(".");
 
         // Create a new trainee based on these information
         new_trainee = new Trainee(name, role, id, num_block, id_list);
-        new_trainee.set_scheduled_blocks(schedule);
+        new_trainee.set_scheduled_blocks(schedule_info);
         trainees.push(new_trainee);
         trainees_dict[id] = new_trainee;
     }
@@ -121,6 +121,9 @@ function read_in_data(input_text) {
     rotations_dict[EMPTY_BLOCK_GRAPHIC_ID] = blank_rot;
     rotations.push(blank_rot);
     id_list.push(EMPTY_BLOCK_GRAPHIC_ID);
+
+    schedule.trainees = trainees;
+    schedule.rotations = rotations;
 
     // Skip 2 lines
     line_num += 2;
@@ -677,6 +680,9 @@ function visualize_data() {
             } else {
                 newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
             }
+
+            // Push the square into the 2D array
+            // TODO: Push the square into 2D array here.
 
             newSquare.draw();
             squares_sprites_list.push(newSquare.sprite);

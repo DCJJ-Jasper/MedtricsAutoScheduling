@@ -2,11 +2,11 @@
 <html>
 <head>
     <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/jquery.qtip.min.css" />
 </head>
 <body>
 <!-- Load JQuery -->
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.balloon.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.switch-button.js') }}"></script>
 <div class="w3-container top">
@@ -23,6 +23,7 @@
     </div>
 </div>
 <!-- Load the pixi.js library -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.qtip.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/pixi.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/chance.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/Utility.js') }}"></script>

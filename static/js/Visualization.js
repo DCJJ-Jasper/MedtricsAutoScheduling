@@ -65,6 +65,7 @@ var chart_line;
 var squares_sprites_list = [];
 var squares_dict = {};
 var underdone_bars = {};
+// TODO: 2D Square array here
 
 var popup_close_btn;
 var popup_label1;
@@ -330,7 +331,7 @@ function onSquarePressed() {
 
 function onButtonOver() {
 
-    if (square_selected == false) {
+    if (square_selected == false || current_mode == MODE_EXPLORE) {
 
         temp_line.clear();
         temp_line.lineStyle(1, 0x000000, 1);
@@ -348,7 +349,7 @@ function onButtonOver() {
 }
 
 function onButtonOut() {
-    if (square_selected == false) {
+    if (square_selected == false || current_mode == MODE_EXPLORE) {
         popup_label1.visible = false;
         popup_label2.visible = false;
         popup_label3.visible = false;
@@ -423,7 +424,6 @@ $('#clear_btn').click(function onClearPressed() {
 
     // Clean all schedules.
     reset_schedule();
-    reset_app();
     visualize_data();
 });
 
@@ -435,6 +435,31 @@ $('#save_btn').click(function onSavePressed() {
 });
 
 /**
+ * When schedule button is hovered
+ */
+$('#greedy_schedule_btn').qtip({
+   content: {
+       text: 'Greedy schedule option allows you to find a basic solution'
+   },
+    style: {
+       classes: 'qtip-light qtip-bootstrap qtip-rounded'
+    }
+});
+
+/**
+ * When schedule button is hovered
+ */
+$('#solver_schedule_btn').qtip({
+   content: {
+       text: 'Solver schedule option allows you to find an optimal solution which might not be able to be found'
+   },
+    style: {
+       classes: 'qtip-light qtip-bootstrap qtip-rounded'
+    }
+});
+
+
+/**
  * When schedule button is clicked
  */
 $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
@@ -444,8 +469,8 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
     if (!isScheduled) {
         $.ajax({
         type: "POST",
-        url: "/requestToSchedule",
-        data: JSON.stringify({title: schedule.generate_problem_text(), method: "greedy"}),
+        url: "/requestToSchedule/greedy",
+        data: JSON.stringify({title: schedule.generate_problem_text()}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
@@ -458,6 +483,7 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
 
                 read_in_data(sample_text);
                 reset_app();
+                sort_trainees(trainees);
                 visualize_data();
             }
         }
@@ -468,12 +494,12 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
 /**
  * When schedule button is clicked
  */
-$('#solver_schedule_btn').click(function onGreedySchedulePressed() {
+$('#solver_schedule_btn').click(function onSolverSchedulePressed() {
     if (!isScheduled) {
         $.ajax({
         type: "POST",
-        url: "/requestToSchedule",
-        data: JSON.stringify({title: schedule.generate_problem_text(), method: "solver"}),
+        url: "/requestToSchedule/solver",
+        data: JSON.stringify({title: schedule.generate_problem_text()}),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
@@ -487,6 +513,7 @@ $('#solver_schedule_btn').click(function onGreedySchedulePressed() {
 
                 read_in_data(sample_text);
                 reset_app();
+                sort_trainees(trainees);
                 visualize_data();
 
             }
@@ -503,6 +530,7 @@ $(document).ready(function () {
         num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
         num_pgy3 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
     create_objects(app_width, app_height);
+    sort_trainees(trainees);
     visualize_data();
 });
 
