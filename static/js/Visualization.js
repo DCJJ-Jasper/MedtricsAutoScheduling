@@ -330,7 +330,7 @@ function onSquarePressed() {
 
 function onButtonOver() {
 
-    if (square_selected == false) {
+    if (square_selected == false || current_mode == MODE_EXPLORE) {
 
         temp_line.clear();
         temp_line.lineStyle(1, 0x000000, 1);
@@ -348,7 +348,7 @@ function onButtonOver() {
 }
 
 function onButtonOut() {
-    if (square_selected == false) {
+    if (square_selected == false || current_mode == MODE_EXPLORE) {
         popup_label1.visible = false;
         popup_label2.visible = false;
         popup_label3.visible = false;
@@ -423,7 +423,6 @@ $('#clear_btn').click(function onClearPressed() {
 
     // Clean all schedules.
     reset_schedule();
-    reset_app();
     visualize_data();
 });
 
@@ -458,6 +457,7 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
 
                 read_in_data(sample_text);
                 reset_app();
+                sort_trainees(trainees);
                 visualize_data();
             }
         }
@@ -468,7 +468,7 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
 /**
  * When schedule button is clicked
  */
-$('#solver_schedule_btn').click(function onGreedySchedulePressed() {
+$('#solver_schedule_btn').click(function onSolverSchedulePressed() {
     if (!isScheduled) {
         $.ajax({
         type: "POST",
@@ -487,6 +487,7 @@ $('#solver_schedule_btn').click(function onGreedySchedulePressed() {
 
                 read_in_data(sample_text);
                 reset_app();
+                sort_trainees(trainees);
                 visualize_data();
 
             }
@@ -503,6 +504,7 @@ $(document).ready(function () {
         num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
         num_pgy3 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
     create_objects(app_width, app_height);
+    sort_trainees(trainees);
     visualize_data();
 });
 
