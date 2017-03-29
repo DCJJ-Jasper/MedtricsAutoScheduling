@@ -681,6 +681,9 @@ function visualize_data() {
                 newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
             }
 
+            // Push the square into the 2D array
+            // TODO: Push the square into 2D array here.
+
             newSquare.draw();
             squares_sprites_list.push(newSquare.sprite);
             newSquare.sprite.on('mousedown', onSquarePressed);

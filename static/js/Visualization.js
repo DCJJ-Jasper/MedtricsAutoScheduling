@@ -65,6 +65,7 @@ var chart_line;
 var squares_sprites_list = [];
 var squares_dict = {};
 var underdone_bars = {};
+// TODO: 2D Square array here
 
 var popup_close_btn;
 var popup_label1;
