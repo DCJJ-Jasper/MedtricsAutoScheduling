@@ -1007,3 +1007,30 @@ function enableSquaresInteractivity() {
         s.interactive = true;
     }
 }
+
+
+/**
+ * Move forward with the animation.
+ */
+function proceedAnimation() {
+    if (animation_count <= ANIMATION_LENGTH) {
+        animation_count += 1;
+
+        console.log(squares_dict)
+
+        // Redraw the opacity of the square
+        for (var key in squares_dict) {
+            var old_alpha = squares_dict[key].old_alpha;
+            var new_alpha = squares_dict[key].new_alpha;
+            squares_dict[key].alpha = old_alpha - (old_alpha - new_alpha) * animation_count / ANIMATION_LENGTH;
+        }
+    }
+}
+
+/**
+ * Change the display of the trainees to different role (we only show 1 role at once.
+ * @param role
+ */
+function changeMode(role) {
+
+}
