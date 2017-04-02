@@ -104,3 +104,26 @@
 span {
   display: table-cell;
 }
+
+.nav-menu {
+    margin-top: 5px;
+    margin-left: 284px;
+}
+
+.orange li a {
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.2s;
+    color: #333333;
+    border: 1px solid #DDDDDD;
+    margin-right: 2px;
+}
+
+.orange li.active a {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    background-color: #ED601A;
+}
+
+.orange > li.active a:focus, .orange > li.active a:hover {
+    background-color: #ED601A;
+}

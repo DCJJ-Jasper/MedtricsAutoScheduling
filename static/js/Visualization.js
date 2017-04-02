@@ -96,7 +96,10 @@ var square_selected = false;
 var id_pressed = -3;
 var role_pressed = "";
 var current_mode = MODE_SCHEDULE;
+var current_pgy = "PGY1";
 
+// ANIMATION CONTROL VARIABLES
+var animation_count = ANIMATION_LENGTH + 1;
 
 ///////////////////
 // OBJECTS CREATION
@@ -217,6 +220,9 @@ function create_objects(width, height) {
 
     // Hold all underdone bars
     underdone_list = [];
+
+    app.ticker.add(proceedAnimation);
+
 }
 
 /////////////////////
@@ -252,10 +258,23 @@ function onSquarePressed() {
 
             if (current_mode == MODE_EXPLORE) {
 
-                for (key in squares_dict) squares_dict[key].alpha = OTHER_ROLE_BLUR;
-                for (var id of id_list) squares_dict[role + "-" + id.toString()].alpha = SQUARE_BLUR;
+                animation_count = 0;
 
-                squares_dict[role + "-" + rot_id].alpha = 1;
+                // Change old alpha and new alpha
+
+                for (var key in squares_dict) {
+                    squares_dict[key].old_alpha = squares_dict[key].alpha;
+                    squares_dict[key].new_alpha = OTHER_ROLE_BLUR
+
+                }
+                for (var id of id_list) {
+                    var key = role_pressed + "-" + id.toString();
+                    squares_dict[key].old_alpha = squares_dict[key].alpha;
+                    squares_dict[key].new_alpha = SQUARE_BLUR
+                }
+                var pressed_role_id_key = role_pressed + "-" + id_pressed;
+                squares_dict[pressed_role_id_key].old_alpha = squares_dict[pressed_role_id_key].alpha;
+                squares_dict[pressed_role_id_key].new_alpha = 1;
 
                 // Draw out chart bars under the role by using PIXI.Graphics
                 // TODO: Fail so far
@@ -422,7 +441,11 @@ function onPopupCloseBtnPressed() {
 }
 
 function resetBlur() {
-    for (key in squares_dict) squares_dict[key].alpha = 1;
+    animation_count = 0;
+    for (var key in squares_dict) {
+        squares_dict[key].old_alpha = squares_dict[key].alpha;
+        squares_dict[key].new_alpha = 1;
+    }
     app.stage.removeChild(chart_bars);
 }
 
@@ -572,3 +595,7 @@ $("input[type=checkbox]").on("change", function(){
     if ($(this).is(":not(:checked)")) current_mode = MODE_SCHEDULE;
     else if ($(this).is(":checked")) current_mode = MODE_EXPLORE;
 });
+
+$('#PGY1-tab').click(changeMode("PGY1"))
+$('#PGY2-tab').click(changeMode("PGY2"))
+$('#PGY3-tab').click(changeMode("PGY3"))
