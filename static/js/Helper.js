@@ -631,6 +631,7 @@ function visualize_data() {
     }
 
     // Draw out squares
+    var trainee_count = 0;
     for (var t of trainees) {
         var color;
         var role = t.role;
@@ -681,8 +682,7 @@ function visualize_data() {
                 newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
             }
 
-            // Push the square into the 2D array
-            // TODO: Push the square into 2D array here.
+            twod_square_arr[trainee_name][rot_count] = newSquare;
 
             newSquare.draw();
             squares_sprites_list.push(newSquare.sprite);
@@ -704,6 +704,7 @@ function visualize_data() {
                     break;
             }
         }
+        trainee_count += 1;
     }
 
     // Draw out underdone bars on the right by using PIXI.Graphics
@@ -1005,5 +1006,13 @@ function disableSquaresInteractivity() {
 function enableSquaresInteractivity() {
     for (var s of squares_sprites_list) {
         s.interactive = true;
+    }
+}
+
+function find_prev_square(trainee, block_num) {
+    if (block_num == 0) {
+        return null;
+    } else {
+        return twod_square_arr[trainee.name][block_num];
     }
 }
