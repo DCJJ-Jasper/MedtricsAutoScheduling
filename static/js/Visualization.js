@@ -29,6 +29,7 @@ var trainees = [];
 var trainees_dict = [];
 var rotations = [];
 var rotations_dict = {};
+var rot_name_to_id_dict = {};
 var id_list = [];
 
 var schedule;
@@ -39,10 +40,6 @@ var sprite_selected = null;
 
 // GRAPHIC VARIABLES
 
-var pgy1_top_left_y;
-var pgy2_top_left_y;
-var pgy3_top_left_y;
-
 var app_width = 1920;
 var app_height;
 
@@ -50,21 +47,35 @@ var app_height;
 
 var app;
 var static_stuffs;
-var pgy1_container;
-var pgy2_container;
-var pgy3_container;
+var pgy_container;
 
 var rot_squares_list;
-var pgy1_squares_list;
-var pgy2_squares_list;
-var pgy3_squares_list;
 var underdone_list;
+
 var chart_bars;
-var chart_line;
+var old_info_arr;
+var new_info_arr;
+var in_between_arr;
+var old_color;
+var new_color;
+var in_between_color;
+var chart_top_left_y;
+var old_min_height;
+var new_min_height;
+var in_between_min_height;
+var old_max_height;
+var new_max_height;
+var in_between_max_height;
 
 var squares_sprites_list = [];
 var squares_dict = {};
 var underdone_bars = {};
+var old_underdone_arrs;
+var new_underdone_arrs;
+var in_between_underdone_arrs;
+var old_overdone_arrs;
+var new_overdone_arrs;
+var in_between_overdone_arrs;
 // TODO: 2D Square array here
 
 var popup_close_btn;
@@ -118,25 +129,11 @@ function create_objects(width, height) {
     app.stage.addChild(static_stuffs);
 
     // Hold static elements such as labels
-    pgy1_container = new PIXI.Container();
-    pgy1_container.interactive = true;
-    pgy1_container.width = width;
-    pgy1_container.height = height;
-    app.stage.addChild(pgy1_container);
-
-    // Hold static elements such as labels
-    pgy2_container = new PIXI.Container();
-    pgy2_container.interactive = true;
-    pgy2_container.width = width;
-    pgy2_container.height = height;
-    app.stage.addChild(pgy2_container);
-
-    // Hold static elements such as labels
-    pgy3_container = new PIXI.Container();
-    pgy3_container.interactive = true;
-    pgy3_container.width = width;
-    pgy3_container.height = height;
-    app.stage.addChild(pgy3_container);
+    pgy_container = new PIXI.Container();
+    pgy_container.interactive = true;
+    pgy_container.width = width;
+    pgy_container.height = height;
+    app.stage.addChild(pgy_container);
 
     // Popup stuffs
     popup_close_btn = new PIXI.Sprite.fromImage("static/images/Close Window-25.png");
@@ -218,7 +215,6 @@ function create_objects(width, height) {
 
     // Hold all underdone bars
     underdone_list = [];
-
     app.ticker.add(proceedAnimation);
 
 }
@@ -230,121 +226,148 @@ function create_objects(width, height) {
 function onSquarePressed() {
 
     var rot_id = this.rot_id;
+    console.log(rot_id);
     var role = this.role;
     trainee_selected = this.trainee;
     block_num_selected = this.block_num;
     sprite_selected = this;
 
     if ((id_pressed == rot_id) && (role_pressed == role)) {
-            resetBlur();
-            id_pressed = -3;
-            role_pressed = "";
-            square_selected = false;
-            trainee_selected = null;
-            block_num_selected = Number.POSITIVE_INFINITY;
-            sprite_selected = null;
+        resetBlur();
+        id_pressed = -3;
+        role_pressed = "";
+        square_selected = false;
+        trainee_selected = null;
+        block_num_selected = Number.POSITIVE_INFINITY;
+        sprite_selected = null;
 
-            // Draw popup;
-            remove_popup();
-            draw_partial_popup(x1, y1, this.trainee_name, this.rot_name);
+        // Calculate information regarding chart bars
+        old_info_arr = new_info_arr;
+        new_info_arr = new Array(num_block).fill(0)
+        in_between_arr = generate_in_between_arr(old_info_arr, new_info_arr, ANIMATION_LENGTH);
+        old_color = new_color;
+        new_color = BACKGROUND_COLOR;
+        in_between_color = generate_in_between_arr(old_color, new_color);
+        old_min_height = new_min_height;
+        new_min_height = 0;
+        in_between_min_height = generate_in_between_val(old_min_height, new_min_height, ANIMATION_LENGTH);
+        old_max_height = new_max_height;
+        new_max_height = 0;
+        in_between_max_height = generate_in_between_val(old_max_height, new_max_height, ANIMATION_LENGTH);
+
+        // Calculate information regarding underdone bars
+        var trainee_count = 0;
+        for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
+            var t = trainees[trainee_i];
+            if (t.role != current_pgy) continue; // Skip the loop if it's not the pgy in need of visualized
+
+            // Push underdone_arr into underdone array
+            var underdone_arr = t.get_underdone_array();
+            old_underdone_arrs[trainee_count] = new_underdone_arrs[trainee_count];
+            new_underdone_arrs[trainee_count] = underdone_arr;
+            in_between_underdone_arrs[trainee_count] =
+                generate_in_between_arr(old_underdone_arrs[trainee_count],
+                    new_underdone_arrs[trainee_count],
+                    ANIMATION_LENGTH);
+            trainee_count += 1;
+        }
+
+        // Draw popup;
+        remove_popup();
+        draw_partial_popup(x1, y1, this.trainee_name, this.rot_name);
+
+    } else {
+        id_pressed = rot_id;
+        role_pressed = role;
+        square_selected = true;
+
+        if (current_mode == MODE_EXPLORE) {
+
+            animation_count = 0;
+            // Change old alpha and new alpha
+
+            for (var key in squares_dict) {
+                squares_dict[key].old_alpha = squares_dict[key].alpha;
+                squares_dict[key].new_alpha = OTHER_ROLE_BLUR
+
+            }
+            for (var id of id_list) {
+                var key = role_pressed + "-" + id.toString();
+                squares_dict[key].old_alpha = squares_dict[key].alpha;
+                squares_dict[key].new_alpha = SQUARE_BLUR
+            }
+            var pressed_role_id_key = role_pressed + "-" + id_pressed;
+            squares_dict[pressed_role_id_key].old_alpha = squares_dict[pressed_role_id_key].alpha;
+            squares_dict[pressed_role_id_key].new_alpha = 1;
+
+            // Draw out chart bars under the role by using PIXI.Graphics
+            var base_x = 300;
+            var base_y;
+            switch (role) {
+                case "PGY1":
+                    chart_top_left_y = LABEL_ROLE_TOP_LEFT_Y + num_pgy1 * LABEL_HEIGHT + CHART_DISTANCE;
+                    break;
+                case "PGY2":
+                    chart_top_left_y = LABEL_ROLE_TOP_LEFT_Y + num_pgy2 * LABEL_HEIGHT + CHART_DISTANCE;
+                    break;
+                case "PGY3":
+                    chart_top_left_y = LABEL_ROLE_TOP_LEFT_Y + num_pgy3 * LABEL_HEIGHT + CHART_DISTANCE;
+                    break;
+            }
+
+            old_info_arr = new_info_arr;
+            new_info_arr = schedule.get_block_info_role_id(role, rot_id);
+            in_between_arr = generate_in_between_arr(old_info_arr, new_info_arr, ANIMATION_LENGTH);
+            old_color = new_color;
+            new_color = ROTATIONS_COLOR[id_pressed];
+            in_between_color = generate_in_between_arr(old_color, new_color, ANIMATION_LENGTH);
+            old_min_height = new_min_height;
+            old_max_height = new_max_height;
+            switch (role) {
+                case "PGY1":
+                    new_min_height = rotations_dict[rot_id].min1;
+                    new_max_height = rotations_dict[rot_id].max1;
+                    break;
+                case "PGY2":
+                    new_min_height = rotations_dict[rot_id].min2;
+                    new_max_height = rotations_dict[rot_id].max2;
+                    break;
+                case "PGY3":
+                    new_min_height = rotations_dict[rot_id].min3;
+                    new_max_height = rotations_dict[rot_id].max3;
+                    break;
+            }
+            in_between_min_height = generate_in_between_val(old_min_height, new_min_height, ANIMATION_LENGTH);
+            in_between_max_height = generate_in_between_val(old_max_height, new_max_height, ANIMATION_LENGTH);
+
+
+            // Calculate information regarding underdone bars
+            var trainee_count = 0;
+            for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
+                var t = trainees[trainee_i];
+                if (t.role != current_pgy) continue; // Skip the loop if it's not the pgy in need of visualized
+
+                // Push underdone_arr into underdone array
+                var underdone_arr = t.get_underdone_spec_array(rot_id);
+                old_underdone_arrs[trainee_count] = new_underdone_arrs[trainee_count];
+                new_underdone_arrs[trainee_count] = underdone_arr;
+                in_between_underdone_arrs[trainee_count] =
+                    generate_in_between_arr(old_underdone_arrs[trainee_count],
+                        new_underdone_arrs[trainee_count],
+                        ANIMATION_LENGTH);
+                trainee_count += 1;
+            }
 
         } else {
 
-            id_pressed = rot_id;
-            role_pressed = role;
-            square_selected = true;
+            // Draw Popup
+            var x1 = this.x + 20;
+            var y1 = this.y - POPUP_WEIGHT;
 
-            if (current_mode == MODE_EXPLORE) {
-
-                animation_count = 0;
-
-                // Change old alpha and new alpha
-
-                for (var key in squares_dict) {
-                    squares_dict[key].old_alpha = squares_dict[key].alpha;
-                    squares_dict[key].new_alpha = OTHER_ROLE_BLUR
-
-                }
-                for (var id of id_list) {
-                    var key = role_pressed + "-" + id.toString();
-                    squares_dict[key].old_alpha = squares_dict[key].alpha;
-                    squares_dict[key].new_alpha = SQUARE_BLUR
-                }
-                var pressed_role_id_key = role_pressed + "-" + id_pressed;
-                squares_dict[pressed_role_id_key].old_alpha = squares_dict[pressed_role_id_key].alpha;
-                squares_dict[pressed_role_id_key].new_alpha = 1;
-
-                // Draw out chart bars under the role by using PIXI.Graphics
-                // TODO: Fail so far
-                var base_x = 300;
-                var base_y;
-                var chart_pgy1_top_left_y = pgy1_top_left_y + num_pgy1 * LABEL_HEIGHT + CHART_DISTANCE;
-                var chart_pgy2_top_left_y = pgy2_top_left_y + num_pgy2 * LABEL_HEIGHT + CHART_DISTANCE;
-                var chart_pgy3_top_left_y = pgy3_top_left_y + num_pgy3 * LABEL_HEIGHT + CHART_DISTANCE;
-
-                var color = convert_to_color_code(ROTATIONS_COLOR[rot_id]);
-                var info_arr = schedule.get_block_info_role_id(role, rot_id);
-
-                switch (role) {
-                    case "PGY1":
-                        base_y = chart_pgy1_top_left_y;
-                        break;
-                    case "PGY2":
-                        base_y = chart_pgy2_top_left_y;
-                        break;
-                    case "PGY3":
-                        base_y = chart_pgy3_top_left_y;
-                        break;
-                }
-
-                // Draw chart bars
-                chart_bars.clear();
-                chart_bars.beginFill(color);
-
-                for (var i = 0; i < num_block; i++) {
-                    var x1 = base_x + i * CHART_RANGE;
-                    var y1 = base_y;
-                    var x2 = base_x + i * CHART_RANGE + CHART_SIZE;
-                    var y2 = base_y + info_arr[i] * CHART_UNIT;
-                    chart_bars.moveTo(x1, y1);
-                    chart_bars.lineTo(x1, y2);
-                    chart_bars.lineTo(x2, y2);
-                    chart_bars.lineTo(x2, y1);
-                    chart_bars.lineTo(x1, y1);
-                }
-
-                // Draw chart lines
-                chart_bars.lineStyle(2, "0xFF0000", 1);
-                x1 = base_x;
-                x2 = base_x + SQUARE_SIZE * num_block + SQUARE_DISTANCE * (num_block - 1);
-                switch (role) {
-                    case "PGY1":
-                        y1 = chart_pgy1_top_left_y + rotations_dict[rot_id].min1 * CHART_UNIT;
-                        break;
-                    case "PGY2":
-                        y1 = chart_pgy2_top_left_y + rotations_dict[rot_id].min2 * CHART_UNIT;
-                        break;
-                    case "PGY3":
-                        y1 = chart_pgy3_top_left_y + rotations_dict[rot_id].min3 * CHART_UNIT;
-                        break;
-                }
-                chart_bars.moveTo(x1, y1);
-                chart_bars.lineTo(x2, y1);
-                chart_bars.lineStyle(0);
-                chart_bars.endFill();
-
-                app.stage.addChild(chart_bars);
-
-            } else {
-
-                // Draw Popup
-                var x1 = this.x + 20;
-                var y1 = this.y - POPUP_WEIGHT;
-
-                // Draw popup;
-                draw_full_popup(x1, y1, this.trainee_name, this.rot_name);
-            }
+            // Draw popup;
+            draw_full_popup(x1, y1, this.trainee_name, this.rot_name);
         }
+    }
 
 }
 
@@ -430,11 +453,11 @@ function resetBlur() {
         squares_dict[key].old_alpha = squares_dict[key].alpha;
         squares_dict[key].new_alpha = 1;
     }
-    app.stage.removeChild(chart_bars);
 }
 
 var isShown = false;
 var isScheduled = false;
+$("#radio-form").fadeOut();
 
 
 /**
@@ -487,8 +510,6 @@ $('#solver_schedule_btn').qtip({
  */
 $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
 
-    console.log(schedule.generate_problem_text());
-
     if (!isScheduled) {
         $.ajax({
         type: "POST",
@@ -503,6 +524,7 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
                 alert('Scheduling');
                 // Read in the data
                 var sample_text = data['data'];
+                console.log(sample_text);
 
                 read_in_data(sample_text);
                 reset_app();
@@ -538,7 +560,6 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
                 reset_app();
                 sort_trainees(trainees);
                 visualize_data();
-
             }
         }
     });}
@@ -565,18 +586,22 @@ $(document).keyup(function(e) {
 });
 
 $("input[type=checkbox]").switchButton({
-    on_label: 'Explore',
-    off_label: 'Schedule',
+    on_label: 'Schedule',
+    off_label: 'Explore',
     width: 60,
     height: 25,
     button_width: 25
 });
 
 $("input[type=checkbox]").on("change", function(){
-    if ($(this).is(":not(:checked)")) current_mode = MODE_SCHEDULE;
-    else if ($(this).is(":checked")) current_mode = MODE_EXPLORE;
-});
+    if ($(this).is(":not(:checked)")) {
+        current_mode = MODE_EXPLORE;
+        $("#radio-form").fadeOut(FADE_LENGTH);
+    }
 
-$('#PGY1-tab').click(changeMode("PGY1"))
-$('#PGY2-tab').click(changeMode("PGY2"))
-$('#PGY3-tab').click(changeMode("PGY3"))
+    else if ($(this).is(":checked")) {
+        current_mode = MODE_SCHEDULE;
+        $("#radio-form").fadeIn(FADE_LENGTH);
+       }
+
+});

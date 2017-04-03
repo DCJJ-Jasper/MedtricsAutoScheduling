@@ -127,3 +127,11 @@ span {
 .orange > li.active a:focus, .orange > li.active a:hover {
     background-color: #ED601A;
 }
+
+.radio-container {
+    margin-left: 10px;
+    margin-top: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #333333;
+}

@@ -27,7 +27,30 @@ function reset_variables() {
     trainees_dict = {};
     rotations = [];
     rotations_dict = {};
+    rot_name_to_id_dict = {};
     id_list = [];
+
+    old_color = BACKGROUND_COLOR;
+    new_color = BACKGROUND_COLOR;
+
+    old_min_height = 0;
+    new_min_height = 0;
+
+    old_max_height = 0;
+    new_max_height = 0;
+
+    old_info_arr = [];
+    new_info_arr = [];
+    in_between_arr = [];
+
+    old_underdone_arrs = [];
+    new_underdone_arrs = [];
+    in_between_underdone_arrs = [];
+
+    old_overdone_arrs = [];
+    new_overdone_arrs = [];
+    in_between_overdone_arrs = [];
+
 }
 
 function reset_schedule() {
@@ -50,6 +73,9 @@ function read_in_data(input_text) {
     var data = str_list[line_num].trim().split(",");
     num_block = parseInt(data[0], 10);
     num_roles = parseInt(data[1], 10);
+    old_info_arr = Array(num_block).fill(0);
+    new_info_arr = Array(num_block).fill(0);
+    in_between_arr = Array(num_block).fill(0);
 
     // Read the number of students in each role
     line_num += 1;
@@ -142,6 +168,8 @@ function read_in_data(input_text) {
         pgy1_reqs[id] = amount
     }
 
+    line_num += 1;
+
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
@@ -153,6 +181,8 @@ function read_in_data(input_text) {
         // Input the requirement for pgy2
         pgy2_reqs[id] = amount
     }
+
+    line_num += 1;
 
     for (var i = 0; i < num_rotations; i++) {
         line_num += 1;
@@ -191,6 +221,7 @@ function read_in_data_from_medtrics(input_data) {
     var data = str_list[line_num].trim().split(",");
     program_name = data[1];
     num_block = parseInt(data[2], 10) * 4;
+    new_info_arr = Array(num_block).fill(0);
 
     // Skip a line
     line_num += 1;
@@ -286,6 +317,7 @@ function read_in_data_from_medtrics(input_data) {
         new_rotation = new Rotation(rot_name, rot_id, vacation_allowed, min_block_length, type, num_block);
         rotations.push(new_rotation);
         rotations_dict[rot_id] = new_rotation;
+        rot_name_to_id_dict[rot_name] = rot_id;
         id_list.push(rot_id);
     }
 
@@ -343,7 +375,8 @@ function read_in_data_from_medtrics(input_data) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
 
-        rot_id = parseInt(data[0]);
+        rot_name = data[0];
+        rot_id = rot_name_to_id_dict[rot_name];
         num_block_required = parseFloat(data[1]);
 
         pgy1_reqs[rot_id] = num_block_required;
@@ -358,7 +391,8 @@ function read_in_data_from_medtrics(input_data) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
 
-        rot_id = parseInt(data[0]);
+        rot_name = data[0];
+        rot_id = rot_name_to_id_dict[rot_name];
         num_block_required = parseFloat(data[1]);
 
         pgy2_reqs[rot_id] = num_block_required;
@@ -373,10 +407,26 @@ function read_in_data_from_medtrics(input_data) {
         line_num += 1;
         data = str_list[line_num].trim().split(",");
 
-        rot_id = parseInt(data[0]);
+        rot_name = data[0];
+        rot_id = rot_name_to_id_dict[rot_name];
         num_block_required = parseFloat(data[1]);
 
         pgy3_reqs[rot_id] = num_block_required;
+    }
+
+    // Set requirements and limitations for each students
+    for (var t of trainees) {
+        switch (t.role) {
+            case "PGY1":
+                t.set_requirements(pgy1_reqs);
+                break;
+            case "PGY2":
+                t.set_requirements(pgy2_reqs);
+                break;
+            case "PGY3":
+                t.set_requirements(pgy3_reqs);
+                break;
+        }
     }
 
     // Skip a line
@@ -470,31 +520,15 @@ function visualize_data() {
     underdone_bars = {};
 
     // Clear out all list
-    pgy1_squares_list = [];
-    pgy2_squares_list = [];
-    pgy3_squares_list = [];
+    pgy_squares_list = [];
 
     // Clean pgy label stuffs
-    app.stage.removeChild(pgy1_container);
-    pgy1_container = new PIXI.Container();
-    pgy1_container.interactive = true;
-    pgy1_container.width = 1080;
-    pgy1_container.height = 1920;
-    app.stage.addChild(pgy1_container);
-
-    app.stage.removeChild(pgy2_container);
-    pgy2_container = new PIXI.Container();
-    pgy2_container.interactive = true;
-    pgy2_container.width = 1080;
-    pgy2_container.height = 1920;
-    app.stage.addChild(pgy2_container);
-
-    app.stage.removeChild(pgy3_container);
-    pgy3_container = new PIXI.Container();
-    pgy3_container.interactive = true;
-    pgy3_container.width = 1080;
-    pgy3_container.height = 1920;
-    app.stage.addChild(pgy3_container);
+    app.stage.removeChild(pgy_container);
+    pgy_container = new PIXI.Container();
+    pgy_container.interactive = true;
+    pgy_container.width = 1080;
+    pgy_container.height = 1920;
+    app.stage.addChild(pgy_container);
 
     // Clean all squares
     app.stage.removeChild(rot_squares_list);
@@ -514,35 +548,11 @@ function visualize_data() {
     var start_x = SQUARE_TOP_LEFT[0];
     var start_y = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
 
+    var num_pgy_vis; // Num of students visualized
+    if (current_pgy == "PGY1") num_pgy_vis = num_pgy1;
+    else if (current_pgy == "PGY2") num_pgy_vis = num_pgy2;
+    else if (current_pgy == "PGY3") num_pgy_vis = num_pgy3;
     var trainee_count = 0;
-
-    num_trainees = num_pgy1 + num_pgy2 + num_pgy3;
-
-    // Create labels for role groups
-    // PGY1
-    var pgy1_label = new PIXI.Text("PGY1", {
-        fontSize: LABEL_ROLE_SIZE
-    });
-    pgy1_label.position.set(LABEL_ROLE_TOP_LEFT_X, LABEL_ROLE_TOP_LEFT_Y);
-    pgy1_top_left_y = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
-    pgy1_container.addChild(pgy1_label);
-
-    // PGY2
-    var pgy2_label = new PIXI.Text("PGY2", {
-        fontSize: LABEL_ROLE_SIZE
-    });
-
-    pgy2_label.position.set(LABEL_ROLE_TOP_LEFT_X, pgy1_top_left_y + num_pgy1 * LABEL_HEIGHT + GROUP_DISTANCE);
-    pgy2_top_left_y = pgy1_top_left_y + num_pgy1 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
-    pgy2_container.addChild(pgy2_label);
-
-    // PGY3
-    var pgy3_label = new PIXI.Text("PGY3", {
-        fontSize: LABEL_ROLE_SIZE
-    });
-    pgy3_label.position.set(LABEL_ROLE_TOP_LEFT_X, pgy2_top_left_y + num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE);
-    pgy3_top_left_y = pgy2_top_left_y + num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
-    pgy3_container.addChild(pgy3_label);
 
     // Draw block number labels
     var blockNumberLabelPositions = new Array(13);
@@ -558,47 +568,20 @@ function visualize_data() {
         app.stage.addChild(blockNumberLabel);
     }
 
-    var pgy1_count = 0;
-    var pgy2_count = 0;
-    var pgy3_count = 0;
+    var pgy_count = 0;
 
     // Create labels for all the trainees
     for (var t of trainees) {
-        var trainee_label = new PIXI.Text(t.name, {
-            fontSize: LABEL_SIZE
-        });
-        var start_name_label_y = 0;
-        switch (t.role) {
-            case "PGY1":
-                start_name_label_y = pgy1_top_left_y;
-                pgy1_count += 1;
-                trainee_count = pgy1_count;
-                trainee_label.position.set(LABEL_TOP_LEFT_X, start_name_label_y + trainee_count * LABEL_HEIGHT);
-                pgy1_container.addChild(trainee_label);
-                break;
-            case "PGY2":
-                start_name_label_y = pgy2_top_left_y;
-                pgy2_count += 1;
-                trainee_count = pgy2_count;
-                trainee_label.position.set(LABEL_TOP_LEFT_X, start_name_label_y + trainee_count * LABEL_HEIGHT);
-                pgy2_container.addChild(trainee_label);
-                break;
-            case "PGY3":
-                start_name_label_y = pgy3_top_left_y;
-                pgy3_count += 1;
-                trainee_count = pgy3_count;
-                trainee_label.position.set(LABEL_TOP_LEFT_X, start_name_label_y + trainee_count * LABEL_HEIGHT);
-                pgy3_container.addChild(trainee_label);
-                break;
+        if (t.role == current_pgy) {
+            var trainee_label = new PIXI.Text(t.name, {fontSize: LABEL_SIZE});
+            trainee_label.position.set(LABEL_TOP_LEFT_X, LABEL_TOP_LEFT_Y + pgy_count * LABEL_HEIGHT);
+            pgy_container.addChild(trainee_label);
+            pgy_count += 1;
         }
     }
 
-    trainee_count = 0;
-
     // Drawing the static_stuffs
-    pgy1_count = 0;
-    pgy2_count = 0;
-    pgy3_count = 0;
+    pgy_count = 0;
 
     // Dictionaries of the containers
     for (var i = 0; i < rotations.length; i++) {
@@ -634,25 +617,9 @@ function visualize_data() {
     for (var t of trainees) {
         var color;
         var role = t.role;
+        var start_name_label_y = LABEL_TOP_LEFT_Y;
 
-        var start_name_label_y = 0;
-        switch (role) {
-            case "PGY1":
-                start_name_label_y = pgy1_top_left_y;
-                pgy1_count += 1;
-                trainee_count = pgy1_count;
-                break;
-            case "PGY2":
-                start_name_label_y = pgy2_top_left_y;
-                pgy2_count += 1;
-                trainee_count = pgy2_count;
-                break;
-            case "PGY3":
-                start_name_label_y = pgy3_top_left_y;
-                pgy3_count += 1;
-                trainee_count = pgy3_count;
-                break;
-        }
+        if (t.role != current_pgy) continue; // Skip the loop if it's not the pgy in need of visualized
 
         for (var rot_count = 0; rot_count < num_block; rot_count++) {
             var id = t.scheduled_blocks[rot_count];
@@ -691,27 +658,10 @@ function visualize_data() {
             newSquare.sprite.on('mouseout', onButtonOut);
 
             squares_dict[role + "-" + id.toString()].addChild(newSquare.sprite);
-
-            switch (role) {
-                case "PGY1":
-                    pgy1_squares_list.push(newSquare.sprite);
-                    break;
-                case "PGY2":
-                    pgy2_squares_list.push(newSquare.sprite);
-                    break;
-                case "PGY3":
-                    pgy3_squares_list.push(newSquare.sprite);
-                    break;
-            }
+            pgy_squares_list.push(newSquare.sprite);
         }
+        trainee_count += 1;
     }
-
-    // Draw out underdone bars on the right by using PIXI.Graphics
-    pgy1_count = 0;
-    pgy2_count = 0;
-    pgy3_count = 0;
-    var underdone_top_left_x = 300 + UNIT_RANGE * num_block + 40;
-    var base_x = underdone_top_left_x;
 
     for (var r of rotations) {
         var new_graphic = new PIXI.Graphics();
@@ -720,54 +670,58 @@ function visualize_data() {
         app.stage.addChild(new_graphic);
     }
 
+    // Draw out underdone bars on the right by using PIXI.Graphics
+    var underdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + UNDERDONE_OFFSET_X + UNDERDONE_UNIT_LENGTH * num_block;
     var base_x = underdone_top_left_x;
-    var base_y;
+    var base_y = SQUARE_TOP_LEFT[1];
+    var trainee_count = 0;
     for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
         var t = trainees[trainee_i];
+        if (t.role != current_pgy) continue; // Skip the loop if it's not the pgy in need of visualized
+
+        // Push underdone_arr into underdone array
         var underdone_arr = t.get_underdone_array();
+        old_underdone_arrs[trainee_count] = underdone_arr;
+        new_underdone_arrs[trainee_count] = underdone_arr;
+        in_between_underdone_arrs[trainee_count] =
+            generate_in_between_arr(old_underdone_arrs[trainee_count],
+                new_underdone_arrs[trainee_count],
+                ANIMATION_LENGTH);
+        trainee_count += 1;
+    }
 
-        switch (t.role) {
-            case "PGY1":
-                base_y = pgy1_top_left_y;
-                pgy1_count += 1;
-                trainee_count = pgy1_count;
-                break;
-            case "PGY2":
-                base_y = pgy2_top_left_y;
-                pgy2_count += 1;
-                trainee_count = pgy2_count;
-                break;
-            case "PGY3":
-                base_y = pgy3_top_left_y;
-                pgy3_count += 1;
-                trainee_count = pgy3_count;
-                break;
-        }
+    // Draw requirement for the first time
+    var num_pgy_vis;
+    switch (current_pgy) {
+        case "PGY1":
+            num_pgy_vis = num_pgy1; break;
+        case "PGY2":
+            num_pgy_vis = num_pgy2; break;
+        case "PGY3":
+            num_pgy_vis = num_pgy2; break;
+    }
 
-        for (var j = 0; j < id_list.length; j++) {
+    for (var i = 0; i < num_pgy_vis; i++) {
+        for (var j = 0; j < num_rotations; j++) {
             var rot_id = id_list[j]
             var color = convert_to_color_code(ROTATIONS_COLOR[rot_id]);
             var graphic = underdone_bars[rot_id];
+
             // Calculate points
             if (j == 0) {
                 var x1 = base_x;
-                var y1 = base_y + UNDERDONE_UNIT_RANGE * trainee_count;
-                var x2 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j];
-                var y2 = base_y + UNDERDONE_UNIT_RANGE * trainee_count + UNDERDONE_SIZE;
+                var y1 = base_y + UNDERDONE_UNIT_RANGE * i;
+                var x2 = base_x + UNDERDONE_UNIT_LENGTH * new_underdone_arrs[i][j];
+                var y2 = base_y + UNDERDONE_UNIT_RANGE * i + UNDERDONE_SIZE;
             } else {
-                var x1 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j - 1];
-                var y1 = base_y + UNDERDONE_UNIT_RANGE * trainee_count;
-                var x2 = base_x + UNDERDONE_UNIT_LENGTH * underdone_arr[j];
-                var y2 = base_y + UNDERDONE_UNIT_RANGE * trainee_count + UNDERDONE_SIZE;
+                var x1 = base_x + UNDERDONE_UNIT_LENGTH * new_underdone_arrs[i][j - 1];
+                var y1 = base_y + UNDERDONE_UNIT_RANGE * i;
+                var x2 = base_x + UNDERDONE_UNIT_LENGTH * new_underdone_arrs[i][j];
+                var y2 = base_y + UNDERDONE_UNIT_RANGE * i + UNDERDONE_SIZE;
             }
+
             // Draw the rectangle
-            graphic.beginFill(color);
-            graphic.moveTo(x1, y1);
-            graphic.lineTo(x1, y2);
-            graphic.lineTo(x2, y2);
-            graphic.lineTo(x2, y1);
-            graphic.lineTo(x1, y1);
-            graphic.endFill();
+            draw_rectangle(graphic, color, x1, y1, x2, y2);
         }
     }
 }
@@ -984,6 +938,7 @@ function remove_popup() {
  */
 function reset_app() {
     for (var i = app.stage.children.length - 1; i >= 0; i--) {	app.stage.removeChild(app.stage.children[i]);};
+
 }
 
 function openModal() {
@@ -1014,9 +969,6 @@ function enableSquaresInteractivity() {
  */
 function proceedAnimation() {
     if (animation_count <= ANIMATION_LENGTH) {
-        animation_count += 1;
-
-        console.log(squares_dict)
 
         // Redraw the opacity of the square
         for (var key in squares_dict) {
@@ -1024,6 +976,86 @@ function proceedAnimation() {
             var new_alpha = squares_dict[key].new_alpha;
             squares_dict[key].alpha = old_alpha - (old_alpha - new_alpha) * animation_count / ANIMATION_LENGTH;
         }
+
+        // Redraw chart bars
+        chart_bars.clear();
+        chart_bars.beginFill(convert_to_color_code(in_between_color[animation_count]));
+
+        var base_x = SQUARE_TOP_LEFT[0];
+        var base_y = chart_top_left_y;
+        for (var i = 0; i < num_block; i++) {
+            var x1 = base_x + i * CHART_RANGE;
+            var y1 = base_y;
+            var x2 = base_x + i * CHART_RANGE + CHART_SIZE;
+            var y2 = base_y + in_between_arr[animation_count][i] * CHART_UNIT;
+            chart_bars.moveTo(x1, y1);
+            chart_bars.lineTo(x1, y2);
+            chart_bars.lineTo(x2, y2);
+            chart_bars.lineTo(x2, y1);
+            chart_bars.lineTo(x1, y1);
+        }
+        chart_bars.endFill();
+
+        // Min chart line
+        y1 = base_y + in_between_min_height[animation_count] * SQUARE_SIZE;
+        x1 = base_x;
+        x2 = base_x + SQUARE_SIZE * num_block + SQUARE_DISTANCE * (num_block - 1);
+        chart_bars.lineStyle(2, "0xFF0000", 1);
+        chart_bars.moveTo(x1, y1);
+        chart_bars.lineTo(x2, y1);
+
+        // Max chart line
+        y1 = base_y + in_between_max_height[animation_count] * SQUARE_SIZE;
+        chart_bars.moveTo(x1, y1);
+        chart_bars.lineTo(x2, y1);
+        chart_bars.lineStyle(0);
+
+        // Draw out all the underdone bars
+        var num_pgy_vis;
+        switch (current_pgy) {
+            case "PGY1":
+                num_pgy_vis = num_pgy1; break;
+            case "PGY2":
+                num_pgy_vis = num_pgy2; break;
+            case "PGY3":
+                num_pgy_vis = num_pgy2; break;
+        }
+
+        var underdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + UNDERDONE_OFFSET_X;
+        var base_x = underdone_top_left_x;
+        var base_y = SQUARE_TOP_LEFT[1];
+
+        for (var j = 0; j < num_rotations; j++) {
+            var rot_id = id_list[j]
+            var graphic = underdone_bars[rot_id];
+            graphic.clear();
+        }
+
+        for (var i = 0; i < num_pgy_vis; i++) {
+            for (var j = 0; j < num_rotations; j++) {
+                var rot_id = id_list[j]
+                var color = convert_to_color_code(ROTATIONS_COLOR[rot_id]);
+                var graphic = underdone_bars[rot_id];
+
+                // Calculate points
+                if (j == 0) {
+                    var x1 = base_x;
+                    var y1 = base_y + UNDERDONE_UNIT_RANGE * i;
+                    var x2 = base_x + UNDERDONE_UNIT_LENGTH * in_between_underdone_arrs[i][animation_count][j];
+                    var y2 = base_y + UNDERDONE_UNIT_RANGE * i + UNDERDONE_SIZE;
+                } else {
+                    var x1 = base_x + UNDERDONE_UNIT_LENGTH * in_between_underdone_arrs[i][animation_count][j - 1];
+                    var y1 = base_y + UNDERDONE_UNIT_RANGE * i;
+                    var x2 = base_x + UNDERDONE_UNIT_LENGTH * in_between_underdone_arrs[i][animation_count][j];
+                    var y2 = base_y + UNDERDONE_UNIT_RANGE * i + UNDERDONE_SIZE;
+                }
+
+                // Draw the rectangle
+                draw_rectangle(graphic, color, x1, y1, x2, y2)
+            }
+        }
+
+        animation_count += 1;
     }
 }
 
@@ -1032,5 +1064,7 @@ function proceedAnimation() {
  * @param role
  */
 function changeMode(role) {
-
+    current_pgy = role;
+    reset_app();
+    visualize_data();
 }
