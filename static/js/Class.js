@@ -28,7 +28,7 @@ function Trainee(name, role, id, num_block) {
 
 Trainee.prototype.set_requirements = function(reqs) {
     this.base_reqs = reqs;
-    this.processed_reqs = Object.assign({}, reqs);;
+    this.processed_reqs = Object.assign({}, reqs);
 };
 
 Trainee.prototype.set_scheduled_blocks = function(scheduled_blocks) {
@@ -318,6 +318,10 @@ LongSquare.prototype.constructor = LongSquare;
 
 LongSquare.prototype.draw = function() {
     this.sprite.texture = this.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[this.rot_id]);
+};
+
+LongSquare.prototype.convert = function () {
+    return new Square(this.x, this.y, this.color, this.renderer, this.rot_name, this.id, this.role, this.trainee, this.trainee_name, this.block_num, this.rotations_texture);
 };
 
 /**

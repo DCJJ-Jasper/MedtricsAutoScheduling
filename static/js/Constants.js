@@ -127,7 +127,7 @@ ROTATIONS_COLOR[EMPTY_BLOCK_GRAPHIC_ID.toString()] = EMPTY_BLOCK_COLOR;
 // Somehow, the code doesn't accept this ID to be a negative number.
 
 // Texture dictionary
-var ROTATIONS_SQUARE_TEXTURE = {}
+var ROTATIONS_SQUARE_TEXTURE = {};
 for (var key in ROTATIONS_COLOR) {
     var texture = new PIXI.Graphics();
     texture.beginFill(convert_to_color_code(ROTATIONS_COLOR[key]));
