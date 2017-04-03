@@ -469,23 +469,34 @@ function onPopupPressed() {
         sprite_selected.square.id = this.rot_id;
         sprite_selected.square.rot_name = this.rot_name;
 
-
         // Change the square color
         sprite_selected.texture = sprite_selected.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[rot_change_to]);
 
-        // // Change the previous square's texture
-        // var prev_square = find_prev_square(trainee_selected, block_num_selected);
-        // if (prev_square) {
-        //     // if prev_square is a long square
-        //     if (prev_square.constructor.name == "LongSquare") {
-        //         var newSquare = prev_square.convert();
-        //         twod_square_arr[trainee_selected.name][block_num_selected] = newSquare;
-        //         prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[prev_square.rot_id]);
-        //         newSquare.sprite.texture = prev_square.sprite.texture;
-        //         squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].removeChild(prev_square.sprite);
-        //         squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].addChild(prev_square.sprite);
-        //     }
-        // }
+        var next_square = find_next_square(trainee_selected, block_num_selected);
+        if (next_square) {
+            // if next_square has the same color
+            if (next_square.sprite.rot_id == rot_change_to) {
+                sprite_selected.texture = sprite_selected.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[rot_change_to]);
+            }
+        }
+
+
+
+        // Change the previous square's texture
+        var prev_square = find_prev_square(trainee_selected, block_num_selected);
+        if (prev_square) {
+            // if prev_square is a long square
+            if (prev_square.rot_id != rot_change_to) {
+                prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[prev_square.rot_id]);
+                squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].removeChild(prev_square.sprite);
+                squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].addChild(prev_square.sprite);
+            }
+            else {
+                prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[prev_square.rot_id]);
+                squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].removeChild(prev_square.sprite);
+                squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].addChild(prev_square.sprite);
+            }
+        }
 
         // Remove the square from the old position in squares_dict
         squares_dict[sprite_selected.role + "-" + sprite_selected.rot_id.toString()].removeChild(sprite_selected);
@@ -641,7 +652,7 @@ $(document).ready(function () {
     create_objects(app_width, app_height);
     sort_trainees(trainees);
     for (var t of trainees) {
-        twod_square_arr[t.name] = new Array(num_block);
+        twod_square_arr[t.id] = new Array(num_block);
     }
     visualize_data();
 });

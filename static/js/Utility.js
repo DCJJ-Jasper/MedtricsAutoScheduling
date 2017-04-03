@@ -35,11 +35,11 @@ function convert_to_schedule_id(schedule_info) {
 }
 
 function sort_trainees(trainees_list) {
-    //trainees_list.sort(function(a, b){
-    //    if(a.name < b.name) return -1;
-    //    if(a.name > b.name) return 1;
-    //    return 0;
-    //})
+    trainees_list.sort(function(a, b){
+       if(a.name < b.name) return -1;
+       if(a.name > b.name) return 1;
+       return 0;
+    })
 }
 
 // Function to download data to a file

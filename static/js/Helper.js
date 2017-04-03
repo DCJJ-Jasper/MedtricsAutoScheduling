@@ -643,6 +643,7 @@ function visualize_data() {
             var rot_name = "";
             var trainee_name = t.name;
             var block_num = rot_count;
+            var trainee_id = t.id;
 
             if (rot) {
                 rot_name = rot.name;
@@ -655,7 +656,7 @@ function visualize_data() {
                 newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
             }
 
-            twod_square_arr[trainee_name][rot_count] = newSquare;
+            twod_square_arr[trainee_id][rot_count] = newSquare;
 
             newSquare.draw();
             squares_sprites_list.push(newSquare.sprite);
@@ -1062,7 +1063,15 @@ function find_prev_square(trainee, block_num) {
     if (block_num == 0) {
         return null;
     } else {
-        return twod_square_arr[trainee.name][block_num];
+        return twod_square_arr[trainee.id][block_num - 1];
+    }
+}
+
+function find_next_square(trainee, block_num) {
+    if (block_num % 4 == 3) {
+        return null;
+    } else {
+        return twod_square_arr[trainee.id][block_num + 1];
     }
 }
 
