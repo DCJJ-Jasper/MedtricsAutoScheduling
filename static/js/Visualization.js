@@ -51,6 +51,7 @@ var pgy_container;
 
 var rot_squares_list;
 var underdone_list;
+var overdone_list;
 
 var chart_bars;
 var old_info_arr;
@@ -69,16 +70,19 @@ var in_between_max_height;
 
 var squares_sprites_list = [];
 var squares_dict = {};
+
 var underdone_bars = {};
 var old_underdone_arrs;
 var new_underdone_arrs;
 var in_between_underdone_arrs;
+
+var overdone_bars = {};
 var old_overdone_arrs;
 var new_overdone_arrs;
 var in_between_overdone_arrs;
+
 // TODO: 2D Square array here
 var twod_square_arr = {};
-
 
 var popup_close_btn;
 var popup_label1;
@@ -101,6 +105,8 @@ var rotation_squares;
 var rotation_squares_container;
 var temp_graphic;
 var temp_line;
+
+var line_graphic;
 
 // GRAPHIC CONTROL VARIABLES
 var square_selected = false;
@@ -212,13 +218,17 @@ function create_objects(width, height) {
     // Temporary line to highlight current trainee.
     temp_line = new PIXI.Graphics();
 
+    // Line graphic holds all the
+    line_graphic = new PIXI.Graphics();
+    app.stage.addChild(line_graphic);
+
     // Hold all squares graphics
     rot_squares_list = [];
 
-    // Hold all underdone bars
+    // Hold all underdone and over done bars
     underdone_list = [];
+    overdone_list = [];
     app.ticker.add(proceedAnimation);
-
 }
 
 /////////////////////
@@ -270,6 +280,23 @@ function onSquarePressed() {
             in_between_underdone_arrs[trainee_count] =
                 generate_in_between_arr(old_underdone_arrs[trainee_count],
                     new_underdone_arrs[trainee_count],
+                    ANIMATION_LENGTH);
+            trainee_count += 1;
+        }
+
+        // Calculate information regarding overdone bars
+        var trainee_count = 0;
+        for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
+            var t = trainees[trainee_i];
+            if (t.role != current_pgy) continue; // Skip the loop if it's not the pgy in need of visualized
+
+            // Push overdone_arr into overdone array
+            var overdone_arr = t.get_overdone_array();
+            old_overdone_arrs[trainee_count] = new_overdone_arrs[trainee_count];
+            new_overdone_arrs[trainee_count] = overdone_arr;
+            in_between_overdone_arrs[trainee_count] =
+                generate_in_between_arr(old_overdone_arrs[trainee_count],
+                    new_overdone_arrs[trainee_count],
                     ANIMATION_LENGTH);
             trainee_count += 1;
         }
@@ -356,6 +383,23 @@ function onSquarePressed() {
                 in_between_underdone_arrs[trainee_count] =
                     generate_in_between_arr(old_underdone_arrs[trainee_count],
                         new_underdone_arrs[trainee_count],
+                        ANIMATION_LENGTH);
+                trainee_count += 1;
+            }
+
+            // Calculate information regarding overdone bars
+            var trainee_count = 0;
+            for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
+                var t = trainees[trainee_i];
+                if (t.role != current_pgy) continue; // Skip the loop if it's not the pgy in need of visualized
+
+                // Push overdone_arr into overdone array
+                var overdone_arr = t.get_overdone_spec_array(rot_id);
+                old_overdone_arrs[trainee_count] = new_overdone_arrs[trainee_count];
+                new_overdone_arrs[trainee_count] = overdone_arr;
+                in_between_overdone_arrs[trainee_count] =
+                    generate_in_between_arr(old_overdone_arrs[trainee_count],
+                        new_overdone_arrs[trainee_count],
                         ANIMATION_LENGTH);
                 trainee_count += 1;
             }
@@ -585,10 +629,15 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
 
 $(document).ready(function () {
     read_in_data_from_medtrics(PROBLEM_TEXT);
+
+    var num_pgy_vis; // Num of students visualized
+    if (current_pgy == "PGY1") num_pgy_vis = num_pgy1;
+    else if (current_pgy == "PGY2") num_pgy_vis = num_pgy2;
+    else if (current_pgy == "PGY3") num_pgy_vis = num_pgy3;
+
     app_height = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
-        num_pgy1 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
-        num_pgy2 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
-        num_pgy3 * LABEL_HEIGHT + GROUP_DISTANCE + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
+        num_pgy_vis * LABEL_HEIGHT + CHART_DISTANCE + num_pgy_vis * CHART_UNIT + 100;
+    
     create_objects(app_width, app_height);
     sort_trainees(trainees);
     for (var t of trainees) {

@@ -377,7 +377,7 @@ function read_in_data_from_medtrics(input_data) {
 
         rot_name = data[0];
         rot_id = rot_name_to_id_dict[rot_name];
-        num_block_required = parseFloat(data[1]);
+        num_block_required = parseFloat(data[1]) * 4;
 
         pgy1_reqs[rot_id] = num_block_required;
     }
@@ -393,7 +393,7 @@ function read_in_data_from_medtrics(input_data) {
 
         rot_name = data[0];
         rot_id = rot_name_to_id_dict[rot_name];
-        num_block_required = parseFloat(data[1]);
+        num_block_required = parseFloat(data[1]) * 4;
 
         pgy2_reqs[rot_id] = num_block_required;
     }
@@ -409,7 +409,7 @@ function read_in_data_from_medtrics(input_data) {
 
         rot_name = data[0];
         rot_id = rot_name_to_id_dict[rot_name];
-        num_block_required = parseFloat(data[1]);
+        num_block_required = parseFloat(data[1]) * 4;
 
         pgy3_reqs[rot_id] = num_block_required;
     }
@@ -518,6 +518,7 @@ function visualize_data() {
     // Clear out all containers
     squares_dict = {};
     underdone_bars = {};
+    ooverdone_bars = {};
 
     // Clear out all list
     pgy_squares_list = [];
@@ -534,11 +535,16 @@ function visualize_data() {
     app.stage.removeChild(rot_squares_list);
     rot_squares_list = [];
 
-    // Clean all underdone container
+    // Clean all underdone and overdone container
     for (var underdone_bar of underdone_list) {
         app.stage.removeChild(underdone_bar);
     }
     underdone_list = [];
+
+    for (var overdone_bar of overdone_list) {
+        app.stage.removeChild(overdone_bar);
+    }
+    overdone_list = [];
 
     // Clean all chart list
     app.stage.removeChild(chart_bars);
@@ -663,6 +669,7 @@ function visualize_data() {
         trainee_count += 1;
     }
 
+    // Underdone graphics
     for (var r of rotations) {
         var new_graphic = new PIXI.Graphics();
         underdone_bars[r.id] = new_graphic;
@@ -671,9 +678,6 @@ function visualize_data() {
     }
 
     // Draw out underdone bars on the right by using PIXI.Graphics
-    var underdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + UNDERDONE_OFFSET_X + UNDERDONE_UNIT_LENGTH * num_block;
-    var base_x = underdone_top_left_x;
-    var base_y = SQUARE_TOP_LEFT[1];
     var trainee_count = 0;
     for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
         var t = trainees[trainee_i];
@@ -690,6 +694,31 @@ function visualize_data() {
         trainee_count += 1;
     }
 
+    // overdone graphics
+    for (var r of rotations) {
+        var new_graphic = new PIXI.Graphics();
+        overdone_bars[r.id] = new_graphic;
+        overdone_list.push(new_graphic);
+        app.stage.addChild(new_graphic);
+    }
+
+    // Draw out overdone bars on the right by using PIXI.Graphics
+    var trainee_count = 0;
+    for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
+        var t = trainees[trainee_i];
+        if (t.role != current_pgy) continue; // Skip the loop if it's not the pgy in need of visualized
+
+        // Push overdone_arr into overdone array
+        var overdone_arr = t.get_overdone_array();
+        old_overdone_arrs[trainee_count] = overdone_arr;
+        new_overdone_arrs[trainee_count] = overdone_arr;
+        in_between_overdone_arrs[trainee_count] =
+            generate_in_between_arr(old_overdone_arrs[trainee_count],
+                new_overdone_arrs[trainee_count],
+                ANIMATION_LENGTH);
+        trainee_count += 1;
+    }
+
     // Draw requirement for the first time
     var num_pgy_vis;
     switch (current_pgy) {
@@ -701,6 +730,10 @@ function visualize_data() {
             num_pgy_vis = num_pgy2; break;
     }
 
+    // Draw underdone bar for the first time
+    var underdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + UNDERDONE_OFFSET_X + UNDERDONE_UNIT_LENGTH * num_block;
+    var base_x = underdone_top_left_x;
+    var base_y = SQUARE_TOP_LEFT[1];
     for (var i = 0; i < num_pgy_vis; i++) {
         for (var j = 0; j < num_rotations; j++) {
             var rot_id = id_list[j]
@@ -711,12 +744,12 @@ function visualize_data() {
             if (j == 0) {
                 var x1 = base_x;
                 var y1 = base_y + UNDERDONE_UNIT_RANGE * i;
-                var x2 = base_x + UNDERDONE_UNIT_LENGTH * new_underdone_arrs[i][j];
+                var x2 = base_x - UNDERDONE_UNIT_LENGTH * new_underdone_arrs[i][j];
                 var y2 = base_y + UNDERDONE_UNIT_RANGE * i + UNDERDONE_SIZE;
             } else {
-                var x1 = base_x + UNDERDONE_UNIT_LENGTH * new_underdone_arrs[i][j - 1];
+                var x1 = base_x - UNDERDONE_UNIT_LENGTH * new_underdone_arrs[i][j - 1];
                 var y1 = base_y + UNDERDONE_UNIT_RANGE * i;
-                var x2 = base_x + UNDERDONE_UNIT_LENGTH * new_underdone_arrs[i][j];
+                var x2 = base_x - UNDERDONE_UNIT_LENGTH * new_underdone_arrs[i][j];
                 var y2 = base_y + UNDERDONE_UNIT_RANGE * i + UNDERDONE_SIZE;
             }
 
@@ -724,6 +757,68 @@ function visualize_data() {
             draw_rectangle(graphic, color, x1, y1, x2, y2);
         }
     }
+
+    // Draw overdone bar for the first time
+    var overdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + OVERDONE_OFFSET_X + OVERDONE_UNIT_LENGTH * num_block + UNDER_OVER_DISTANCE;
+    var base_x = overdone_top_left_x;
+    var base_y = SQUARE_TOP_LEFT[1];
+    for (var i = 0; i < num_pgy_vis; i++) {
+        for (var j = 0; j < num_rotations; j++) {
+            var rot_id = id_list[j]
+            var color = convert_to_color_code(ROTATIONS_COLOR[rot_id]);
+            var graphic = overdone_bars[rot_id];
+
+            // Calculate points
+            if (j == 0) {
+                var x1 = base_x;
+                var y1 = base_y + OVERDONE_UNIT_RANGE * i;
+                var x2 = base_x + OVERDONE_UNIT_LENGTH * new_overdone_arrs[i][j];
+                var y2 = base_y + OVERDONE_UNIT_RANGE * i + OVERDONE_SIZE;
+            } else {
+                var x1 = base_x + OVERDONE_UNIT_LENGTH * new_overdone_arrs[i][j - 1];
+                var y1 = base_y + OVERDONE_UNIT_RANGE * i;
+                var x2 = base_x + OVERDONE_UNIT_LENGTH * new_overdone_arrs[i][j];
+                var y2 = base_y + OVERDONE_UNIT_RANGE * i + OVERDONE_SIZE;
+            }
+
+            // Draw the rectangle
+            draw_rectangle(graphic, color, x1, y1, x2, y2);
+        }
+    }
+
+    // Add line graphic at the end
+    app.stage.addChild(line_graphic);
+    line_graphic.clear();
+
+    var underdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + UNDERDONE_OFFSET_X + UNDERDONE_UNIT_LENGTH * num_block;
+        var base_x = underdone_top_left_x;
+        var base_y = SQUARE_TOP_LEFT[1];
+
+    // White lines
+    line_graphic.lineStyle(1, "0xFFFFFF", 1);
+    for (var i = 0; i < num_block; i++) {
+        var x = base_x - i * UNDERDONE_UNIT_LENGTH;
+        var y1 = base_y;
+        var y2 = base_y + UNIT_RANGE * num_pgy_vis;
+        line_graphic.moveTo(x, y1);
+        line_graphic.lineTo(x, y2);
+    }
+
+    // Draw underdone bars
+    var overdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + OVERDONE_OFFSET_X + OVERDONE_UNIT_LENGTH * num_block + UNDER_OVER_DISTANCE;
+    var base_x = overdone_top_left_x;
+    var base_y = SQUARE_TOP_LEFT[1];
+
+    // White lines
+    for (var i = 0; i < num_block; i++) {
+        var x = base_x + i * OVERDONE_UNIT_LENGTH;
+        var y1 = base_y;
+        var y2 = base_y + UNIT_RANGE * num_pgy_vis;
+        line_graphic.moveTo(x, y1);
+        line_graphic.lineTo(x, y2);
+    }
+    animation_count += 1;
+
 }
 
 /**
@@ -969,12 +1064,17 @@ function find_prev_square(trainee, block_num) {
     } else {
         return twod_square_arr[trainee.name][block_num];
     }
+}
 
 /**
  * Move forward with the animation.
  */
 function proceedAnimation() {
     if (animation_count <= ANIMATION_LENGTH) {
+
+        // Reset line graphic
+        line_graphic.clear()
+        line_graphic.lineStyle(1, "0xFFFFFF", 1);
 
         // Redraw the opacity of the square
         for (var key in squares_dict) {
@@ -1002,19 +1102,30 @@ function proceedAnimation() {
         }
         chart_bars.endFill();
 
+        // White lines
+        var base_x = SQUARE_TOP_LEFT[0];
+        var base_y = chart_top_left_y;
+        for (var i = 0; i < num_trainees; i++) {
+            var y = base_y + i * CHART_SIZE;
+            var x1 = base_x;
+            var x2 = base_x + num_block * SQUARE_SIZE + (num_block - 1) * SQUARE_DISTANCE;
+            line_graphic.moveTo(x1, y);
+            line_graphic.lineTo(x2, y);
+        }
+
         // Min chart line
         y1 = base_y + in_between_min_height[animation_count] * SQUARE_SIZE;
         x1 = base_x;
         x2 = base_x + SQUARE_SIZE * num_block + SQUARE_DISTANCE * (num_block - 1);
-        chart_bars.lineStyle(2, "0xFF0000", 1);
-        chart_bars.moveTo(x1, y1);
-        chart_bars.lineTo(x2, y1);
+        line_graphic.lineStyle(2, "0xFF0000", 1);
+        line_graphic.moveTo(x1, y1);
+        line_graphic.lineTo(x2, y1);
 
         // Max chart line
         y1 = base_y + in_between_max_height[animation_count] * SQUARE_SIZE;
-        chart_bars.moveTo(x1, y1);
-        chart_bars.lineTo(x2, y1);
-        chart_bars.lineStyle(0);
+        line_graphic.moveTo(x1, y1);
+        line_graphic.lineTo(x2, y1);
+        line_graphic.lineStyle(0);
 
         // Draw out all the underdone bars
         var num_pgy_vis;
@@ -1027,7 +1138,9 @@ function proceedAnimation() {
                 num_pgy_vis = num_pgy2; break;
         }
 
-        var underdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + UNDERDONE_OFFSET_X;
+        // Draw underdone bars
+
+        var underdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + UNDERDONE_OFFSET_X + UNDERDONE_UNIT_LENGTH * num_block;
         var base_x = underdone_top_left_x;
         var base_y = SQUARE_TOP_LEFT[1];
 
@@ -1047,12 +1160,12 @@ function proceedAnimation() {
                 if (j == 0) {
                     var x1 = base_x;
                     var y1 = base_y + UNDERDONE_UNIT_RANGE * i;
-                    var x2 = base_x + UNDERDONE_UNIT_LENGTH * in_between_underdone_arrs[i][animation_count][j];
+                    var x2 = base_x - UNDERDONE_UNIT_LENGTH * in_between_underdone_arrs[i][animation_count][j];
                     var y2 = base_y + UNDERDONE_UNIT_RANGE * i + UNDERDONE_SIZE;
                 } else {
-                    var x1 = base_x + UNDERDONE_UNIT_LENGTH * in_between_underdone_arrs[i][animation_count][j - 1];
+                    var x1 = base_x - UNDERDONE_UNIT_LENGTH * in_between_underdone_arrs[i][animation_count][j - 1];
                     var y1 = base_y + UNDERDONE_UNIT_RANGE * i;
-                    var x2 = base_x + UNDERDONE_UNIT_LENGTH * in_between_underdone_arrs[i][animation_count][j];
+                    var x2 = base_x - UNDERDONE_UNIT_LENGTH * in_between_underdone_arrs[i][animation_count][j];
                     var y2 = base_y + UNDERDONE_UNIT_RANGE * i + UNDERDONE_SIZE;
                 }
 
@@ -1061,6 +1174,58 @@ function proceedAnimation() {
             }
         }
 
+        // White lines
+        line_graphic.lineStyle(1, "0xFFFFFF", 1);
+        for (var i = 0; i < num_block; i++) {
+            var x = base_x - i * UNDERDONE_UNIT_LENGTH;
+            var y1 = base_y;
+            var y2 = base_y + UNIT_RANGE * num_pgy_vis;
+            line_graphic.moveTo(x, y1);
+            line_graphic.lineTo(x, y2);
+        }
+
+        // Draw underdone bars
+        var overdone_top_left_x = SQUARE_TOP_LEFT[0] + UNIT_RANGE * num_block + OVERDONE_OFFSET_X + OVERDONE_UNIT_LENGTH * num_block + UNDER_OVER_DISTANCE;
+        var base_x = overdone_top_left_x;
+        var base_y = SQUARE_TOP_LEFT[1];
+
+        for (var j = 0; j < num_rotations; j++) {
+            var rot_id = id_list[j]
+            var graphic = overdone_bars[rot_id];
+            graphic.clear();
+        }
+
+        for (var i = 0; i < num_pgy_vis; i++) {
+            for (var j = 0; j < num_rotations; j++) {
+                var rot_id = id_list[j]
+                var color = convert_to_color_code(ROTATIONS_COLOR[rot_id]);
+                var graphic = overdone_bars[rot_id];
+
+                // Calculate points
+                if (j == 0) {
+                    var x1 = base_x;
+                    var y1 = base_y + OVERDONE_UNIT_RANGE * i;
+                    var x2 = base_x + OVERDONE_UNIT_LENGTH * in_between_overdone_arrs[i][animation_count][j];
+                    var y2 = base_y + OVERDONE_UNIT_RANGE * i + OVERDONE_SIZE;
+                } else {
+                    var x1 = base_x + OVERDONE_UNIT_LENGTH * in_between_overdone_arrs[i][animation_count][j - 1];
+                    var y1 = base_y + OVERDONE_UNIT_RANGE * i;
+                    var x2 = base_x + OVERDONE_UNIT_LENGTH * in_between_overdone_arrs[i][animation_count][j];
+                    var y2 = base_y + OVERDONE_UNIT_RANGE * i + OVERDONE_SIZE;
+                }
+
+                // Draw the rectangle
+                draw_rectangle(graphic, color, x1, y1, x2, y2)
+            }
+        }
+        // White lines
+        for (var i = 0; i < num_block; i++) {
+            var x = base_x + i * OVERDONE_UNIT_LENGTH;
+            var y1 = base_y;
+            var y2 = base_y + UNIT_RANGE * num_pgy_vis;
+            line_graphic.moveTo(x, y1);
+            line_graphic.lineTo(x, y2);
+        }
         animation_count += 1;
     }
 }

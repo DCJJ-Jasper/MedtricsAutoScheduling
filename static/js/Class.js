@@ -107,6 +107,25 @@ Trainee.prototype.get_overdone_array = function() {
     return overdone_arr;
 };
 
+/**
+ * overdone array for specs but with only the information of the rotation specified
+ * @param rot_id
+ */
+Trainee.prototype.get_overdone_spec_array = function(rot_id) {
+    rot_id = parseInt(rot_id);
+    var arr = [];
+    var current_value = 0;
+    for (var i = 0; i < num_rotations; i++) {
+        var temp_id = this.id_list[i];
+        if (temp_id == rot_id) {
+            var num_req = this.processed_reqs[this.id_list[i]];
+            if (num_req > 0) current_value = 0;
+            else current_value = - num_req;
+        }
+        arr[i] = current_value;
+    }
+    return arr;
+}
 
 Trainee.prototype.generate_prefill_info = function() {
     var str = "";
