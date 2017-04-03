@@ -22,15 +22,22 @@
         <button class="button2" id="save_btn">Save CSV</button>
     </div>
     <div class="switch-wrapper">
-        <input type="checkbox" value="1" unchecked>
+        <input type="checkbox" value="1" checked>
+    </div>
+    <div class="radio-container">
+        <form id="radio-form">
+            <input type="radio" name="gender" value="male" checked> Whole block<br>
+            <input type="radio" name="gender" value="female"> Quarter block
+        </form>
     </div>
     <!-- Role Navication bar -->
     <div class="nav-menu">
         <ul class="nav nav-pills orange">
-            <li class="active"><a data-toggle="tab" href="#home" id = "PGY1-tab">PGY1</a></li>
-            <li><a data-toggle="tab" href="#menu1" id = "PGY2-tab">PGY2</a></li>
-            <li><a data-toggle="tab" href="#menu2" id = "PGY3-tab">PGY3</a></li>
-            <li><a data-toggle="tab" href="#warning" id = "Warning-tab">Warning</a></li>
+            <li class="active"><a data-toggle="tab" href="#pgy1" onclick="changeMode('PGY1')" id ="PGY1-tab">PGY1</a>
+            </li>
+            <li><a data-toggle="tab" href="#pgy2" onclick="changeMode('PGY2')" id ="PGY2-tab">PGY2</a></li>
+            <li><a data-toggle="tab" href="#pgy3" onclick="changeMode('PGY3')" id ="PGY3-tab">PGY3</a></li>
+            <li><a data-toggle="tab" href="#warning" id ="Warning-tab">Warning</a></li>
         </ul>
     </div>
 </div>

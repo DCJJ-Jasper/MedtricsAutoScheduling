@@ -39,6 +39,10 @@ Trainee.prototype.set_empty_schedule_blocks = function () {
     this.scheduled_blocks = new Array(this.num_block).fill(EMPTY_BLOCK_GRAPHIC_ID);
 };
 
+/**
+ * Underdone information for graphics
+ * @returns {Array}
+ */
 Trainee.prototype.get_underdone_array = function() {
 
     var underdone_arr = [];
@@ -58,6 +62,70 @@ Trainee.prototype.get_underdone_array = function() {
     // Return the underdone_arr
     return underdone_arr;
 };
+
+/**
+ * Underdone array for specs but with only the information of the rotation specified
+ * @param rot_id
+ */
+Trainee.prototype.get_underdone_spec_array = function(rot_id) {
+    rot_id = parseInt(rot_id);
+    var arr = [];
+    var current_value = 0;
+    for (var i = 0; i < num_rotations; i++) {
+        var temp_id = this.id_list[i];
+        if (temp_id == rot_id) {
+            var num_req = this.processed_reqs[this.id_list[i]];
+            if (num_req < 0) current_value = 0;
+            else current_value = num_req;
+        }
+        arr[i] = current_value;
+    }
+    return arr;
+}
+
+/**
+ * Overdone information for graphics
+ * @returns {Array}
+ */
+Trainee.prototype.get_overdone_array = function() {
+
+    var overdone_arr = [];
+
+    // Add the remain requirements for the first rotation
+    var num_req = this.processed_reqs[this.id_list[0]];
+    if (num_req > 0) overdone_arr.push(0);
+    else overdone_arr.push(- num_req);
+
+    // Add the remaining require for the rest of the rotation
+    for (var i = 1; i < num_rotations; i++) {
+        num_req = this.processed_reqs[this.id_list[i]];
+        if (num_req > 0) overdone_arr.push(overdone_arr[i-1]);
+        else overdone_arr.push(overdone_arr[i-1] - num_req);
+    }
+
+    // Return the underdone_arr
+    return overdone_arr;
+};
+
+/**
+ * overdone array for specs but with only the information of the rotation specified
+ * @param rot_id
+ */
+Trainee.prototype.get_overdone_spec_array = function(rot_id) {
+    rot_id = parseInt(rot_id);
+    var arr = [];
+    var current_value = 0;
+    for (var i = 0; i < num_rotations; i++) {
+        var temp_id = this.id_list[i];
+        if (temp_id == rot_id) {
+            var num_req = this.processed_reqs[this.id_list[i]];
+            if (num_req > 0) current_value = 0;
+            else current_value = - num_req;
+        }
+        arr[i] = current_value;
+    }
+    return arr;
+}
 
 Trainee.prototype.generate_prefill_info = function() {
     var str = "";
