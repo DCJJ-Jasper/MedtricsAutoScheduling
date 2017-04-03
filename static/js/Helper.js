@@ -1015,6 +1015,7 @@ function find_prev_square(trainee, block_num) {
     } else {
         return twod_square_arr[trainee.name][block_num];
     }
+}
 
 /**
  * Move forward with the animation.

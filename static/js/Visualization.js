@@ -395,7 +395,7 @@ function onPopupOut() {
 function onPopupPressed() {
     remove_popup();
     var rot_change_to = this.rot_id.toString();
-    if (trainee_selected && Number.isFinite(block_num_selected) && sprite_selected) {
+    if (trainee_selected && Number.isFinite(block_num_selected) && sprite_selected && rot_change_to != sprite_selected.rot_id) {
         trainee_selected.scheduled_blocks[block_num_selected] = rot_change_to;
         sprite_selected.rot_id = this.rot_id;
         sprite_selected.rot_name = this.rot_name;
@@ -406,7 +406,7 @@ function onPopupPressed() {
         // Change the square color
         sprite_selected.texture = sprite_selected.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[rot_change_to]);
 
-        // Change the previous square's texture
+        // // Change the previous square's texture
         // var prev_square = find_prev_square(trainee_selected, block_num_selected);
         // if (prev_square) {
         //     // if prev_square is a long square
