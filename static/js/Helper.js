@@ -656,7 +656,7 @@ function visualize_data() {
                 newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
             }
 
-            twod_square_arr[trainee_id][rot_count] = newSquare;
+            helper_square_dict[trainee_id][rot_count] = newSquare;
 
             newSquare.draw();
             squares_sprites_list.push(newSquare.sprite);
@@ -1037,33 +1037,11 @@ function reset_app() {
 
 }
 
-function openModal() {
-    var ele = document.getElementById('modal')
-    if (ele)
-      ele.style.display = 'block';
-}
-
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-}
-
-function disableSquaresInteractivity() {
-    for (var s of squares_sprites_list) {
-        s.interactive = false;
-    }
-}
-
-function enableSquaresInteractivity() {
-    for (var s of squares_sprites_list) {
-        s.interactive = true;
-    }
-}
-
 function find_prev_square(trainee, block_num) {
     if (block_num == 0) {
         return null;
     } else {
-        return twod_square_arr[trainee.id][block_num - 1];
+        return helper_square_dict[trainee.id][block_num - 1];
     }
 }
 
@@ -1071,7 +1049,7 @@ function find_next_square(trainee, block_num) {
     if (block_num % 4 == 3) {
         return null;
     } else {
-        return twod_square_arr[trainee.id][block_num + 1];
+        return helper_square_dict[trainee.id][block_num + 1];
     }
 }
 

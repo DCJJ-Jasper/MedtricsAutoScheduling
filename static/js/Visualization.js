@@ -81,8 +81,7 @@ var old_overdone_arrs;
 var new_overdone_arrs;
 var in_between_overdone_arrs;
 
-// TODO: 2D Square array here
-var twod_square_arr = {};
+var helper_square_dict = {};
 
 var popup_close_btn;
 var popup_label1;
@@ -652,7 +651,7 @@ $(document).ready(function () {
     create_objects(app_width, app_height);
     sort_trainees(trainees);
     for (var t of trainees) {
-        twod_square_arr[t.id] = new Array(num_block);
+        helper_square_dict[t.id] = new Array(num_block);
     }
     visualize_data();
 });
@@ -665,7 +664,7 @@ $(document).keyup(function(e) {
 });
 
 $("input[type=checkbox]").switchButton({
-    on_label: 'Schedule',
+    on_label: 'Edit',
     off_label: 'Explore',
     width: 60,
     height: 25,
