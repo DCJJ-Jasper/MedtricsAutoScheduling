@@ -1226,3 +1226,32 @@ function changeMode(role) {
     reset_app();
     visualize_data();
 }
+
+function close_to_border(y, fullorpartial) {
+    if (fullorpartial == "partial") {
+        if (y < LABEL_ROLE_TOP_LEFT_Y + 6 * LABEL_HEIGHT) {
+        var dis_to_top = Math.abs(LABEL_ROLE_TOP_LEFT_Y - y);
+        if (dis_to_top <= FIRST_TWO_ROWS_BOUND) {
+            return y + LABEL_HEIGHT + TOP_BORDER_OFFSET - POPUP_WEIGHT
+        }
+        return y + dis_to_top * TOP_BORDER_MULTIPLIER - POPUP_WEIGHT;
+        } else {
+            return y - POPUP_WEIGHT
+        }
+    } else if (fullorpartial == "full") {
+        var popupheight = POPUP_LABEL_HEIGHT * 5 + (num_rotations + 1) * POPUP_ROTATION_SIZE;
+        if (y + popupheight - app_height > -POPUP_LABEL_HEIGHT * 6) {
+            return y - (POPUP_LABEL_HEIGHT * 6.5 + y + popupheight - app_height) - POPUP_WEIGHT
+        } else if (y < LABEL_ROLE_TOP_LEFT_Y + 6 * LABEL_HEIGHT) {
+            var dis_to_top = Math.abs(LABEL_ROLE_TOP_LEFT_Y - y);
+            if (dis_to_top <= FIRST_TWO_ROWS_BOUND) {
+                return y + LABEL_HEIGHT + TOP_BORDER_OFFSET - POPUP_WEIGHT
+            }
+            return y + dis_to_top * TOP_BORDER_MULTIPLIER - POPUP_WEIGHT;
+        } else {
+            return y - POPUP_WEIGHT
+        }
+    }
+
+
+}

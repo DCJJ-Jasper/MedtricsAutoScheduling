@@ -302,7 +302,7 @@ function onSquarePressed() {
 
         // Draw popup;
         remove_popup();
-        draw_partial_popup(x1, y1, this.trainee_name, this.rot_name);
+        draw_partial_popup(x, y, this.trainee_name, this.rot_name);
 
     } else {
         id_pressed = rot_id;
@@ -406,11 +406,11 @@ function onSquarePressed() {
         } else {
 
             // Draw Popup
-            var x1 = this.x + 20;
-            var y1 = this.y - POPUP_WEIGHT;
+            var x = this.x + 20;
+            var y = close_to_border(this.y, "full");
 
             // Draw popup;
-            draw_full_popup(x1, y1, this.trainee_name, this.rot_name);
+            draw_full_popup(x, y, this.trainee_name, this.rot_name);
         }
     }
 
@@ -427,11 +427,9 @@ function onButtonOver() {
         temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
         temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
         temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
-
-        var x1 = this.x + 20;
-        var y1 = this.y - POPUP_WEIGHT;
-
-        draw_partial_popup(x1, y1, this.trainee_name, this.rot_name);
+        var x = this.x + 20;
+        var y = close_to_border(this.y, "partial");
+        draw_partial_popup(x, y, this.trainee_name, this.rot_name);
     }
 }
 
@@ -638,7 +636,7 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
 
 
 $(document).ready(function () {
-    read_in_data_from_medtrics(FAKE_TEXT);
+    read_in_data_from_medtrics(PROBLEM_TEXT);
 
     var num_pgy_vis; // Num of students visualized
     if (current_pgy == "PGY1") num_pgy_vis = num_pgy1;
