@@ -43,7 +43,7 @@ var LABEL_TOP_LEFT_Y = 40 + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
 var POPUP_LABEL_SIZE = 14;
 var POPUP_LABEL_HEIGHT = 22;
 var POPUP_SQUARE_SIZE = 14;
-var POPUP_CLOSE_OFFSET = 35
+var POPUP_CLOSE_OFFSET = 35;
 var POPUP_INFO_X_OFFSET = 85;
 var POPUP_PADDING = 7;
 var POPUP_WIDTH = 350;
@@ -82,6 +82,10 @@ var UNDER_OVER_DISTANCE = 10;
 
 var GROUP_DISTANCE = 40; // Distance between two role groups
 var CHART_DISTANCE = 40; // Distance between charts and square
+
+var TOP_BORDER_OFFSET = 60;
+var TOP_BORDER_MULTIPLIER = 1.2;
+var FIRST_TWO_ROWS_BOUND = 47;
 
 //////////////////
 // COLOR CONSTANTS

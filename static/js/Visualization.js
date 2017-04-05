@@ -81,8 +81,7 @@ var old_overdone_arrs;
 var new_overdone_arrs;
 var in_between_overdone_arrs;
 
-// TODO: 2D Square array here
-var twod_square_arr = {};
+var helper_square_dict = {};
 
 var popup_close_btn;
 var popup_label1;
@@ -303,7 +302,7 @@ function onSquarePressed() {
 
         // Draw popup;
         remove_popup();
-        draw_partial_popup(x1, y1, this.trainee_name, this.rot_name);
+        draw_partial_popup(x, y, this.trainee_name, this.rot_name);
 
     } else {
         id_pressed = rot_id;
@@ -407,11 +406,11 @@ function onSquarePressed() {
         } else {
 
             // Draw Popup
-            var x1 = this.x + 20;
-            var y1 = this.y - POPUP_WEIGHT;
+            var x = this.x + 20;
+            var y = close_to_border(this.y, "full");
 
             // Draw popup;
-            draw_full_popup(x1, y1, this.trainee_name, this.rot_name);
+            draw_full_popup(x, y, this.trainee_name, this.rot_name);
         }
     }
 
@@ -428,11 +427,9 @@ function onButtonOver() {
         temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE + num_block * (SQUARE_SIZE + SQUARE_DISTANCE) + DISTANCE + (SQUARE_TOP_LEFT[0] - LABEL_TOP_LEFT_X), this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
         temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y + SQUARE_SIZE + SQUARE_DISTANCE / 2);
         temp_line.lineTo(LABEL_ROLE_TOP_LEFT_X - DISTANCE, this.y - SQUARE_DISTANCE / 2);
-
-        var x1 = this.x + 20;
-        var y1 = this.y - POPUP_WEIGHT;
-
-        draw_partial_popup(x1, y1, this.trainee_name, this.rot_name);
+        var x = this.x + 20;
+        var y = close_to_border(this.y, "partial");
+        draw_partial_popup(x, y, this.trainee_name, this.rot_name);
     }
 }
 
@@ -469,23 +466,34 @@ function onPopupPressed() {
         sprite_selected.square.id = this.rot_id;
         sprite_selected.square.rot_name = this.rot_name;
 
-
         // Change the square color
         sprite_selected.texture = sprite_selected.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[rot_change_to]);
 
-        // // Change the previous square's texture
-        // var prev_square = find_prev_square(trainee_selected, block_num_selected);
-        // if (prev_square) {
-        //     // if prev_square is a long square
-        //     if (prev_square.constructor.name == "LongSquare") {
-        //         var newSquare = prev_square.convert();
-        //         twod_square_arr[trainee_selected.name][block_num_selected] = newSquare;
-        //         prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[prev_square.rot_id]);
-        //         newSquare.sprite.texture = prev_square.sprite.texture;
-        //         squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].removeChild(prev_square.sprite);
-        //         squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].addChild(prev_square.sprite);
-        //     }
-        // }
+        var next_square = find_next_square(trainee_selected, block_num_selected);
+        if (next_square) {
+            // if next_square has the same color
+            if (next_square.sprite.rot_id == rot_change_to) {
+                sprite_selected.texture = sprite_selected.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[rot_change_to]);
+            }
+        }
+
+
+
+        // Change the previous square's texture
+        var prev_square = find_prev_square(trainee_selected, block_num_selected);
+        if (prev_square) {
+            // if prev_square is a long square
+            if (prev_square.rot_id != rot_change_to) {
+                prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[prev_square.rot_id]);
+                squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].removeChild(prev_square.sprite);
+                squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].addChild(prev_square.sprite);
+            }
+            else {
+                prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[prev_square.rot_id]);
+                squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].removeChild(prev_square.sprite);
+                squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].addChild(prev_square.sprite);
+            }
+        }
 
         // Remove the square from the old position in squares_dict
         squares_dict[sprite_selected.role + "-" + sprite_selected.rot_id.toString()].removeChild(sprite_selected);
@@ -628,7 +636,7 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
 
 
 $(document).ready(function () {
-    read_in_data_from_medtrics(FAKE_TEXT);
+    read_in_data_from_medtrics(PROBLEM_TEXT);
 
     var num_pgy_vis; // Num of students visualized
     if (current_pgy == "PGY1") num_pgy_vis = num_pgy1;
@@ -641,7 +649,7 @@ $(document).ready(function () {
     create_objects(app_width, app_height);
     sort_trainees(trainees);
     for (var t of trainees) {
-        twod_square_arr[t.name] = new Array(num_block);
+        helper_square_dict[t.id] = new Array(num_block);
     }
     visualize_data();
 });
@@ -654,7 +662,7 @@ $(document).keyup(function(e) {
 });
 
 $("input[type=checkbox]").switchButton({
-    on_label: 'Schedule',
+    on_label: 'Edit',
     off_label: 'Explore',
     width: 60,
     height: 25,

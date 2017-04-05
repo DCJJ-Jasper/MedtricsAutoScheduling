@@ -643,6 +643,7 @@ function visualize_data() {
             var rot_name = "";
             var trainee_name = t.name;
             var block_num = rot_count;
+            var trainee_id = t.id;
 
             if (rot) {
                 rot_name = rot.name;
@@ -655,7 +656,7 @@ function visualize_data() {
                 newSquare = new Square(x, y, color, app.renderer, rot_name, id, role, t, trainee_name, block_num);
             }
 
-            twod_square_arr[trainee_name][rot_count] = newSquare;
+            helper_square_dict[trainee_id][rot_count] = newSquare;
 
             newSquare.draw();
             squares_sprites_list.push(newSquare.sprite);
@@ -1036,33 +1037,19 @@ function reset_app() {
 
 }
 
-function openModal() {
-    var ele = document.getElementById('modal')
-    if (ele)
-      ele.style.display = 'block';
-}
-
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-}
-
-function disableSquaresInteractivity() {
-    for (var s of squares_sprites_list) {
-        s.interactive = false;
-    }
-}
-
-function enableSquaresInteractivity() {
-    for (var s of squares_sprites_list) {
-        s.interactive = true;
-    }
-}
-
 function find_prev_square(trainee, block_num) {
     if (block_num == 0) {
         return null;
     } else {
-        return twod_square_arr[trainee.name][block_num];
+        return helper_square_dict[trainee.id][block_num - 1];
+    }
+}
+
+function find_next_square(trainee, block_num) {
+    if (block_num % 4 == 3) {
+        return null;
+    } else {
+        return helper_square_dict[trainee.id][block_num + 1];
     }
 }
 
@@ -1238,4 +1225,33 @@ function changeMode(role) {
     current_pgy = role;
     reset_app();
     visualize_data();
+}
+
+function close_to_border(y, fullorpartial) {
+    if (fullorpartial == "partial") {
+        if (y < LABEL_ROLE_TOP_LEFT_Y + 6 * LABEL_HEIGHT) {
+        var dis_to_top = Math.abs(LABEL_ROLE_TOP_LEFT_Y - y);
+        if (dis_to_top <= FIRST_TWO_ROWS_BOUND) {
+            return y + LABEL_HEIGHT + TOP_BORDER_OFFSET - POPUP_WEIGHT
+        }
+        return y + dis_to_top * TOP_BORDER_MULTIPLIER - POPUP_WEIGHT;
+        } else {
+            return y - POPUP_WEIGHT
+        }
+    } else if (fullorpartial == "full") {
+        var popupheight = POPUP_LABEL_HEIGHT * 5 + (num_rotations + 1) * POPUP_ROTATION_SIZE;
+        if (y + popupheight - app_height > -POPUP_LABEL_HEIGHT * 6) {
+            return y - (POPUP_LABEL_HEIGHT * 6.5 + y + popupheight - app_height) - POPUP_WEIGHT
+        } else if (y < LABEL_ROLE_TOP_LEFT_Y + 6 * LABEL_HEIGHT) {
+            var dis_to_top = Math.abs(LABEL_ROLE_TOP_LEFT_Y - y);
+            if (dis_to_top <= FIRST_TWO_ROWS_BOUND) {
+                return y + LABEL_HEIGHT + TOP_BORDER_OFFSET - POPUP_WEIGHT
+            }
+            return y + dis_to_top * TOP_BORDER_MULTIPLIER - POPUP_WEIGHT;
+        } else {
+            return y - POPUP_WEIGHT
+        }
+    }
+
+
 }
