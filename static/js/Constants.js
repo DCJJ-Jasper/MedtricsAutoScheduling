@@ -311,13 +311,13 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "---\n" +
     "Num_rotations,8\n" +
     "ROTATION_ID, ROTATION,WORK_WITH_ALLOWED_VACATION,MINIMUM_BLOCK_LENGTH,MAX_BLOCKS_PER_YEAR,TYPE\n" +
-    "0,Ambulatory Medicine Blocks,Yes,1,6,Core\n" +
+    "0,Ambulatory Medicine Blocks,Yes,0.25,6,Core\n" +
     "1,Backup Staffing / Urgent Visit,No,1,6,Core\n" +
     "2,Coronary Care Unit,Yes,1,6,Core\n" +
     "3,Elective,No,0.25,1,Core\n" +
     "4,Emergency Medicine,No,1,6,Core\n" +
     "5,Inpatient Wards,No,1,6,Core\n" +
-    "6,Medical Intensive Care Unit,No,1,6,Core\n" +
+    "6,Medical Intensive Care Unit,No,0.5,6,Core\n" +
     "7,Neurology,Yes,1,6,Core\n" +
     "---\n" +
     "Workforce_requirements,8\n" +
