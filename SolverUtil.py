@@ -170,8 +170,8 @@ def doubleSchedule(currentSchedule, prefilledSchedule):
     for trainee in range(num_trainee):
         for block in range(num_block):
             if (currentSchedule[trainee][block] == -3):
-                result_schedule[trainee].append(prefilledSchedule[trainee][block])
-                result_schedule[trainee].append(prefilledSchedule[trainee][block+1])
+                result_schedule[trainee].append(prefilledSchedule[trainee][2*block])
+                result_schedule[trainee].append(prefilledSchedule[trainee][2*block+1])
             else:
                 result_schedule[trainee].append(currentSchedule[trainee][block])
                 result_schedule[trainee].append(currentSchedule[trainee][block])
