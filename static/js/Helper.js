@@ -1098,7 +1098,7 @@ function proceedAnimation() {
             var x2 = base_x + num_block * SQUARE_SIZE + (num_block - 1) * SQUARE_DISTANCE;
             line_graphic.moveTo(x1, y);
             line_graphic.lineTo(x2, y);
-        }
+        }a
 
         // Min chart line
         y1 = base_y + in_between_min_height[animation_count] * SQUARE_SIZE;

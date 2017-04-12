@@ -636,7 +636,7 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
 
 
 $(document).ready(function () {
-    read_in_data_from_medtrics(FAKE_TEXT);
+    read_in_data_from_medtrics(PROBLEM_TEXT);
 
     var num_pgy_vis; // Num of students visualized
     if (current_pgy == "PGY1") num_pgy_vis = num_pgy1;
