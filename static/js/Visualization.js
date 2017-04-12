@@ -461,9 +461,9 @@ function onPopupPressed() {
     var rot_change_to = this.rot_id.toString();
     if (trainee_selected && Number.isFinite(block_num_selected) && sprite_selected && rot_change_to != sprite_selected.rot_id) {
         trainee_selected.scheduled_blocks[block_num_selected] = rot_change_to;
-        sprite_selected.rot_id = this.rot_id;
+        sprite_selected.rot_id = rot_change_to;
         sprite_selected.rot_name = this.rot_name;
-        sprite_selected.square.id = this.rot_id;
+        sprite_selected.square.id = rot_change_to;
         sprite_selected.square.rot_name = this.rot_name;
 
         // Change the square color
@@ -482,16 +482,15 @@ function onPopupPressed() {
         // Change the previous square's texture
         var prev_square = find_prev_square(trainee_selected, block_num_selected);
         if (prev_square) {
-            // if prev_square is a long square
-            if (prev_square.rot_id != rot_change_to) {
-                prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[prev_square.rot_id]);
+            if (prev_square.sprite.rot_id != rot_change_to) {
                 squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].removeChild(prev_square.sprite);
+                prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_SQUARE_TEXTURE[prev_square.sprite.rot_id]);
                 squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].addChild(prev_square.sprite);
             }
             else {
-                prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[prev_square.rot_id]);
+                prev_square.sprite.texture = prev_square.renderer.generateTexture(ROTATIONS_LONG_SQUARE_TEXTURE[rot_change_to]);
                 squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].removeChild(prev_square.sprite);
-                squares_dict[prev_square.sprite.role+ "-" + prev_square.sprite.rot_id.toString()].addChild(prev_square.sprite);
+                squares_dict[prev_square.sprite.role+ "-" + rot_change_to].addChild(prev_square.sprite);
             }
         }
 
