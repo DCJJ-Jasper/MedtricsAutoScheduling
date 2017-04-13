@@ -48,6 +48,7 @@ var app_height;
 var app;
 var static_stuffs;
 var pgy_container;
+var loader_container;
 
 var rot_squares_list;
 var underdone_list;
@@ -104,6 +105,8 @@ var rotation_squares;
 var rotation_squares_container;
 var temp_graphic;
 var temp_line;
+var loader_gif;
+var loader_label;
 
 var line_graphic;
 
@@ -544,7 +547,8 @@ $('#clear_btn').click(function onClearPressed() {
  * When schedule button is clicked
  */
 $('#save_btn').click(function onSavePressed() {
-    download(schedule.get_schedule_info_csv(), "schedule.csv", "text/plain")
+    download(schedule.get_schedule_info_csv(), "schedule.csv", "text/plain");
+    finish_download_dialog();
 });
 
 /**
@@ -578,6 +582,7 @@ $('#solver_schedule_btn').qtip({
 $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
 
     if (!isScheduled) {
+        open_modal();
         $.ajax({
         type: "POST",
         url: "/requestToSchedule/greedy",
@@ -585,10 +590,10 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
+            close_modal();
             if (!isShown) {
                 isShown = true;
                 isScheduled = true;
-                alert('Scheduling');
                 // Read in the data
                 var sample_text = data['data'];
                 console.log(sample_text);
@@ -600,7 +605,7 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
             }
         }
     });}
-    else {alert('Scheduled');}
+    else {alert_scheduled();}
 });
 
 /**
@@ -608,6 +613,7 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
  */
 $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
     if (!isScheduled) {
+        open_modal();
         $.ajax({
         type: "POST",
         url: "/requestToSchedule/solver",
@@ -615,10 +621,10 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
+            close_modal();
             if (!isShown) {
                 isShown = true;
                 isScheduled = true;
-                alert('Scheduling');
 
                 // Read in the data
                 var sample_text = data['data'];
@@ -630,7 +636,7 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
             }
         }
     });}
-    else {alert('Scheduled');}
+    else {alert_scheduled();}
 });
 
 

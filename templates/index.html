@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="../static/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="../static/css/style.css" />
     <link rel="stylesheet" href="../static/css/jquery.qtip.min.css" />
+    <link rel="stylesheet" href="../static/css/magnific-popup.css" />
 
     <!--=============== favicons ===============-->
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png')}}">
@@ -14,6 +15,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.switch-button.js') }}"></script>
+
 <!-- Top Menu -->
 <div class="w3-container top">
     <img src="../static/images/MedtricsLogo-01.png" />
@@ -54,7 +56,8 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/Constants.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/Class.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/Visualization.js') }}"></script>
-<!--<div id="modal">Loading data...<br>-->
-                  <!--<img id="loader" src="{{ url }}/static/images/ajax-loader.gif"/> </div>-->
+<!-- Magnific Popup core JS file -->
+<script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+
 </body>
 </html>
