@@ -648,16 +648,16 @@ var PROBLEM_TEXT = "Program,Psychiatry,13\n" +
     "8,Fred,Marston\n" +
     "9,Dodie,Woodman\n" +
     "10,Edie,Ballin\n" +
-    "11,Christine,Weible\n" +
-    "34,Fred,Marston\n" +
-    "35,Dodie,Woodman\n" +
-    "36,Edie,Ballin\n" +
-    "37,Christine,Weible\n" +
+    "11,Chris,Shadek\n" +
+    "34,Jasper,Ding\n" +
+    "35,AC,Li\n" +
+    "36,Xiaoying,Pu\n" +
+    "37,Anmol,Singh\n" +
     "56,Dorothea,Steckler\n" +
-    "57,Fred,Marston\n" +
-    "58,Dodie,Woodman\n" +
-    "59,Edie,Ballin\n" +
-    "60,Christine,Weible\n" +
+    "57,John,Simmons\n" +
+    "58,Courtney,Bolivar\n" +
+    "59,Eddy,Lopez\n" +
+    "60,Brian,King\n" +
     "Num_PGY2,20\n" +
     "12,Corina,Colwell\n" +
     "13,Corrin,Ingersoll\n" +
