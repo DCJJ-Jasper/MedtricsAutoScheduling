@@ -37,6 +37,7 @@ Trainee.prototype.set_scheduled_blocks = function(scheduled_blocks) {
 
 Trainee.prototype.set_empty_schedule_blocks = function () {
     this.scheduled_blocks = new Array(this.num_block).fill(EMPTY_BLOCK_GRAPHIC_ID);
+    this.processed_reqs = Object.assign({}, this.base_reqs);
 };
 
 /**

@@ -76,6 +76,8 @@ var underdone_bars = {};
 var old_underdone_arrs;
 var new_underdone_arrs;
 var in_between_underdone_arrs;
+var underdone_label;
+var overdone_label;
 
 var overdone_bars = {};
 var old_overdone_arrs;
@@ -109,6 +111,10 @@ var loader_gif;
 var loader_label;
 
 var line_graphic;
+
+var block_labels  = [];
+
+var switch_button;
 
 // GRAPHIC CONTROL VARIABLES
 var square_selected = false;
@@ -527,8 +533,7 @@ function resetBlur() {
 
 var isShown = false;
 var isScheduled = false;
-$("#radio-form").fadeOut();
-
+$("#radio-form").fadeIn();
 
 /**
  * When schedule button is clicked
@@ -537,6 +542,9 @@ $('#clear_btn').click(function onClearPressed() {
     // isScheueld no longer true.
     isScheduled = false;
     isShown = false;
+
+    // Turn back to schedule mode if it is currently exploring
+    if (current_mode == MODE_EXPLORE) switch_button._toggleSwitch(false);
 
     // Clean all schedules.
     reset_schedule();
@@ -594,6 +602,7 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
             if (!isShown) {
                 isShown = true;
                 isScheduled = true;
+
                 // Read in the data
                 var sample_text = data['data'];
                 console.log(sample_text);
@@ -602,6 +611,8 @@ $('#greedy_schedule_btn').click(function onGreedySchedulePressed() {
                 reset_app();
                 sort_trainees(trainees);
                 visualize_data();
+
+                if (current_mode == MODE_SCHEDULE) switch_button._toggleSwitch(false);
             }
         }
     });}
@@ -633,6 +644,8 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
                 reset_app();
                 sort_trainees(trainees);
                 visualize_data();
+
+                if (current_mode == MODE_SCHEDULE) switch_button._toggleSwitch(false);
             }
         }
     });}
@@ -674,6 +687,7 @@ $("input[type=checkbox]").switchButton({
     button_width: 25
 });
 
+
 $("input[type=checkbox]").on("change", function(){
     if ($(this).is(":not(:checked)")) {
         current_mode = MODE_EXPLORE;
@@ -683,6 +697,5 @@ $("input[type=checkbox]").on("change", function(){
     else if ($(this).is(":checked")) {
         current_mode = MODE_SCHEDULE;
         $("#radio-form").fadeIn(FADE_LENGTH);
-       }
-
+    }
 });
