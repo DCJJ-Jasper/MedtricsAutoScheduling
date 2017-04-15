@@ -1253,5 +1253,38 @@ function close_to_border(y, fullorpartial) {
         }
     }
 
+}
 
+function open_modal() {
+    $.magnificPopup.open({
+        items: {
+            src: $('<div id="modal" class="white-popup-loader center"><h4>Scheduling...</h4><img class="center" src="static/images/loader.gif"/></div>')
+        },
+        type: 'inline',
+        modal: true
+    })
+}
+
+function close_modal() {
+        $.magnificPopup.close();
+}
+
+function alert_scheduled() {
+    $.magnificPopup.open({
+        items: {
+            src: $('<div id="modal" class="white-popup center"><h4>Scheduled...</h4></div>')
+        },
+        type: 'inline',
+        closeBtnInside: true
+    })
+}
+
+function finish_download_dialog() {
+    $.magnificPopup.open({
+        items: {
+            src: $('<div id="modal" class="white-popup center"><h4>Your download will begin shortly.</h4></div>')
+        },
+        type: 'inline',
+        closeBtnInside: true
+    })
 }
