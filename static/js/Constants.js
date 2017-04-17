@@ -104,7 +104,7 @@ var FIRST_TWO_ROWS_BOUND = 47;
 //////////////////
 
 var BACKGROUND_COLOR = [255.0, 255.0, 255.0]
-var SQUARE_BLUR = 0.2;
+var SQUARE_BLUR = 0.5;
 var OTHER_ROLE_BLUR = 0.08;
 
 var ROTATIONS_COLOR = {
@@ -179,6 +179,15 @@ var POPUP_CLOSE_BTN_OFFSET = 262;
 
 var MODE_EXPLORE = 0;
 var MODE_SCHEDULE = 1;
+
+var SCHEDULE_MODE_WHOLE = 0;
+var SCHEDULE_MODE_QUARTER = 1;
+
+var STATE_EXPLORE = "explore";
+var STATE_INDIVIDUAL = "invidiual";
+var STATE_SELECT = "selected";
+var STATE_POPUP = "popup";
+var STATE_POPUP_SELECT_BUFFER = "buffer";
 
 /////////////////////
 // ANIMATION CONSTANT

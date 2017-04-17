@@ -65,6 +65,8 @@ function reset_schedule() {
  */
 function read_in_data(input_text) {
 
+    var schedules_list = [];
+
     reset_variables();
     var str_list = input_text.split("\n");
 
@@ -104,10 +106,11 @@ function read_in_data(input_text) {
         id = parseInt(data[1]);
         role = data[2];
         schedule_info = data[3].split(".");
+        schedules_list.push(schedule_info);
 
         // Create a new trainee based on these information
         new_trainee = new Trainee(name, role, id, num_block, id_list);
-        new_trainee.set_scheduled_blocks(schedule_info);
+        new_trainee.to_be_scheduled = schedule_info;
         trainees.push(new_trainee);
         trainees_dict[id] = new_trainee;
     }
@@ -207,6 +210,10 @@ function read_in_data(input_text) {
 
     for (var i = num_pgy1 + num_pgy2; i < num_trainees ; i++) {
         trainees[i].set_requirements(pgy3_reqs)
+    }
+
+    for (var i = 0; i < num_trainees; i++) {
+        trainees[i].set_scheduled_blocks(schedules_list[i])
     }
 }
 
@@ -637,8 +644,6 @@ function visualize_data() {
             var id = t.scheduled_blocks[rot_count];
             if (id == -1) id = EMPTY_BLOCK_GRAPHIC_ID;
 
-            t.processed_reqs[id] -= 1;
-
             color = convert_to_color_code(ROTATIONS_COLOR[id]);
 
             var x = start_x + rot_count * UNIT_RANGE + Math.floor(rot_count / 4) * BLOCK_DISTANCE;
@@ -666,8 +671,8 @@ function visualize_data() {
             newSquare.draw();
             squares_sprites_list.push(newSquare.sprite);
             newSquare.sprite.on('mousedown', onSquarePressed);
-            newSquare.sprite.on('mouseover', onButtonOver);
-            newSquare.sprite.on('mouseout', onButtonOut);
+            newSquare.sprite.on('mouseover', onSquareOver);
+            newSquare.sprite.on('mouseout', onSquareOut);
 
             squares_dict[role + "-" + id.toString()].addChild(newSquare.sprite);
             pgy_squares_list.push(newSquare.sprite);
@@ -1081,14 +1086,19 @@ function find_next_square(trainee, block_num) {
     }
 }
 
+function find_square(trainee, block_num) {
+    return helper_square_dict[trainee.id][block_num];
+}
+
 /**
  * Move forward with the animation.
  */
 function proceedAnimation() {
 
-    console.log(animation_count);
-
-    if (animation_count <= ANIMATION_LENGTH) {
+    if (animation_count <= ANIMATION_LENGTH && (program_state == STATE_SELECT || program_state == STATE_POPUP_SELECT_BUFFER)) {
+        draw_underdone_and_overdone_bars();
+        animation_count += 1;
+    } else if (animation_count <= ANIMATION_LENGTH) {
 
         // Reset line graphic
         line_graphic.clear()
@@ -1354,6 +1364,41 @@ function draw_underdone_and_overdone_bars() {
     line_graphic.lineStyle(2, OVERDONE_LINE_COLOR, OVERDONE_INTEGER_ALPHA);
     line_graphic.moveTo(base_x, base_y);
     line_graphic.lineTo(base_x, base_y + UNIT_RANGE * num_pgy_vis);
+}
 
+function calculate_underdone_overdone_bars() {
 
+    // Calculate information regarding underdone bars
+    var trainee_count = 0;
+    for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
+        var t = trainees[trainee_i];
+        if (t.role != current_pgy) continue; // Skip the loop if it's not the pgy in need of visualized
+
+        // Push underdone_arr into underdone array
+        var underdone_arr = t.get_underdone_array();
+        old_underdone_arrs[trainee_count] = new_underdone_arrs[trainee_count];
+        new_underdone_arrs[trainee_count] = underdone_arr;
+        in_between_underdone_arrs[trainee_count] =
+            generate_in_between_arr(old_underdone_arrs[trainee_count],
+                new_underdone_arrs[trainee_count],
+                ANIMATION_LENGTH);
+        trainee_count += 1;
+    }
+
+    // Calculate information regarding overdone bars
+    var trainee_count = 0;
+    for (var trainee_i = 0; trainee_i < trainees.length; trainee_i++) {
+        var t = trainees[trainee_i];
+        if (t.role != current_pgy) continue; // Skip the loop if it's not the pgy in need of visualized
+
+        // Push overdone_arr into overdone array
+        var overdone_arr = t.get_overdone_array();
+        old_overdone_arrs[trainee_count] = new_overdone_arrs[trainee_count];
+        new_overdone_arrs[trainee_count] = overdone_arr;
+        in_between_overdone_arrs[trainee_count] =
+            generate_in_between_arr(old_overdone_arrs[trainee_count],
+                new_overdone_arrs[trainee_count],
+                ANIMATION_LENGTH);
+        trainee_count += 1;
+    }
 }
