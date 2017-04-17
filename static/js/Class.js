@@ -20,7 +20,8 @@ function Trainee(name, role, id, num_block) {
     this.id = id;
     this.num_block = num_block;
     this.id_list = id_list;
-    this.scheduled_blocks = [];
+    this.scheduled_blocks = new Array(this.num_block).fill(EMPTY_BLOCK_GRAPHIC_ID);
+    this.to_be_scheduled = "";
 
     this.base_reqs = {};
     this.processed_reqs = {};
@@ -32,11 +33,20 @@ Trainee.prototype.set_requirements = function(reqs) {
 };
 
 Trainee.prototype.set_scheduled_blocks = function(scheduled_blocks) {
-    this.scheduled_blocks = scheduled_blocks;
+    for (var i = 0; i < this.num_block; i++) {
+        this.fill_in(i, scheduled_blocks[i]);
+    }
 };
 
 Trainee.prototype.set_empty_schedule_blocks = function () {
     this.scheduled_blocks = new Array(this.num_block).fill(EMPTY_BLOCK_GRAPHIC_ID);
+    this.processed_reqs = Object.assign({}, this.base_reqs);
+};
+
+Trainee.prototype.fill_in = function(block_num, rot_id) {
+    if (this.scheduled_blocks[block_num] != EMPTY_BLOCK_GRAPHIC_ID) this.processed_reqs[this.scheduled_blocks[block_num]] += 1;
+    this.scheduled_blocks[block_num] = String(rot_id);
+    this.processed_reqs[rot_id] -= 1
 };
 
 /**

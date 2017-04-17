@@ -1145,7 +1145,7 @@ class Schedule:
                         #         break
                         # pass
                         i = random.randint(0, int(self.num_block/2)-1)
-                        if ((trainee.block[4*i].id == -1) and (trainee.block[2*i+1].id == -1) and (rotation.processed_max2[4*i] > 0)):
+                        if ((trainee.block[2*i].id == -1) and (trainee.block[2*i+1].id == -1) and (rotation.processed_max2[2*i] > 0)):
                             self.fill_in(trainee, 2 * i, rotation)
                             self.fill_in(trainee, 2 * i + 1, rotation)
 

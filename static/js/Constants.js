@@ -43,7 +43,7 @@ var LABEL_TOP_LEFT_Y = 40 + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST;
 var POPUP_LABEL_SIZE = 14;
 var POPUP_LABEL_HEIGHT = 22;
 var POPUP_SQUARE_SIZE = 14;
-var POPUP_CLOSE_OFFSET = 35
+var POPUP_CLOSE_OFFSET = 35;
 var POPUP_INFO_X_OFFSET = 85;
 var POPUP_PADDING = 7;
 var POPUP_WIDTH = 350;
@@ -69,26 +69,42 @@ var CHART_RANGE = UNIT_RANGE;
 
 var UNDERDONE_BASE_Y = LABEL_ROLE_TOP_LEFT_Y;
 var UNDERDONE_OFFSET_X = 40;
-var UNDERDONE_UNIT_LENGTH = SQUARE_SIZE / 2;
+var UNDERDONE_UNIT_LENGTH = 6;
 var UNDERDONE_UNIT_RANGE = UNIT_RANGE;
 var UNDERDONE_SIZE = SQUARE_SIZE;
+var UNDERDONE_LINE_COLOR = "0xEDEDED";
+var UNDERDONE_QUARTER_ALPHA = 0.2;
+var UNDERDONE_INTEGER_ALPHA = 1;
+var UNDERDONE_LABEL_SIZE = 14;
+var UNDERDONE_LABEL_COLOR = 0x121212;
+var UNDERDONE_LABEL_HEIGHT = BLOCK_LABEL_HEIGHT;
 
 var OVERDONE_OFFSET_X = UNDERDONE_OFFSET_X;
 var OVERDONE_UNIT_LENGTH = UNDERDONE_UNIT_LENGTH;
 var OVERDONE_UNIT_RANGE = UNDERDONE_UNIT_RANGE;
 var OVERDONE_SIZE = UNDERDONE_SIZE;
+var OVERDONE_LINE_COLOR = UNDERDONE_LINE_COLOR;
+var OVERDONE_QUARTER_ALPHA = UNDERDONE_QUARTER_ALPHA;
+var OVERDONE_INTEGER_ALPHA = UNDERDONE_INTEGER_ALPHA;
+var OVERDONE_LABEL_SIZE = UNDERDONE_LABEL_SIZE;
+var OVERDONE_LABEL_COLOR = UNDERDONE_LABEL_COLOR;
+var OVERDONE_LABEL_HEIGHT = UNDERDONE_LABEL_HEIGHT;
 
-var UNDER_OVER_DISTANCE = 10;
+var UNDER_OVER_DISTANCE = 40;
 
 var GROUP_DISTANCE = 40; // Distance between two role groups
 var CHART_DISTANCE = 40; // Distance between charts and square
+
+var TOP_BORDER_OFFSET = 60;
+var TOP_BORDER_MULTIPLIER = 1.2;
+var FIRST_TWO_ROWS_BOUND = 47;
 
 //////////////////
 // COLOR CONSTANTS
 //////////////////
 
 var BACKGROUND_COLOR = [255.0, 255.0, 255.0]
-var SQUARE_BLUR = 0.2;
+var SQUARE_BLUR = 0.5;
 var OTHER_ROLE_BLUR = 0.08;
 
 var ROTATIONS_COLOR = {
@@ -163,6 +179,15 @@ var POPUP_CLOSE_BTN_OFFSET = 262;
 
 var MODE_EXPLORE = 0;
 var MODE_SCHEDULE = 1;
+
+var SCHEDULE_MODE_WHOLE = 0;
+var SCHEDULE_MODE_QUARTER = 1;
+
+var STATE_EXPLORE = "explore";
+var STATE_INDIVIDUAL = "invidiual";
+var STATE_SELECT = "selected";
+var STATE_POPUP = "popup";
+var STATE_POPUP_SELECT_BUFFER = "buffer";
 
 /////////////////////
 // ANIMATION CONSTANT
@@ -307,13 +332,13 @@ var FAKE_TEXT = "Program,Psychiatry,13\n" +
     "---\n" +
     "Num_rotations,8\n" +
     "ROTATION_ID, ROTATION,WORK_WITH_ALLOWED_VACATION,MINIMUM_BLOCK_LENGTH,MAX_BLOCKS_PER_YEAR,TYPE\n" +
-    "0,Ambulatory Medicine Blocks,Yes,1,6,Core\n" +
+    "0,Ambulatory Medicine Blocks,Yes,0.25,6,Core\n" +
     "1,Backup Staffing / Urgent Visit,No,1,6,Core\n" +
     "2,Coronary Care Unit,Yes,1,6,Core\n" +
     "3,Elective,No,0.25,1,Core\n" +
     "4,Emergency Medicine,No,1,6,Core\n" +
     "5,Inpatient Wards,No,1,6,Core\n" +
-    "6,Medical Intensive Care Unit,No,1,6,Core\n" +
+    "6,Medical Intensive Care Unit,No,0.5,6,Core\n" +
     "7,Neurology,Yes,1,6,Core\n" +
     "---\n" +
     "Workforce_requirements,8\n" +
@@ -644,16 +669,16 @@ var PROBLEM_TEXT = "Program,Psychiatry,13\n" +
     "8,Fred,Marston\n" +
     "9,Dodie,Woodman\n" +
     "10,Edie,Ballin\n" +
-    "11,Christine,Weible\n" +
-    "34,Fred,Marston\n" +
-    "35,Dodie,Woodman\n" +
-    "36,Edie,Ballin\n" +
-    "37,Christine,Weible\n" +
+    "11,Chris,Shadek\n" +
+    "34,Jasper,Ding\n" +
+    "35,AC,Li\n" +
+    "36,Xiaoying,Pu\n" +
+    "37,Anmol,Singh\n" +
     "56,Dorothea,Steckler\n" +
-    "57,Fred,Marston\n" +
-    "58,Dodie,Woodman\n" +
-    "59,Edie,Ballin\n" +
-    "60,Christine,Weible\n" +
+    "57,John,Simmons\n" +
+    "58,Courtney,Bolivar\n" +
+    "59,Eddy,Lopez\n" +
+    "60,Brian,King\n" +
     "Num_PGY2,20\n" +
     "12,Corina,Colwell\n" +
     "13,Corrin,Ingersoll\n" +

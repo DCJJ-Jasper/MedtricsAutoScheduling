@@ -62,6 +62,7 @@
                 this.options.checked = this.element.prop("checked");
             }
 
+            switch_button = this;
             this._initLayout();
             this._initEvents();
         },
