@@ -1227,7 +1227,7 @@ function close_modal() {
 function alert_scheduled() {
     $.magnificPopup.open({
         items: {
-            src: $('<div id="modal" class="white-popup center"><h4>Scheduled...</h4></div>')
+            src: $('<div id="modal" class="white-popup center"><br/><p>A schedule has been generated. If you want to reschedule, please clear the current schedule first.</p></div>')
         },
         type: 'inline',
         closeBtnInside: true
