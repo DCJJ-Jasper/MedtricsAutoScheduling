@@ -33,6 +33,7 @@ var rot_name_to_id_dict = {};
 var id_list = [];
 
 var schedule;
+var problem_text = FAKE_TEXT;
 
 var trainee_selected = null;
 var block_num_selected = Number.POSITIVE_INFINITY;
@@ -693,25 +694,7 @@ $('#solver_schedule_btn').click(function onSolverSchedulePressed() {
     else {alert_scheduled();}
 });
 
-
-$(document).ready(function () {
-    read_in_data_from_medtrics(PROBLEM_TEXT);
-
-    var num_pgy_vis; // Num of students visualized
-    if (current_pgy == "PGY1") num_pgy_vis = num_pgy1;
-    else if (current_pgy == "PGY2") num_pgy_vis = num_pgy2;
-    else if (current_pgy == "PGY3") num_pgy_vis = num_pgy3;
-
-    app_height = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
-        num_pgy_vis * LABEL_HEIGHT + CHART_DISTANCE + num_pgy_vis * CHART_UNIT + 100;
-    
-    create_objects(app_width, app_height);
-    sort_trainees(trainees);
-    for (var t of trainees) {
-        helper_square_dict[t.id] = new Array(num_block);
-    }
-    visualize_data();
-});
+$(document).ready();
 
 $(document).keyup(function(e) {
      if (e.keyCode == 27) { // escape key maps to keycode `27`
@@ -751,3 +734,52 @@ $("#radio_quarter").on("click", function() {
     schedule_mode = SCHEDULE_MODE_QUARTER;
     console.log("SHIT");
 })
+
+var fileInput = $("#file_upload");
+
+$("#upload_btn").click(function() {
+    $("#file_upload").click();
+})
+
+$("#file_upload").on('change', function() {
+    var input = fileInput.get(0);
+
+    // Create a reader object
+    var reader = new FileReader();
+    if (input.files.length) {
+        var textFile = input.files[0];
+        // Read the file
+        reader.readAsText(textFile);
+        // When it's loaded, process it
+        $(reader).on('load', processFile);
+    } else {
+        alert('Please upload a file before continuing')
+    }
+});
+
+function processFile(e) {
+    var file = e.target.result;
+    problem_text = file;
+    processProblemText();
+}
+
+function processProblemText() {
+    read_in_data_from_medtrics(problem_text);
+
+    var num_pgy_vis; // Num of students visualized
+    if (current_pgy == "PGY1") num_pgy_vis = num_pgy1;
+    else if (current_pgy == "PGY2") num_pgy_vis = num_pgy2;
+    else if (current_pgy == "PGY3") num_pgy_vis = num_pgy3;
+
+    app_height = LABEL_ROLE_TOP_LEFT_Y + LABEL_ROLE_HEIGHT + ROLE_LABEL_TRAINEE_DIST +
+        num_pgy_vis * LABEL_HEIGHT + CHART_DISTANCE + num_pgy_vis * CHART_UNIT + 100;
+
+    create_objects(app_width, app_height);
+    sort_trainees(trainees);
+    for (var t of trainees) {
+        helper_square_dict[t.id] = new Array(num_block);
+    }
+    visualize_data();
+}
+
+console.log(PROBLEM_TEXT)
