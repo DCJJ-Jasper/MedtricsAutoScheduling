@@ -780,6 +780,4 @@ function processProblemText() {
         helper_square_dict[t.id] = new Array(num_block);
     }
     visualize_data();
-}
-
-console.log(PROBLEM_TEXT)
+};
