@@ -458,24 +458,27 @@ def request_schedule(method):
         # ---------------------------
 
         else:
-            (pgy1_req_full, pgy1_req_half, pgy1_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy1_req)
-            (pgy1_lim_full, pgy1_lim_half, pgy1_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy1_lim)
-            (pgy2_req_full, pgy2_req_half, pgy2_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy2_req)
-            (pgy2_lim_full, pgy2_lim_half, pgy2_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy2_lim)
-            (pgy3_req_full, pgy3_req_half, pgy3_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy3_req)
-            (pgy3_lim_full, pgy3_lim_half, pgy3_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy3_lim)
+            # Get the Full, Half, Quarter Requirements and Rotation Limit Counts
+            pgy1_req_full, pgy1_req_half, pgy1_req_quarter = SolverUtil.generateFullHalfQuarterDict(pgy1_req)
+            pgy1_lim_full, pgy1_lim_half, pgy1_lim_quarter = SolverUtil.generateFullHalfQuarterDict(pgy1_lim)
+            pgy2_req_full, pgy2_req_half, pgy2_req_quarter = SolverUtil.generateFullHalfQuarterDict(pgy2_req)
+            pgy2_lim_full, pgy2_lim_half, pgy2_lim_quarter = SolverUtil.generateFullHalfQuarterDict(pgy2_lim)
+            pgy3_req_full, pgy3_req_half, pgy3_req_quarter = SolverUtil.generateFullHalfQuarterDict(pgy3_req)
+            pgy3_lim_full, pgy3_lim_half, pgy3_lim_quarter = SolverUtil.generateFullHalfQuarterDict(pgy3_lim)
 
+            # Random seed for pruning, to ensure replicability
             seed = 100
             num_trainee_list = (num_pgy1, num_pgy2, num_pgy3)
             fullPrefilled, halfPrefilled, quarterPrefilled = SolverUtil.generateFullHalfQuarterPrefilled(prefilled_schedule)
 
+            # Solve the Full Schedule (13 resolution)
             presolve_schedule = fullPrefilled
             resultArray = SolverUtil.solveSchedule(presolve_schedule, num_block // 4, num_trainee_list, rotations,
                                                    pgy1_req_full, pgy1_lim_full,
                                                    pgy2_req_full, pgy2_lim_full,
                                                    pgy3_req_full, pgy3_lim_full)
 
-            # Double to halves
+            # Double to halves and solve (26 resolution)
             presolve_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray, halfPrefilled),
                                                          halfPrefilled, seed, num_trainee_list, rotations)
             resultArray = SolverUtil.solveSchedule(presolve_schedule, num_block // 2, num_trainee_list, rotations,
@@ -483,7 +486,7 @@ def request_schedule(method):
                                                    pgy2_req_half, pgy2_lim_half,
                                                    pgy3_req_half, pgy3_lim_half)
 
-            # Double again to quarters
+            # Double again to quarters and solve (52 resolution)
             presolve_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray, quarterPrefilled),
                                                          quarterPrefilled, seed, num_trainee_list, rotations)
             resultArray = SolverUtil.solveSchedule(presolve_schedule, num_block, num_trainee_list, rotations,
@@ -491,9 +494,7 @@ def request_schedule(method):
                                                    pgy2_req_quarter, pgy2_lim_quarter,
                                                    pgy3_req_quarter, pgy3_lim_quarter)
 
-
-            # print(resultArray)
-
+            # Filling the schedule class with the result schedule from Solver
             schedule = Class.Schedule(trainees, rotations)
 
             # A hack to allow vis to work for solver.
@@ -502,9 +503,11 @@ def request_schedule(method):
             # Fill in using idiomatic way
             for trainee_num in range(num_trainees):
                 for block_num in range(num_block):
-                    # print rotations_dict[resultArray[trainee_num][block_num]]
                     schedule.fill_in(trainees[trainee_num], block_num, rotations_dict[resultArray[trainee_num][block_num]])
 
+        # ------------
+        # Done scheduling, return the json object
+        # ------------
         global scheduleText, isScheduled
         scheduleText = schedule.generate_info_file()
         isScheduled = True
