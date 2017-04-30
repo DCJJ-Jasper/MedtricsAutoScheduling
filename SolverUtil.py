@@ -182,8 +182,8 @@ def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, ro
         # update the count array to reflect the pruned block
         for typeTrainee in typeTraineeList:
             count_array[block][rotation][typeTrainee] -= 1
-
-    print("Pruned " + str(pruneCount))
+    if DEBUG_PRINT:
+        print("Pruned " + str(pruneCount))
     return prunedSchedule
 
 
