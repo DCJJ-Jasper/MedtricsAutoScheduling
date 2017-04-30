@@ -1,0 +1,356 @@
+Program,Psychiatry,13
+USER_ID,FIRST_NAME,LAST_NAME
+Num_PGY1,20
+1,Santhosh,Cherian
+2,Ron,Rivera
+3,Todd,Wilkinson
+4,Mary,Renner
+5,Randy,Moss
+6,Chris,Tokodi
+7,Grant,Fuhr
+8,Fred,Marston
+9,Dodie,Woodman
+10,Edie,Ballin
+11,Chris,Shadek
+34,Jasper,Ding
+35,AC,Li
+36,Xiaoying,Pu
+37,Anmol,Singh
+56,Dorothea,Steckler
+57,John,Simmons
+58,Courtney,Bolivar
+59,Eddy,Lopez
+60,Brian,King
+Num_PGY2,20
+12,Corina,Colwell
+13,Corrin,Ingersoll
+14,Soledad,Levey
+15,Ron,Dhillon
+16,Eileen,Telford
+17,In,Trimpe
+18,Larisa,Owen
+19,Gaynell,Vanleuven
+20,Milagros,Tanner
+21,Mila,Span
+22,Patrina,Pettaway
+38,Fred,Marston
+39,Dodie,Woodman
+40,Edie,Ballin
+41,Christine,Weible
+51,Dorothea,Steckler
+52,Fred,Marston
+53,Dodie,Woodman
+54,Edie,Ballin
+55,Christine,Weible
+Num_PGY3,30
+23,Takako,Jarrells
+24,Jenee,Lach
+25,Santina,Gwynn
+26,Alisia,Durbin
+27,Carolyne,Backes
+28,Reyes,Turberville
+29,Mignon,Jesus
+30,Carina,Milbourn
+31,Erick,Mines
+32,Timothy,Boyes
+33,Dorothea,Steckler
+42,Fred,Marston
+43,Dodie,Woodman
+44,Edie,Ballin
+45,Christine,Weible
+46,Dorothea,Steckler
+47,Fred,Marston
+48,Dodie,Woodman
+49,Edie,Ballin
+50,Christine,Weible
+61,Dorothea,Steckler
+62,Fred,Marston
+63,Dodie,Woodman
+64,Edie,Ballin
+65,Christine,Weible
+66,Dorothea,Steckler
+67,Fred,Marston
+68,Dodie,Woodman
+69,Edie,Ballin
+70,Christine,Weible
+---
+Num_rotations,24
+ROTATION_ID,ROTATION,WORK_WITH_ALLOWED_VACATION,MINIMUM_BLOCK_LENGTH,MAX_BLOCKS_PER_YEAR,TYPE
+0,Inpatient Psychiatry at VCUHS,Yes,1,6,Core
+1,Neurology,No,1,6,Core
+2,Emergency Medicine,Yes,1,6,Core
+3,Night Float,No,0.25,1,Core
+4,Inpatient Psychiatry at VAMC,No,1,6,Core
+5,Inpatient Psychiatry with Substance Abuse at VAMC,No,1,6,Core
+6,Inpatient Medicine,No,1,6,Elective
+7,Pediatrics,Yes,1,6,Elective
+8,Child and Adolescent Elective,No,1,6,Elective
+9,Consult Liaison at VCUHS,No,1,6,Elective
+10,ECT,No,0.25,6,Elective
+11,Eastern State Hospital/Forensics,Yes,1,6,Elective
+12,Outpatient Psychotherapy Clinic,No,1,6,Core
+13,ER Psychiatry Night Float,No,1,6,Core
+14,VAMC Night Float,No,1,6,Core
+15,General Psychiatry,No,1,6,Core
+16,Emergency Psychiatry,No,1,6,Core
+17,Didactics,No,1,6,Core
+18,Child and Adolescent,No,1,6,Core
+19,Psychotherapy,No,0.25,6,Core
+20,Grand Rounds,No,1,6,Core
+21,Consultation and Liaison Psychiatry,No,1,6,Core
+22,Community Psychiatry,No,1,6,Core
+23,Elective,No,0.25,6,Core
+---
+Workforce_requirements,24
+ROTATION_ID,ROTATION,LEVEL,MIN1,MAX1,MIN2,MAX2,MIN3,MAX3
+0,Inpatient Psychiatry at VCUHS,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1
+1,Neurology,1,10,0,0,1,10,-1,-1,-1,-1,-1,-1,-1,-1
+2,Emergency Medicine,1,10,1,10,1,10,-1,-1,-1,-1,-1,-1,-1,-1
+3,Night Float,1,10,1,10,1,10,-1,-1,-1,-1,-1,-1,-1,-1
+4,Inpatient Psychiatry at VAMC,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1
+5,Inpatient Psychiatry with Substance Abuse at VAMC,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1
+6,Inpatient Medicine,0,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1
+7,Pediatrics,1,10,1,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1
+8,Child and Adolescent Elective,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1
+9,Consult Liaison at VCUHS,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1
+10,ECT,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1
+11,Eastern State Hospital/Forensics,0,10,0,10,0,10,-1,-1,-1,-1,-1,-1,-1,-1
+12,Outpatient Psychotherapy Clinic,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+13,ER Psychiatry Night Float,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+14,VAMC Night Float,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+15,General Psychiatry,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+16,Emergency Psychiatry,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+17,Didactics,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+18,Child and Adolescent,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+19,Psychotherapy,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+20,Grand Rounds,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+21,Consultation and Liaison Psychiatry,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+22,Community Psychiatry,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+23,Elective,0,20,0,20,0,20,-1,-1,-1,-1,-1,-1,-1,-1
+---
+ROTATION,MIN_BLOCKS_REQUIRED
+PGY1_REQUIREMENT,24
+Inpatient Medicine,0
+Pediatrics,0
+Child and Adolescent Elective,0
+Consult Liaison at VCUHS,0
+ECT,0
+Eastern State Hospital/Forensics,0
+Outpatient Psychotherapy Clinic,0
+ER Psychiatry Night Float,0
+VAMC Night Float,0
+General Psychiatry,0
+Emergency Psychiatry,0
+Didactics,0
+Child and Adolescent,0
+Psychotherapy,0
+Grand Rounds,0
+Consultation and Liaison Psychiatry,0
+Community Psychiatry,0
+Inpatient Psychiatry at VCUHS,3
+Neurology,2
+Emergency Medicine,1
+Night Float,0.25
+Inpatient Psychiatry at VAMC,1
+Inpatient Psychiatry with Substance Abuse at VAMC,1
+Elective,2
+PGY2_REQUIREMENT,24
+Inpatient Medicine,1
+Pediatrics,2
+Child and Adolescent Elective,0
+Consult Liaison at VCUHS,0
+ECT,0
+Eastern State Hospital/Forensics,0
+Outpatient Psychotherapy Clinic,1
+ER Psychiatry Night Float,1
+VAMC Night Float,1
+General Psychiatry,0
+Emergency Psychiatry,0
+Didactics,0
+Child and Adolescent,0
+Psychotherapy,0
+Grand Rounds,0
+Consultation and Liaison Psychiatry,0
+Community Psychiatry,0
+Inpatient Psychiatry at VCUHS,1
+Neurology,0
+Emergency Medicine,0
+Night Float,0
+Inpatient Psychiatry at VAMC,0
+Inpatient Psychiatry with Substance Abuse at VAMC,0
+Elective,2
+PGY3_REQUIREMENT,24
+Inpatient Medicine,1
+Pediatrics,1
+Child and Adolescent Elective,0
+Consult Liaison at VCUHS,0
+ECT,0
+Eastern State Hospital/Forensics,0
+Outpatient Psychotherapy Clinic,0
+ER Psychiatry Night Float,0
+VAMC Night Float,0
+General Psychiatry,1
+Emergency Psychiatry,1
+Didactics,2
+Child and Adolescent,1
+Psychotherapy,0.25
+Grand Rounds,2
+Consultation and Liaison Psychiatry,0
+Community Psychiatry,0
+Inpatient Psychiatry at VCUHS,0
+Neurology,0
+Emergency Medicine,0
+Night Float,0
+Inpatient Psychiatry at VAMC,0
+Inpatient Psychiatry with Substance Abuse at VAMC,0
+Elective,0
+---
+ROTATION,LIMITATION
+PGY1_LIMITATION, 24
+Inpatient Medicine,52
+Pediatrics,52
+Child and Adolescent Elective,52
+Consult Liaison at VCUHS,52
+ECT,52
+Eastern State Hospital/Forensics,52
+Outpatient Psychotherapy Clinic,52
+ER Psychiatry Night Float,52
+VAMC Night Float,52
+General Psychiatry,52
+Emergency Psychiatry,52
+Didactics,52
+Child and Adolescent,52
+Psychotherapy,52
+Grand Rounds,52
+Consultation and Liaison Psychiatry,52
+Community Psychiatry,52
+Inpatient Psychiatry at VCUHS,4
+Neurology,3
+Emergency Medicine,1
+Night Float,2
+Inpatient Psychiatry at VAMC,520
+Inpatient Psychiatry with Substance Abuse at VAMC,52
+Elective,52
+PGY2_LIMITATION, 24
+Inpatient Medicine,52
+Pediatrics,52
+Child and Adolescent Elective,52
+Consult Liaison at VCUHS,52
+ECT,52
+Eastern State Hospital/Forensics,52
+Outpatient Psychotherapy Clinic,52
+ER Psychiatry Night Float,52
+VAMC Night Float,52
+General Psychiatry,52
+Emergency Psychiatry,52
+Didactics,52
+Child and Adolescent,52
+Psychotherapy,52
+Grand Rounds,52
+Consultation and Liaison Psychiatry,52
+Community Psychiatry,52
+Inpatient Psychiatry at VCUHS,52
+Neurology,52
+Emergency Medicine,52
+Night Float,52
+Inpatient Psychiatry at VAMC,0
+Inpatient Psychiatry with Substance Abuse at VAMC,0
+Elective,52
+PGY3_LIMITATION,24
+Inpatient Medicine,52
+Pediatrics,52
+Child and Adolescent Elective,52
+Consult Liaison at VCUHS,52
+ECT,52
+Eastern State Hospital/Forensics,52
+Outpatient Psychotherapy Clinic,52
+ER Psychiatry Night Float,52
+VAMC Night Float,52
+General Psychiatry,52
+Emergency Psychiatry,52
+Didactics,52
+Child and Adolescent,1
+Psychotherapy,52
+Grand Rounds,52
+Consultation and Liaison Psychiatry,52
+Community Psychiatry,52
+Inpatient Psychiatry at VCUHS,52
+Neurology,52
+Emergency Medicine,52
+Night Float,52
+Inpatient Psychiatry at VAMC,0
+Inpatient Psychiatry with Substance Abuse at VAMC,0
+Elective,52
+---
+Prefilled
+USERID,NAME,ROLE,SCHEDULE
+1,Santhosh Cherian,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+2,Ron Rivera,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+3,Todd Wilkinson,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+4,Mary Renner,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+5,Randy Moss,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+6,Chris Tokodi,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+7,Grant Fuhr,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+8,Fred Marston,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+9,Dodie Woodman,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+10,Edie Ballin,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+11,Christine Weible,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+12,Corina Colwell,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+13,Corrin Ingersoll,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+14,Soledad Levey,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+15,Ron Dhillon,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+16,Eileen Telford,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+17,In Trimpe,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+18,Larisa Owen,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+19,Gaynell Vanleuven,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+20,Milagros Tanner,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+21,Mila Span,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+22,Patrina Pettaway,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+23,Takako Jarrells,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+24,Jenee Lach,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+25,Santina Gwynn,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+26,Alisia Durbin,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+27,Carolyne Backes,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+28,Reyes Turberville,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+29,Mignon Jesus,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+30,Carina Milbourn,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+31,Erick Mines,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+32,Timothy Boyes,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+33,Dorothea Steckler,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+34,Patrina Pettaway,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+35,Takako Jarrells,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+36,Jenee Lach,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+37,Santina Gwynn,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+38,Alisia Durbin,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+39,Carolyne Backes,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+40,Reyes Turberville,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+41,Mignon Jesus,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+42,Carina Milbourn,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+43,Erick Mines,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+44,Timothy Boyes,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+45,Dorothea Steckler,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+46,Mignon Jesus,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+47,Carina Milbourn,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+48,Erick Mines,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+49,Timothy Boyes,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+50,Dorothea Steckler,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+51,Mignon Jesus,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+52,Carina Milbourn,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+53,Erick Mines,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+54,Timothy Boyes,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+55,Dorothea Steckler,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+56,Mignon Jesus,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+57,Carina Milbourn,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+58,Erick Mines,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+59,Timothy Boyes,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+60,Dorothea Steckler,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+61,Mignon Jesus,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+62,Carina Milbourn,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+63,Erick Mines,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+64,Timothy Boyes,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+65,Dorothea Steckler,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+66,Mignon Jesus,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+67,Carina Milbourn,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+68,Erick Mines,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+69,Timothy Boyes,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1
+70,Dorothea Steckler,-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1.-1

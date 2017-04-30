@@ -436,6 +436,8 @@ def request_schedule(method):
 
         if (method == "greedy"):
 
+            start = time.time()
+
             #schedule.greedy_step0_4()
             schedule.greedy_step1_4()
             schedule.greedy_step2_4()
@@ -447,6 +449,9 @@ def request_schedule(method):
             schedule.greedy_step8_4()
             schedule.sort_trainees()
             schedule.generate_info_file()
+
+            end = time.time()
+            print(end-start)
 
         # ---------------------------
         # CREATE SCHEDULE FOR SOLVERS
