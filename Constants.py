@@ -1,3 +1,4 @@
+
 DEBUG_MODE = False
 
 # ------------------
@@ -14,48 +15,8 @@ NUM_BLOCK = 52
 # GRADUATION REQUIREMENTS
 # -----------------------
 
-# NOTE: The number in requirements represent the number of blocks that student have to take. For example,
-#       Each PGY1 has to take 16 blocks of Ambulatory Medicine in order to graduate.
-
 ROLES = ["PGY1", "PGY2", "PGY3"]
 REQUIREMENTS = {}
-# REQUIREMENTS["PGY1"] = {
-#                         #"Vacation": 4,
-#                         "Ambulatory Medicine Blocks": 16,
-#                         "Emergency Medicine": 2,
-#                         "Coronary Care Unit": 4,
-#                         "Medical Intensive Care Unit": 4,
-#                         "Inpatient Wards": 14,
-#                         "Elective": 4,
-#                         "Backup Staffing / Urgent Visit": 2,
-#                         "Neurology": 2}
-# Note: The above is traditional requirement
-
-# requirements for 1.25 and 1.5 issue
-# REQUIREMENTS["PGY1"] = {
-#     "Ambulatory Medicine Blocks": 5,
-#     "Backup Staffing / Urgent Visit": 4,
-#     "Coronary Care Unit": 8,
-#     "Elective": 8,
-#     "Emergency Medicine": 4,
-#     "Inpatient Wards": 8,
-#     "Medical Intensive Car Unit": 6,
-#     "Neurology": 4,
-#     # "Vacation": 1
-# }
-
-# requirements for 1.25 and 1.5 issue
-# REQUIREMENTS["PGY1"] = {
-#     "Ambulatory Medicine Blocks": 1,
-#     "Backup Staffing / Urgent Visit": 1,
-#     "Coronary Care Unit": 2,
-#     "Elective": 2,
-#     "Emergency Medicine": 1,
-#     "Inpatient Wards": 2,
-#     "Medical Intensive Care Unit": 1,
-#     "Neurology": 1,
-#     # "Vacation": 1
-# }
 
 REQUIREMENTS["PGY1"] = {
     "Ambulatory Medicine Blocks": 5,
@@ -65,8 +26,7 @@ REQUIREMENTS["PGY1"] = {
     "Emergency Medicine": 4,
     "Inpatient Wards": 8,
     "Medical Intensive Care Unit": 6,
-    "Neurology": 4,
-    # "Vacation": 1
+    "Neurology": 4
 }
 
 REQUIREMENTS["PGY1-half"] = {
@@ -77,8 +37,7 @@ REQUIREMENTS["PGY1-half"] = {
     "Emergency Medicine": (1.75, 1, 3, 7),
     "Inpatient Wards": (1, 1, 2, 4),
     "Medical Intensive Care Unit": (1, 1, 2, 4),
-    "Neurology": (1, 1, 2, 4),
-    # "Vacation": 1
+    "Neurology": (1, 1, 2, 4)
 }
 
 REQUIREMENTS["PGY2"] = {
@@ -109,31 +68,8 @@ VACATION_ALLOWED["PGY1"] = {
     "Emergency Medicine": False,
     "Inpatient Wards": True,
     "Medical Intensive Care Unit": False,
-    "Neurology": True,
-    # "Vacation": True
+    "Neurology": True
 }
-
-# ROTATIONS_LIST = [("Ambulatory Medicine Blocks", 3, 20, 3, 20, 3, 20),
-#                   ("Backup Staffing / Urgent Visit", 1, 20, 1, 20, 1, 20),
-#                   ("Emergency Medicine", 1, 20, 1, 20, 1, 20),
-#                   ("Vacation", 2, 20, 2, 20, 2, 20),
-#                   ("Inpatient Wards", 5, 20, 5, 20, 5, 20),
-#                   ("Neurology", 1, 20, 1, 20, 1, 20),
-#                   ("Coronary Care Unit", 1, 20, 1, 20, 1, 20),
-#                   ("Medical Intensive Care Unit", 1, 20, 1, 20, 1, 20),
-#                   ("Non-CCU Cardiology", 1, 20, 1, 20, 1, 20),
-#                   ("Elective", 2, 20, 2, 20, 2, 20)]
-#
-# ROTATIONS_LIST = [("Ambulatory Medicine Blocks", 1, 5, 0, 0, 0, 0),
-#                   ("Backup Staffing / Urgent Visit", 1, 6, 0, 0, 0, 0),
-#                   ("Coronary Care Unit", 1, 7, 0, 0, 0, 0),
-#                   ("Elective", 2, 7, 0, 0, 0, 0),
-#                   ("Emergency Medicine", 1, 5, 0, 0, 0, 0),
-#                   ("Inpatient Wards", 3, 7, 0, 0, 0, 0),
-#                   ("Medical Intensive Care Unit", 1, 5, 0, 0, 0, 0),
-#                   ("Neurology", 1, 5, 0, 0, 0, 0),
-#                   # ("Vacation", 2, 5)
-#                   ]
 
 ROTATIONS_LIST = [("Ambulatory Medicine Blocks", 1, 8, 0, 8, 0, 8),
                   ("Backup Staffing / Urgent Visit", 1, 8, 0, 8, 0, 8),

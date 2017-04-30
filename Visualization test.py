@@ -80,8 +80,7 @@ def request_schedule(method):
             # ---------------------
             line_data = f.readline().rstrip('\n').split(",")
             program_name = line_data[1]
-            num_block = int(line_data[2]) * 4 # Fucking hack
-            print("SHIT-FUCK")
+            num_block = int(line_data[2]) * 4
             print(num_block)
             f.readline()
 
@@ -434,6 +433,8 @@ def request_schedule(method):
 
         if (method == "greedy"):
 
+            start = time.time()
+
             #schedule.greedy_step0_4()
             schedule.greedy_step1_4()
             schedule.greedy_step2_4()
@@ -446,29 +447,35 @@ def request_schedule(method):
             schedule.sort_trainees()
             schedule.generate_info_file()
 
+            end = time.time()
+            print(end-start)
+
         # ---------------------------
         # CREATE SCHEDULE FOR SOLVERS
         # ---------------------------
 
         else:
-            (pgy1_req_full, pgy1_req_half, pgy1_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy1_req)
-            (pgy1_lim_full, pgy1_lim_half, pgy1_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy1_lim)
-            (pgy2_req_full, pgy2_req_half, pgy2_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy2_req)
-            (pgy2_lim_full, pgy2_lim_half, pgy2_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy2_lim)
-            (pgy3_req_full, pgy3_req_half, pgy3_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy3_req)
-            (pgy3_lim_full, pgy3_lim_half, pgy3_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy3_lim)
+            # Get the Full, Half, Quarter Requirements and Rotation Limit Counts
+            pgy1_req_full, pgy1_req_half, pgy1_req_quarter = SolverUtil.generateFullHalfQuarterDict(pgy1_req)
+            pgy1_lim_full, pgy1_lim_half, pgy1_lim_quarter = SolverUtil.generateFullHalfQuarterDict(pgy1_lim)
+            pgy2_req_full, pgy2_req_half, pgy2_req_quarter = SolverUtil.generateFullHalfQuarterDict(pgy2_req)
+            pgy2_lim_full, pgy2_lim_half, pgy2_lim_quarter = SolverUtil.generateFullHalfQuarterDict(pgy2_lim)
+            pgy3_req_full, pgy3_req_half, pgy3_req_quarter = SolverUtil.generateFullHalfQuarterDict(pgy3_req)
+            pgy3_lim_full, pgy3_lim_half, pgy3_lim_quarter = SolverUtil.generateFullHalfQuarterDict(pgy3_lim)
 
+            # Random seed for pruning, to ensure replicability
             seed = 100
             num_trainee_list = (num_pgy1, num_pgy2, num_pgy3)
             fullPrefilled, halfPrefilled, quarterPrefilled = SolverUtil.generateFullHalfQuarterPrefilled(prefilled_schedule)
 
+            # Solve the Full Schedule (13 resolution)
             presolve_schedule = fullPrefilled
             resultArray = SolverUtil.solveSchedule(presolve_schedule, num_block // 4, num_trainee_list, rotations,
                                                    pgy1_req_full, pgy1_lim_full,
                                                    pgy2_req_full, pgy2_lim_full,
                                                    pgy3_req_full, pgy3_lim_full)
 
-            # Double to halves
+            # Double to halves and solve (26 resolution)
             presolve_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray, halfPrefilled),
                                                          halfPrefilled, seed, num_trainee_list, rotations)
             resultArray = SolverUtil.solveSchedule(presolve_schedule, num_block // 2, num_trainee_list, rotations,
@@ -476,7 +483,7 @@ def request_schedule(method):
                                                    pgy2_req_half, pgy2_lim_half,
                                                    pgy3_req_half, pgy3_lim_half)
 
-            # Double again to quarters
+            # Double again to quarters and solve (52 resolution)
             presolve_schedule = SolverUtil.pruneSchedule(SolverUtil.doubleSchedule(resultArray, quarterPrefilled),
                                                          quarterPrefilled, seed, num_trainee_list, rotations)
             resultArray = SolverUtil.solveSchedule(presolve_schedule, num_block, num_trainee_list, rotations,
@@ -484,9 +491,7 @@ def request_schedule(method):
                                                    pgy2_req_quarter, pgy2_lim_quarter,
                                                    pgy3_req_quarter, pgy3_lim_quarter)
 
-
-            # print(resultArray)
-
+            # Filling the schedule class with the result schedule from Solver
             schedule = Class.Schedule(trainees, rotations)
 
             # A hack to allow vis to work for solver.
@@ -495,187 +500,17 @@ def request_schedule(method):
             # Fill in using idiomatic way
             for trainee_num in range(num_trainees):
                 for block_num in range(num_block):
-                    # print rotations_dict[resultArray[trainee_num][block_num]]
                     schedule.fill_in(trainees[trainee_num], block_num, rotations_dict[resultArray[trainee_num][block_num]])
 
+        # ------------
+        # Done scheduling, return the json object
+        # ------------
         global scheduleText, isScheduled
         scheduleText = schedule.generate_info_file()
         isScheduled = True
         return json.dumps({'data': scheduleText})
-
-        # -------------
-        # VISUALIZATION
-        # -------------
-
-        # IMPORT
-
-        import pyglet
-        from pyglet.gl import gl
-
-        # ADAPT THE CONSTANTS
-        # Some graphic constants in the Constants file no longer apply to this case
-
-        legend_top_left = [40, 40 + LABEL_HEIGHT * num_trainees + 40]
-        legend_label_top_left = [66, HEIGHT - (40 + LABEL_HEIGHT * num_trainees + 40)]
-
-        print("SHIT22222")
-
-        underdone_top_left = UNDERDONE_TOP_LEFT = [300 + UNIT_RANGE * num_block + 40, 40]
-
-        chart_top_left = [300, 40 + LABEL_HEIGHT * num_trainees + 40]
-
-        below_mark_top_left = [300, HEIGHT - (40 + LABEL_HEIGHT * num_trainees + 40)]
-        right_mark_top_left = [300 + UNIT_RANGE * num_block + 40, HEIGHT - 40]
-
-        # WINDOW AND SETTINGS
-
-        window = Window(width=WIDTH, height=HEIGHT)
-        gl.glClearColor(*BACKGROUND_COLOR)
-
-        # Trainee and rotation labels
-        trainee_labels = create_trainee_labels(schedule.trainees, LABEL_TOP_LEFT, LABEL_SIZE, LABEL_HEIGHT)
-        rotation_labels = create_labels(core_rotations, legend_label_top_left, LEGEND_SIZE, LEGEND_HEIGHT)
-        rotation_legends = create_legends(core_rotations, legend_top_left=legend_top_left)
-        rotation_legends_click_space = create_click_space(core_rotations, legend_top_left=legend_top_left)
-
-        # Unit squares
-        rot_squares = create_squares(schedule.trainees, num_block)
-        square_dict = create_square_dict(rot_squares)
-        super_quad_dict = {}
-        super_quads = []
-        for key in square_dict.keys():
-            quad = create_superquad(square_dict[key])
-            super_quad_dict[key] = quad
-            super_quads.append(quad)
-
-        # All squares: This is used to find appropriate rotation when a square is clicked
-        squares = rot_squares + rotation_legends + rotation_legends_click_space
-
-        # Height chart
-        chart_bars = create_chart_bars(num_block, chart_top_left=chart_top_left)
-
-        # Underdone chart
-        underdone_quads = create_underdone_bars(schedule.trainees, schedule.rotations,
-                                                underdone_top_left=underdone_top_left)
-
-        # Mark lines
-        mark_lines = create_superline(num_trainees, num_block,
-                                      below_mark_top_left=below_mark_top_left,
-                                      right_mark_top_left=right_mark_top_left)
-
-        # Min lines
-        min_line = create_mark_line(num_block, below_mark_top_left=below_mark_top_left)
-        max_line = create_mark_line(num_block, below_mark_top_left=below_mark_top_left)
-
-        def draw_begin_state():
-            window.clear()
-            draw_labels(trainee_labels)
-            draw_super_quads(super_quads)
-            draw_bars(chart_bars)
-            draw_bars(underdone_quads)
-            mark_lines.draw()
-            min_line.draw()
-            max_line.draw()
-            draw_legends(rotation_legends)
-            draw_labels(rotation_labels)
-
-        def draw_animation():
-            window.clear()
-            draw_labels(trainee_labels)
-            draw_animated_quads(super_quads, ANIMATION_STEPS - window.steps)
-            draw_animated_bars(chart_bars, ANIMATION_STEPS - window.steps)
-            draw_animated_bars(underdone_quads, ANIMATION_STEPS - window.steps)
-            window.steps -= 1
-            if window.steps == 0:
-                window.state = STATE_IDLE
-                for quad in super_quads:
-                    quad.current_blur = quad.target_blur
-
-                for bar in chart_bars:
-                    bar.current_height = bar.target_height
-                    bar.current_color = bar.target_color
-
-                for quad in underdone_quads:
-                    quad.current_points_array = quad.target_points_array
-
-                min_line.current_height = min_line.target_height
-                max_line.current_height = max_line.target_height
-            mark_lines.draw()
-            min_line.draw_animated(ANIMATION_STEPS - window.steps)
-            max_line.draw_animated(ANIMATION_STEPS - window.steps)
-            draw_legends(rotation_legends)
-            draw_labels(rotation_labels)
-
-        @window.event
-        def on_draw():
-            if (window.state == STATE_BEGIN):
-                window.state = STATE_IDLE
-                draw_begin_state()
-            elif window.state == STATE_IDLE:
-                draw_begin_state()
-            elif window.state == STATE_ANIMATION:
-                draw_animation()
-                pass
-
-        @window.event
-        def on_mouse_press(x, y, button, modifiers):
-            curr_square = find_curr_square(squares, x, y)
-            if curr_square:
-                rot_id = curr_square.id
-                rot_color = curr_square.color
-                for quad in super_quads:
-                    if quad.id == rot_id:
-                        quad.target_blur = NO_BLUR
-                    else:
-                        quad.target_blur = UNCHOSEN_BLUR
-
-                for bar in chart_bars:
-                    bar.target_color = rot_color
-                    bar.target_height = schedule.sum_rot_at_block(bar.col_num, rot_id) * CHART_UNIT_HEIGHT
-
-                temporary_quads = create_temporary_bars(schedule.trainees, schedule.rotations, rot_id,
-                                                        underdone_top_left=underdone_top_left)
-                for i in range(len(underdone_quads)):
-                    underdone_quads[i].target_points_array = temporary_quads[i].base_points_array
-
-                min_line.target_height = (schedule.rotations[rot_id].min1 + \
-                                          schedule.rotations[rot_id].min2 + \
-                                          schedule.rotations[rot_id].min3) * CHART_UNIT_HEIGHT
-
-                max_line.target_height = (schedule.rotations[rot_id].max1 + \
-                                          schedule.rotations[rot_id].max2 + \
-                                          schedule.rotations[rot_id].max3) * CHART_UNIT_HEIGHT
-
-            else:
-                for quad in super_quads:
-                    quad.target_blur = NO_BLUR
-
-                for bar in chart_bars:
-                    bar.target_color = to_decimal_color(ROTATIONS_COLOR[-1])
-                    bar.target_height = 0
-
-                for quad in underdone_quads:
-                    quad.target_points_array = quad.base_points_array
-
-                min_line.target_height = 0
-                max_line.target_height = 0
-
-            window.steps = ANIMATION_STEPS
-            window.state = STATE_ANIMATION
-
-        @window.event
-        def update(dt):
-            pass
-
-        @window.event
-        def on_show():
-            state = STATE_BEGIN
-
-        pyglet.clock.schedule_interval(update, 1.0 / 60)
-        pyglet.app.run()
-        return data
     else:
-        return 'SHIT'
+        return 'Finished'
 
 @app.route('/')
 def hello_world():
