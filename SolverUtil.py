@@ -3,34 +3,53 @@ import math
 import random
 import copy
 
-# -------------
-# SOLVER HELPER
-# -------------
+# ------------------------
+# Solver UTILITY CONSTANTS
+# ------------------------
+DEBUG_PRINT = False
+
+# ------------------------
+# SOLVER UTILITY FUNCTIONS
+# ------------------------
 
 def generateFullHalfQuarter(req):
+    """
+    Return set of 3 requirements: Full, Half, Quarter based on the standard requirement number.
+    Example: 1.75 -> (1, 3, 7)
+    :param req: A double number representing a resident requirement
+    :return: A 3 int element tuple containing Full, Half, Quarter requirements
+    """
     floor_value_full = int(math.floor(req))
-    if (floor_value_full >= req):
-        return (floor_value_full, 2 * floor_value_full, 4 * floor_value_full)
+    if floor_value_full >= req:
+        return floor_value_full, 2 * floor_value_full, 4 * floor_value_full
     floor_value_half = int(math.floor(req * 2))
-    if (floor_value_half >= req * 2):
-        return (floor_value_full, floor_value_half, 2 * floor_value_half)
+    if floor_value_half >= req * 2:
+        return floor_value_full, floor_value_half, 2 * floor_value_half
     floor_value_quarter = int(math.floor(req * 4))
-    if (floor_value_quarter >= req * 4):
-        return (floor_value_full, floor_value_half, floor_value_quarter)
+    if floor_value_quarter >= req * 4:
+        return floor_value_full, floor_value_half, floor_value_quarter
     raise ValueError("Requirement has minimum resolution of 0.25")
 
 def generateFullHalfQuarterDict(trainee_req):
+    """
+    Apply generateFullHalfQuarter to all key-value of trainee_req to get 3 dictionaries containing
+    the 3 types of requirement sets.
+    :param trainee_req: The standard resident requirement dictionary
+    :return: A 3 dict element tuple containing Full, Half, Quarter requirement dicts
+    """
     trainee_req_full = {}
     trainee_req_half = {}
     trainee_req_quarter = {}
     for k in trainee_req.keys():
-        full_half_quarter = generateFullHalfQuarter(trainee_req[k])
-        trainee_req_full[k] = full_half_quarter[0]
-        trainee_req_half[k] = full_half_quarter[1]
-        trainee_req_quarter[k] = full_half_quarter[2]
-    return(trainee_req_full, trainee_req_half, trainee_req_quarter)
+        trainee_req_full[k], trainee_req_half[k], trainee_req_quarter[k] = generateFullHalfQuarter(trainee_req[k])
+    return trainee_req_full, trainee_req_half, trainee_req_quarter
 
 def generateFullHalfQuarterPrefilled(prefilledSchedule):
+    """
+    Convert prefilledSchedule into 3 prefilled schedules with different format
+    :param prefilledSchedule: The given prefilledSchedule 2D array, in 52 week format
+    :return: quarterPrefilled 52 week format, halfPrefilled 26 block format, fullPrefilled 13 block format
+    """
     num_trainees = len(prefilledSchedule)
     num_block = len(prefilledSchedule[0])
     if num_block != 52:
@@ -43,23 +62,34 @@ def generateFullHalfQuarterPrefilled(prefilledSchedule):
     for trainee in range(num_trainees):
         for block in range(num_block // 2):
             two_block = 2*block
-            if (quarterPrefilled[trainee][two_block] == quarterPrefilled[trainee][two_block+1]):
+            if quarterPrefilled[trainee][two_block] == quarterPrefilled[trainee][two_block+1]:
+                # Same rotation, reduce the resolution
                 halfPrefilled[trainee][block] = quarterPrefilled[trainee][two_block]
             else:
-                #There's already something there, but lower resolution
+                # There's already something there, but lower resolution
                 halfPrefilled[trainee][block] = -3
     for trainee in range(num_trainees):
         for block in range(num_block // 4):
             two_block = 2 * block
-            if (halfPrefilled[trainee][two_block] == halfPrefilled[trainee][two_block+1]):
+            if halfPrefilled[trainee][two_block] == halfPrefilled[trainee][two_block+1]:
+                # Same rotation, reducec the resolution
                 fullPrefilled[trainee][block] = halfPrefilled[trainee][two_block]
             else:
-                #There's already something there, but lower resolution
+                # There's already something there, but lower resolution
                 fullPrefilled[trainee][block] = -3
 
     return fullPrefilled, halfPrefilled, quarterPrefilled
 
 def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, rotations):
+    """
+    Prune the current schedule so that more rotations can fit in subsquently more detailed resolutions
+    :param currentSchedule: The current schedule that we need to prune
+    :param prefilledSchedule: The prefilled schedule that was used to generate currentSchedule
+    :param seed: The seed for the random generator so that the result can be replicated
+    :param num_trainee_list: The list containing number of each types of resident
+    :param rotations: The list containing rotation objects to get the min/max resident count
+    :return: prunedSchedule: The pruned schedule that still respect the pre-filled schedule and rotation min
+    """
     # Create rotations_list_local and min_length_rotation_local to match the solver
     pruneCount = 0
     rotations_list_local = []
@@ -78,11 +108,11 @@ def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, ro
         min_length_rotation_local.append((rot.name, rot.min_block_length))
 
     # Deep copy the input schedule
-    currentSchedule = copy.deepcopy(currentSchedule)
+    prunedSchedule = copy.deepcopy(currentSchedule)
 
     # Generate a list of randomly shuffled trainee x block to randomly prune
-    num_trainee_total = len(currentSchedule)
-    num_block = len(currentSchedule[0])
+    num_trainee_total = len(prunedSchedule)
+    num_block = len(prunedSchedule[0])
     trainee_block_list = list(range(num_trainee_total * num_block))
 
     random.seed(seed)
@@ -91,7 +121,7 @@ def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, ro
     # Construct the array for counting types of trainee
     count_array = [[[0 for typeTrainee in range(7)] for rotation in range(len(rotations_list_local))] for block in range(num_block)]
     for trainee in range(num_trainee_total):
-        #Check these requirements for types of trainee
+        # Check these requirements for all types of trainee
         if (trainee < num_trainee_list[0]):
             # PGY1
             typeTraineeList = [0, 3, 4, 6]
@@ -103,7 +133,7 @@ def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, ro
             typeTraineeList = [2, 4, 5, 6]
 
         for block in range(num_block):
-            rotation = currentSchedule[trainee][block]
+            rotation = prunedSchedule[trainee][block]
             if rotation < 0:
                 # Empty block, skip
                 continue
@@ -116,12 +146,12 @@ def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, ro
         canPrune = True
         trainee = trainee_block // num_block
         block = trainee_block % num_block
-        rotation = currentSchedule[trainee][block]
-        #Check these requirements for types of trainee
-        if (trainee < num_trainee_list[0]):
+        rotation = prunedSchedule[trainee][block]
+        # Check these requirements for types of trainee
+        if trainee < num_trainee_list[0]:
             # PGY1
             typeTraineeList = [0, 3, 4, 6]
-        elif (trainee < (num_trainee_list[0] + num_trainee_list[1])):
+        elif trainee < (num_trainee_list[0] + num_trainee_list[1]):
             # PGY2
             typeTraineeList = [1, 3, 5, 6]
         else:
@@ -129,11 +159,11 @@ def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, ro
             typeTraineeList = [2, 4, 5, 6]
 
         # If the current block is empty, there's nothing to prune, skip
-        if (rotation < 0):
+        if rotation < 0:
             continue
         # If the rotation is at min requirement in some type to run, we can't prune
         for typeTrainee in typeTraineeList:
-            if (count_array[block][rotation][typeTrainee] <= rotations_list_local[rotation][typeTrainee]):
+            if count_array[block][rotation][typeTrainee] <= rotations_list_local[rotation][typeTrainee]:
                 canPrune = False
                 break
         if not canPrune:
@@ -146,37 +176,41 @@ def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, ro
         # If the current rotation is prefilled, we can't prune
         if prefilledSchedule[trainee][block] != -1:
             continue
-        #Prune the desired block
+        # Prune the desired block
         pruneCount += 1
-        currentSchedule[trainee][block] = -1
-        #update the count array to reflect the pruned block
+        prunedSchedule[trainee][block] = -1
+        # update the count array to reflect the pruned block
         for typeTrainee in typeTraineeList:
             count_array[block][rotation][typeTrainee] -= 1
 
     print("Pruned " + str(pruneCount))
-    return currentSchedule
+    return prunedSchedule
 
 
 def doubleSchedule(currentSchedule, prefilledSchedule):
     """
-
-    :param currentSchedule:
-    :return:
+    Double the current Schedule to allow for more detailed resolution. Remove ambiguity using the prefilledSchedule
+    E.g: [1, 2, 3] -> [1, 1, 2, 2, 3, 3]
+    :param currentSchedule: The current schedule that needs to be doubled
+    :param prefilledSchedule: The pre-filled schedule to provide more information about what to fill in
+    :return: doubled_schedule: The doubled schedule that allows for more detailed resolution
     """
     num_trainee = len(currentSchedule)
     num_block = len(currentSchedule[0])
-    result_schedule = [[] for i in range(num_trainee)]
+    doubled_schedule = [[] for i in range(num_trainee)]
 
     for trainee in range(num_trainee):
         for block in range(num_block):
-            if (currentSchedule[trainee][block] == -3):
-                result_schedule[trainee].append(prefilledSchedule[trainee][2*block])
-                result_schedule[trainee].append(prefilledSchedule[trainee][2*block+1])
+            if currentSchedule[trainee][block] == -3:
+                # Ambiguous block, refer back to prefilledSchedule
+                doubled_schedule[trainee].append(prefilledSchedule[trainee][2*block])
+                doubled_schedule[trainee].append(prefilledSchedule[trainee][2*block+1])
             else:
-                result_schedule[trainee].append(currentSchedule[trainee][block])
-                result_schedule[trainee].append(currentSchedule[trainee][block])
+                # Simple block, just double it
+                doubled_schedule[trainee].append(currentSchedule[trainee][block])
+                doubled_schedule[trainee].append(currentSchedule[trainee][block])
 
-    return result_schedule
+    return doubled_schedule
 
 
 def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
@@ -184,8 +218,31 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
                   requirements_pgy2, max_requirements_pgy2,
                   requirements_pgy3, max_requirements_pgy3
                   ):
-    test_print = False;
+    """
+    Solve the schedule. This is our main function to solve the schedule, taking into account all the constraints on
+    rotation, resident and prefilled schedule.
+
+    :param prefilled_schedule: The starting base schedule that will be filled in
+    :param num_block: Number of blocks of the schedule
+    :param num_trainee_list: List containing numbers of trainees
+    :param rotations: List of rotation objects to get min/max requirements, vacation, etc.
+    :param requirements_pgy1: Min graduation requirement of PGY1
+    :param max_requirements_pgy1: Limit on number of blocks in each rotation for PGY1
+    :param requirements_pgy2: Min graduation requirement of PGY2
+    :param max_requirements_pgy2: Limit on number of blocks in each rotation for PGY2
+    :param requirements_pgy3: Min graduation requirement of PGY3
+    :param max_requirements_pgy3: Limit on number of blocks in each rotation for PGY3
+    :return: resultArray: The result array after solving using IP Solver
+    """
     num_trainee = sum(num_trainee_list)
+    if len(prefilled_schedule) != num_trainee:
+        print("Number of trainees not matched")
+        return prefilled_schedule
+
+    if len(prefilled_schedule[1]) != num_block:
+        print("Number of blocks not matched")
+        return prefilled_schedule
+
     # Create vacation allowed local
     vacation_allowed_local = {}
     for rot in rotations:
@@ -202,8 +259,8 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
                                      rot.min13, rot.max13,
                                      rot.min23, rot.max23,
                                      rot.mintotal, rot.maxtotal))
-    if test_print:
-        print("TEST Print, in SolverUtil.solveSchedule")
+    if DEBUG_PRINT:
+        print("DEBUG Print, in SolverUtil.solveSchedule")
         print(num_block)
         print(num_trainee_list)
         print("PGY1")
@@ -218,7 +275,7 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
         print("Num trainee ", num_trainee)
         print("Rotations")
         print(rotations_list_local)
-        print("Done Test Print")
+        print("Done DEBUG Print")
 
     num_rotation = len(rotations_list_local)
     # Instantiate a mixed-integer solver, naming it SolveIntegerProblem
@@ -229,19 +286,13 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
     # in a designated time and rotation
     vacation_allowed_rotations = []
     for k in range(num_rotation):
-        if (vacation_allowed_local[rotations_list_local[k][0]]):
+        if vacation_allowed_local[rotations_list_local[k][0]]:
             vacation_allowed_rotations.append(k)
 
     attend_list = [[[None
                      for k in range(num_rotation)]
                     for j in range(num_block)]
                    for i in range(num_trainee)]
-
-    if (len(prefilled_schedule) != num_trainee):
-        print("Number of trainees not matched")
-
-    if (len(prefilled_schedule[1]) != num_block):
-        print("Number of blocks not matched")
 
     for i in range(num_trainee):
         for j in range(num_block):
@@ -338,35 +389,39 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
     objective.SetMinimization()
 
     #Start solving
-    print("Constraints inputted. Solving")
+    if DEBUG_PRINT:
+        print("Constraints inputted. Solving")
     result_status = solver.Solve()
 
     # Check if the problem has an optimal solution
     # when using solvers other than
     # GLOP_LINEAR_PROGRAMMING, verifying the solution is highly recommended!
     resultArray = []
-    print('Number of variables =', solver.NumVariables())
-    print('Number of constraints =', solver.NumConstraints())
+    if DEBUG_PRINT:
+        print('Number of variables =', solver.NumVariables())
+        print('Number of constraints =', solver.NumConstraints())
 
     if ((result_status != pywraplp.Solver.OPTIMAL) or not (solver.VerifySolution(1e-7, True))):
-        print('No optimal solution found\n')
+        if DEBUG_PRINT:
+            print('No optimal solution found\n')
         resultArray = prefilled_schedule
     else:
-        # The solution looks legit, output it from the solver
-        print('Problem solved in %f milliseconds' % solver.WallTime())
-        print('Problem solved in %d iterations' % solver.Iterations())
+        if DEBUG_PRINT:
+            # The solution looks legit, output it from the solver
+            print('Problem solved in %f milliseconds' % solver.WallTime())
+            print('Problem solved in %d iterations' % solver.Iterations())
 
-        # The objective value of the solution.
-        print('Optimal objective value = %d\n' % solver.Objective().Value())
+            # The objective value of the solution.
+            print('Optimal objective value = %d\n' % solver.Objective().Value())
 
-        # Print out the result in a 2D matrix
+        # Construct the 2D matrix from the solved variables
 
         for i in range(num_trainee):
             row = []
             for j in range(num_block):
                 attending = False
                 for k in range(num_rotation):
-                    if (attend_list[i][j][k].solution_value() == 1):
+                    if attend_list[i][j][k].solution_value() == 1:
                         # If solver determines any rotation variable to be 1, fill it in
                         attending = True
                         row += [k]
