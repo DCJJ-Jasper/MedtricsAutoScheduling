@@ -1,3 +1,9 @@
+# Author:
+# Jasper Ding
+# Son Pham
+
+
+
 # ---------------------------------
 # IMPORT LIBRARIES AND DEPENDENCIES
 # ---------------------------------
@@ -21,27 +27,31 @@ import Helper
 class Trainee:
     '''
         Trainee is someone who participates in a program.
-        - role: He can be either PGY1, PGY2, PGY3, which are the years he participated the program
+        - role: It can be either PGY1, PGY2, PGY3, which are the years he participated the program
         - base_reqs: These are requirements that he needs to accomplish in order to complete the program
         - processed_reqs: This variable is used in the scheduling algorithm. It reflects the requirements still have to
                           be completed.
         - block: This store the schedule of the trainee.
     '''
     def __init__(self, name, role, id = -1, num_block = NUM_BLOCK):
+        # Basic attributes
         self.name = name
         self.role = role
         self.id = id
+        self.num_block = num_block
+        # contain requirements for the trainee (dictionary)
         self.base_reqs = {}
         self.processed_reqs = {}
-        self.num_block = num_block
-        self.rotations = []
+        # limit of each rotation a trainee can take(dictionary)
         self.base_limits = {}
         self.processed_limits = {}
-        self.block = [Rotation("SHIT", -1)] * self.num_block
+        # Final answer will save in block attribute
+        self.block = [Rotation("EMPTY", -1)] * self.num_block
 
     def __repr__(self):
         return Helper.pad_blank(self.name, TRAINEE_NAME_LEN) + " - " + self.role
 
+    #  Setter
     def set_rotations(self, rotations):
         self.rotations = rotations
 
@@ -177,11 +187,9 @@ class Rotation:
     def __init__(self, name, id, vacation_allowed = False, min_block_length = 1.0, type = "Core", num_block = NUM_BLOCK):
         self.name = name
         self.id = id
-        self.vacation_allowed = vacation_allowed
         self.min_block_length = min_block_length
         self.type = type
         self.num_block = num_block
-        self._sites = {}
 
         # Min, max cap for the rotation
         self.min1 = -1
@@ -328,19 +336,27 @@ class Schedule:
     """
     def __init__(self, trainees, rotations,
                  num_block = NUM_BLOCK, rotations_id = ROTATIONS_ID):
+        # contain all trainees
         self.trainees = trainees
+        # contain all rotations
         self.rotations = rotations
+        # number of blocks
         self.num_block = num_block
+        # contain the id of the rotation
         self.rotations_id = rotations_id
+        # number of trainees
         self.num_trainees = len(trainees)
 
+        # numbers of different roles
         self.num_pgy1 = 0
         self.num_pgy2 = 0
         self.num_pgy3 = 0
+        # the requirements corresponding with the roles
         self.req_pgy1 = {}
         self.req_pgy2 = {}
         self.req_pgy3 = {}
 
+        # update the numbers of different roles
         for trainee in self.trainees:
             if trainee.role == "PGY1":
                 if (self.num_pgy1 == 0): self.req_pgy1 = trainee.base_reqs
@@ -352,50 +368,9 @@ class Schedule:
                 if (self.num_pgy3 == 0): self.req_pgy3 = trainee.base_reqs
                 self.num_pgy3 += 1
 
-
-    def halffill(self, trainees, rotations):
-        with open('data/prefilled.csv', newline='') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-
-            # for i in range(self.num_block):
-            #     print(spamreader[i])
-            # j = 0
-            # for trainee in trainees:
-            #     for i in range(self.num_block):
-            #         if (spamreader[j][i] != -1):
-            #             self.fill_in_PGY1(trainee,i,rotations[spamreader[j][i]])
-            #     j += 1
-
-            j = 0
-            for row in spamreader:
-                currentline = row[0].split(",")
-                #print(currentline)
-                for i in range(self.num_block):
-                    if (int(currentline[i]) != -1 ):
-                        self.fill_in(trainees[j], i, rotations[int(currentline[i])])
-                j += 1
-
-
-        csvfile.close()
-
-    def halffill4(self, trainees, rotations):
-        with open('data/prefilled.csv', newline='') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-
-            j = 0
-            for row in spamreader:
-                currentline = row[0].split(",")
-                # print(currentline)
-                for i in range(int(self.num_block/4)):
-                    if (int(currentline[i]) != -1 ):
-                        self.fill_in(trainees[j], 4*i, rotations[int(currentline[4*i])])
-                        self.fill_in(trainees[j], 4*i+1, rotations[int(currentline[4*i+1])])
-                        self.fill_in(trainees[j], 4*i+2, rotations[int(currentline[4*i+2])])
-                        self.fill_in(trainees[j], 4*i+3, rotations[int(currentline[4*i+3])])
-                j += 1
-
-        csvfile.close()
-
+    # fill a given rotation into the given block for a given trainee
+    # Also, update all min and max
+    # This function can be used for any roles
     def fill_in(self, trainee, i, rotation):
         trainee.block[i] = rotation
         if (trainee.role == "PGY1"):
@@ -437,11 +412,13 @@ class Schedule:
             elif (rotation.mintotal != -1):
                 rotation.processed_mintotal[i] -= 1  # Cut down min
                 rotation.processed_maxtotal[i] -= 1  # Cut down max
-        # TODO: Magic number here, fix this.
         if (rotation.name != "Blank"):
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
+    # fill a given rotation into the given block for a given list of PGY1 trainee
+    # Also, update all min and max
+    # This function can be only used for PGY1
     def fill_in_PGY1(self, trainees, i, rotation):
         for trainee in trainees:
             trainee.block[i] = rotation
@@ -460,6 +437,9 @@ class Schedule:
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
+    # fill a given rotation into the given block for a given list of PGY2 trainee
+    # Also, update all min and max
+    # This function can be only used for PGY2
     def fill_in_PGY2(self, trainees, i, rotation):
         for trainee in trainees:
             trainee.block[i] = rotation
@@ -478,6 +458,9 @@ class Schedule:
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
+    # fill a given rotation into the given block for a given list of PGY3 trainee
+    # Also, update all min and max
+    # This function can be only used for PGY3
     def fill_in_PGY3(self, trainees, i, rotation):
         for trainee in trainees:
             trainee.block[i] = rotation
@@ -496,71 +479,22 @@ class Schedule:
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
-    def greedy_step0_4(self):
-        trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
-        rotations = self.rotations
-        print("")
-        print("")
-        print("")
 
-
-        with open('data/vacation.csv', newline='') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-
-            # for i in range(self.num_block):
-            #     print(spamreader[i])
-            # j = 0
-            # for trainee in trainees:
-            #     for i in range(self.num_block):
-            #         if (spamreader[j][i] != -1):
-            #             self.fill_in_PGY1(trainee,i,rotations[spamreader[j][i]])
-            #     j += 1
-
-            j = 0
-            for row in spamreader:
-                currentline = row[0].split(",")
-                #print(currentline)
-                for i in range(self.num_block):
-                    if (int(currentline[i]) != -1):
-                        if (int(currentline[i]) == -2):
-                            trainees[j].block[i] = Rotation("VACATION", -2)
-                        else:
-                            self.fill_in(trainees[j], i, rotations[int(currentline[i])])
-                j += 1
-
-
-        csvfile.close()
-
-
+    # greedy step1
+    # For each roles of trainees,
+    # If a rotation exists in some period with unsatisfied min, and meanwhile, there exist trainees with unsatisfied educational requirements for that rotation.
+    # Choose the trainees cover the rotation for that period.
     def greedy_step1_4(self):
-        print("HAHAHAHAHAHAHA")
-        print(self.trainees[0].block[0])
-        print(self.trainees[0].block)
-        trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
-        rotations = self.rotations
-        print("")
-        print("")
-        print("")
 
-        # print('test min1 start')
-        #
-        # for i in range(self.num_block):
-        #     print("i = ",i)
-        #
-        #     for rotation in rotations:
-        #
-        #         print(rotation.name)
-        #         print(rotation.processed_min1[i])
-        #
-        # print('test min1 end')
+        trainees = self.trainees
+        rotations = self.rotations
+        if (DEBUG_MODE):
+            print("")
+            print("")
+            print("")
+
 
         for i in range(int(self.num_block/4)):
-
-
-            print("test start", i)
-
 
             for rotation in rotations:
 
@@ -579,12 +513,8 @@ class Schedule:
                 elif (rotation.mintotal != -1):
                     min_PGY1 = rotation.processed_mintotal[4 * i]
 
-
-                print("ISWHIWUHSWIUS",min_PGY1)
-
                 if (min_PGY1 > 0):
                     avail_trainees = Helper.search_trainee(min_PGY1, "PGY1", rot_name, trainees, 4 * i)
-                    # print(avail_trainees)
                     self.fill_in_PGY1(avail_trainees, 4 * i, rotation)
                     self.fill_in_PGY1(avail_trainees, 4 * i + 1, rotation)
                     self.fill_in_PGY1(avail_trainees, 4 * i + 2, rotation)
@@ -623,69 +553,28 @@ class Schedule:
                     self.fill_in_PGY3(avail_trainees, 4*i+3, rotation)
                 pass
             pass
-            print("test end")
-        print("First pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
 
-    def greedy_step1(self):
+        if (DEBUG_MODE):
+            print("First pass:")
+            self.print_average_underdone()
+            self.print_average_overdone()
+            self.print_average_blank()
+            print("")
+            print("")
+            print("")
 
-        trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
-        rotations = self.rotations
-        print("")
-        print("")
-        print("")
 
-        # Step 1: Fill in the minimum teaching demands with unsatisfied residents
-        # TODO: implement the half block algorithm
-        #        Should step 1 keep same? Is min/max of rotation possible to be 1.5 or even 1.25
-        for i in range(self.num_block):
-            print("test start", i)
-            for rotation in rotations:
-
-                rot_name = rotation.name
-                rot_id = rotation.id
-                min_PGY1 = rotation.processed_min1[i]
-                min_PGY2 = rotation.processed_min2[i]
-                min_PGY3 = rotation.processed_min3[i]
-
-                # print(rot_name,min_PGY1)
-
-                # If rotation still needs to fill in min
-                # TODO: Possibly randomize the fulfillment before assigning.
-                if (min_PGY1 > 0):
-                    avail_trainees = search_trainee(min_PGY1, "PGY1", rot_name, trainees, i)
-                    # print(avail_trainees)
-                    self.fill_in_PGY1(avail_trainees, i, rotation)
-                if (min_PGY2 > 0):
-                    avail_trainees = search_trainee(min_PGY2, "PGY2", rot_name, trainees, i)
-                    self.fill_in_PGY2(avail_trainees, i, rotation)
-                if (min_PGY3 > 0):
-                    avail_trainees = search_trainee(min_PGY3, "PGY3", rot_name, trainees, i)
-                    self.fill_in_PGY3(avail_trainees, i, rotation)
-                pass
-            pass
-            print("test end")
-        print("First pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-
+    # greedy step2
+    # For each roles of trainees,
+    # If no trainee exists with unsatisfied educational requirements for a particular rotation that has unsatisfied teaching service demands in some period.
+    # Choose an trainee who does not touch the limit of this rotation to assign to this rotation.
     def greedy_step2_4(self):
         trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
         rotations = self.rotations
-        print("")
-        print("")
-        print("")
+        if (DEBUG_MODE):
+            print("")
+            print("")
+            print("")
 
         for i in range(int(self.num_block/4)):
             for rotation in rotations:
@@ -707,13 +596,10 @@ class Schedule:
 
                 if (min_PGY1 > 0):
 
-                    # TODO: Possibly randomize the trainees
                     random.shuffle(trainees)
-
-                    # TODO: Randomize within the group
                     for trainee in trainees:
                         # random.shuffle(trainees)
-                        # print(trainee.processed_limits)
+
                         if ((trainee.role == "PGY1") and (trainee.block[4 * i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
                                     4 * i + 3].id == -1 and (trainee.processed_limits[rot_name] > 3)):
@@ -735,10 +621,9 @@ class Schedule:
                     min_PGY2 = rotation.processed_mintotal[4 * i]
 
                 if (min_PGY2 > 0):
-                    # TODO: Possibly randomize the trainees
+
                     random.shuffle(trainees)
 
-                    # TODO: Randomize within the group
                     for trainee in trainees:
                         # random.shuffle(trainees)
                         if ((trainee.role == "PGY2") and (trainee.block[4 * i].id == -1) and trainee.block[
@@ -762,10 +647,9 @@ class Schedule:
                     min_PGY3 = rotation.processed_mintotal[4 * i]
 
                 if (min_PGY3 > 0):
-                    # TODO: Possibly randomize the trainees
+
                     random.shuffle(trainees)
 
-                    # TODO: Randomize within the group
                     for trainee in trainees:
                         # random.shuffle(trainees)
 
@@ -788,15 +672,15 @@ class Schedule:
                 elif (rotation.mintotal != -1):
                     min_PGY1 = rotation.processed_mintotal[4 * i]
 
+                # if we need to remove some prefill vacation block in order to fulfill the rotation min
+                # we will do it here
                 if (min_PGY1 > 0):
 
-                    # TODO: Possibly randomize the trainees
                     random.shuffle(trainees)
 
-                    # TODO: Randomize within the group
                     for trainee in trainees:
                         # random.shuffle(trainees)
-                        # print(trainee.processed_limits)
+
                         if ((trainee.role == "PGY1") and ((trainee.block[4 * i].id == -1) or (trainee.block[4 * i].id == -2)) and
                                 ((trainee.block[4 * i + 1].id == -1) or (trainee.block[4 * i + 1].id == -2)) and
                                 ((trainee.block[4 * i + 2].id == -1) or (trainee.block[4 * i + 2].id == -2)) and
@@ -820,10 +704,9 @@ class Schedule:
                     min_PGY2 = rotation.processed_mintotal[4 * i]
 
                 if (min_PGY2 > 0):
-                    # TODO: Possibly randomize the trainees
+
                     random.shuffle(trainees)
 
-                    # TODO: Randomize within the group
                     for trainee in trainees:
                         # random.shuffle(trainees)
                         if ((trainee.role == "PGY2") and (
@@ -850,10 +733,9 @@ class Schedule:
                     min_PGY3 = rotation.processed_mintotal[4 * i]
 
                 if (min_PGY3 > 0):
-                    # TODO: Possibly randomize the trainees
+
                     random.shuffle(trainees)
 
-                    # TODO: Randomize within the group
                     for trainee in trainees:
                         # random.shuffle(trainees)
 
@@ -871,86 +753,30 @@ class Schedule:
                             if (min_PGY3 == 0): break
                 pass
             pass
-        print("Second pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
 
-    def greedy_step2(self):
-        trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
-        rotations = self.rotations
-        print("")
-        print("")
-        print("")
-
-        for i in range(self.num_block):
-            for rotation in rotations:
-                rot_name = rotation.name
-                rot_id = rotation.id
-                min_PGY1 = rotation.processed_min1[i]
-                min_PGY2 = rotation.processed_min2[i]
-                min_PGY3 = rotation.processed_min3[i]
-
-                # If rotation is still not satisfied
-                # TODO: Possibly randomize the fulfillment
-                if (min_PGY1 > 0):
-                    # TODO: Possibly randomize the trainees
-                    random.shuffle(trainees)
-
-                    # TODO: Randomize within the group
-                    for trainee in trainees:
-                        # random.shuffle(trainees)
-                        if ((trainee.role == "PGY1") and (trainee.block[i].id == -1)):
-                            self.fill_in(trainee, i, rotation)
-                            min_PGY1 -= 1
-                            if (min_PGY1 == 0): break
-
-                if (min_PGY2 > 0):
-                    # TODO: Possibly randomize the trainees
-                    random.shuffle(trainees)
-
-                    # TODO: Randomize within the group
-                    for trainee in trainees:
-                        # random.shuffle(trainees)
-                        if ((trainee.role == "PGY2") and (trainee.block[i].id == -1)):
-                            self.fill_in(trainee, i, rotation)
-                            min_PGY2 -= 1
-                            if (min_PGY2 == 0): break
-
-                if (min_PGY3 > 0):
-                    # TODO: Possibly randomize the trainees
-                    random.shuffle(trainees)
-
-                    # TODO: Randomize within the group
-                    for trainee in trainees:
-                        # random.shuffle(trainees)
-
-                        if ((trainee.role == "PGY3") and (trainee.block[i].id == -1)):
-                            self.fill_in(trainee, i, rotation)
-                            min_PGY3 -= 1
-                            if (min_PGY3 == 0): break
-                pass
-            pass
-        print("Second pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
+        if (DEBUG_MODE):
+            print("Second pass:")
+            self.print_average_underdone()
+            self.print_average_overdone()
+            self.print_average_blank()
+            print("")
+            print("")
+            print("")
 
 
+
+    # greedy step3
+    # For each roles of trainees,
+    # If trainees exist with unsatisfied educational requirements for some rotations.
+    # Choose a whole block to assign them to that rotation, meanwhile, the rotation max should not be touched
+    # This step fills the whole block
     def greedy_step3_4(self):
         trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
         rotations = self.rotations
-        print("")
-        print("")
-        print("")
+        if (DEBUG_MODE):
+            print("")
+            print("")
+            print("")
 
         for trainee in trainees:
             for req in trainee.processed_reqs:
@@ -960,14 +786,12 @@ class Schedule:
 
                     full_flag = True
                     for i in range(int(self.num_block/4)):
-                        # print(trainee.block[i].id)
                         if (trainee.block[4*i].id == -1):
 
                             full_flag = False
                             break
 
                     if (full_flag):
-                        # print("in flag")
                         break
 
                     id = self.rotations_id[req]
@@ -977,10 +801,6 @@ class Schedule:
                         break
 
                     if (trainee.role == "PGY1"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0,int(self.num_block/4)-1)
                         if ((trainee.block[4*i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
@@ -989,11 +809,8 @@ class Schedule:
                             self.fill_in(trainee, 4*i+1, rotation)
                             self.fill_in(trainee, 4*i+2, rotation)
                             self.fill_in(trainee, 4*i+3, rotation)
+
                     if (trainee.role == "PGY2"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, int(self.num_block/4)-1)
                         if ((trainee.block[4*i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
@@ -1004,10 +821,6 @@ class Schedule:
                             self.fill_in(trainee, 4 * i + 3, rotation)
 
                     if (trainee.role == "PGY3"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, int(self.num_block/4)-1)
                         if ((trainee.block[4*i].id == -1) and trainee.block[
                                     4 * i + 1].id == -1 and trainee.block[4 * i + 2].id == -1 and trainee.block[
@@ -1017,94 +830,29 @@ class Schedule:
                             self.fill_in(trainee, 4 * i + 2, rotation)
                             self.fill_in(trainee, 4 * i + 3, rotation)
 
-
-        print("Third pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-
-
-
-    def greedy_step3(self):
-        trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
-        rotations = self.rotations
-        print("")
-        print("")
-        print("")
-
-        for trainee in trainees:
-            for req in trainee.processed_reqs:
-                count = 0
-                while (trainee.processed_reqs[req] > 0 and count < 1000):
-                    count += 1
-
-                    full_flag = True
-                    for i in range(self.num_block):
-                        # print(trainee.block[i].id)
-                        if (trainee.block[i].id == -1):
-
-                            full_flag = False
-                            break
-
-                    if (full_flag):
-                        # print("in flag")
-                        break
-
-                    id = self.rotations_id[req]
-                    rotation = self.rotations[id]
+        if (DEBUG_MODE):
+            print("Third pass:")
+            self.print_average_underdone()
+            self.print_average_overdone()
+            self.print_average_blank()
+            print("")
+            print("")
+            print("")
 
 
-                    if (rotation.min_block_length != 0.5):
-                        break
 
-                    if (trainee.role == "PGY1"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                        #         break
-                        # pass
-                        i = random.randint(0,self.num_block-1)
-                        if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                            self.fill_in(trainee, i, rotation)
-                    if (trainee.role == "PGY2"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                        #         break
-                        # pass
-                        i = random.randint(0, self.num_block - 1)
-                        if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                            self.fill_in(trainee, i, rotation)
-
-                    if (trainee.role == "PGY3"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                        #         break
-                        # pass
-                        i = random.randint(0, self.num_block - 1)
-                        if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                            self.fill_in(trainee, i, rotation)
-
-
-        print("Third pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-        self.print_trainee_schedule()
-
-
+    # greedy step4
+    # For each roles of trainees,
+    # If trainees exist with unsatisfied educational requirements for some rotations.
+    # Choose a half block to assign them to that rotation, meanwhile, the rotation max should not be touched
+    # This step fills the half block
     def greedy_step4_4(self):
         trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
         rotations = self.rotations
-        print("")
-        print("")
-        print("")
+        if (DEBUG_MODE):
+            print("")
+            print("")
+            print("")
 
         for trainee in trainees:
             for req in trainee.processed_reqs:
@@ -1114,14 +862,12 @@ class Schedule:
 
                     full_flag = True
                     for i in range(int(self.num_block/2)):
-                        # print(trainee.block[i].id)
                         if (trainee.block[2*i].id == -1):
 
                             full_flag = False
                             break
 
                     if (full_flag):
-                        # print("in flag")
                         break
 
                     id = self.rotations_id[req]
@@ -1131,51 +877,43 @@ class Schedule:
                         break
 
                     if (trainee.role == "PGY1"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0,int(self.num_block/2)-1)
                         if ((trainee.block[2*i].id == -1) and (trainee.block[2*i+1].id == -1) and (rotation.processed_max1[2*i] > 0)):
                             self.fill_in(trainee, 2*i, rotation)
                             self.fill_in(trainee, 2*i+1, rotation)
                     if (trainee.role == "PGY2"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, int(self.num_block/2)-1)
                         if ((trainee.block[2*i].id == -1) and (trainee.block[2*i+1].id == -1) and (rotation.processed_max2[2*i] > 0)):
                             self.fill_in(trainee, 2 * i, rotation)
                             self.fill_in(trainee, 2 * i + 1, rotation)
 
                     if (trainee.role == "PGY3"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, int(self.num_block/2)-1)
                         if ((trainee.block[2*i].id == -1)  and (trainee.block[2*i+1].id == -1) and (rotation.processed_max3[2*i] > 0)):
                             self.fill_in(trainee, 2 * i, rotation)
                             self.fill_in(trainee, 2 * i + 1, rotation)
 
+        if (DEBUG_MODE):
+            print("Fourth pass:")
+            self.print_average_underdone()
+            self.print_average_overdone()
+            self.print_average_blank()
+            print("")
+            print("")
+            print("")
 
-        print("Fourth pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-
-
+    # greedy step5
+    # For each roles of trainees,
+    # If trainees exist with unsatisfied educational requirements for some rotations.
+    # Choose a quarter block to assign them to that rotation, meanwhile, the rotation max should not be touched
+    # This step fills the quarter block
     def greedy_step5_4(self):
         trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
         rotations = self.rotations
-        print("")
-        print("")
-        print("")
+        if (DEBUG_MODE):
+            print("")
+            print("")
+            print("")
 
         for trainee in trainees:
             for req in trainee.processed_reqs:
@@ -1185,13 +923,11 @@ class Schedule:
 
                     full_flag = True
                     for i in range(self.num_block):
-                        # print(trainee.block[i].id)
                         if (trainee.block[i].id == -1):
                             full_flag = False
                             break
 
                     if (full_flag):
-                        # print("in flag")
                         break
 
                     id = self.rotations_id[req]
@@ -1201,46 +937,41 @@ class Schedule:
                         break
 
                     if (trainee.role == "PGY1"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                        #         break
-                        # pass
+
                         i = random.randint(0, self.num_block - 1)
                         if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
                             self.fill_in(trainee, i, rotation)
+
                     if (trainee.role == "PGY2"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, self.num_block - 1)
                         if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
                             self.fill_in(trainee, i, rotation)
 
                     if (trainee.role == "PGY3"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, self.num_block - 1)
                         if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
                             self.fill_in(trainee, i, rotation)
+        if (DEBUG_MODE):
+            print("Fifth pass:")
+            self.print_average_underdone()
+            self.print_average_overdone()
+            self.print_average_blank()
+            print("")
+            print("")
+            print("")
 
-        print("Fifth pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-
+    # greedy step6
+    # For each roles of trainees,
+    # If trainees exist with unsatisfied educational requirements for some rotations, after doing step 3.
+    # Choose a whole block occupied by vacation to replace them to that rotation, meanwhile, the rotation max should not be touched
+    # This step fills the whole block
     def greedy_step6_4(self):
         trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
         rotations = self.rotations
-        print("")
-        print("")
-        print("")
+        if (DEBUG_MODE):
+            print("")
+            print("")
+            print("")
 
         for trainee in trainees:
             for req in trainee.processed_reqs:
@@ -1250,14 +981,12 @@ class Schedule:
 
                     full_flag = True
                     for i in range(int(self.num_block/4)):
-                        # print(trainee.block[i].id)
                         if (trainee.block[4*i].id == -2):
 
                             full_flag = False
                             break
 
                     if (full_flag):
-                        # print("in flag")
                         break
 
                     id = self.rotations_id[req]
@@ -1267,10 +996,6 @@ class Schedule:
                         break
 
                     if (trainee.role == "PGY1"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0,int(self.num_block/4)-1)
                         if ((trainee.block[4*i].id == -2) and trainee.block[
                                     4 * i + 1].id == -2 and trainee.block[4 * i + 2].id == -2 and trainee.block[
@@ -1279,11 +1004,8 @@ class Schedule:
                             self.fill_in(trainee, 4*i+1, rotation)
                             self.fill_in(trainee, 4*i+2, rotation)
                             self.fill_in(trainee, 4*i+3, rotation)
+
                     if (trainee.role == "PGY2"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, int(self.num_block/4)-1)
                         if ((trainee.block[4*i].id == -2) and trainee.block[
                                     4 * i + 1].id == -2 and trainee.block[4 * i + 2].id == -2 and trainee.block[
@@ -1294,10 +1016,6 @@ class Schedule:
                             self.fill_in(trainee, 4 * i + 3, rotation)
 
                     if (trainee.role == "PGY3"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, int(self.num_block/4)-1)
                         if ((trainee.block[4*i].id == -2) and trainee.block[
                                     4 * i + 1].id == -2 and trainee.block[4 * i + 2].id == -2 and trainee.block[
@@ -1307,23 +1025,27 @@ class Schedule:
                             self.fill_in(trainee, 4 * i + 2, rotation)
                             self.fill_in(trainee, 4 * i + 3, rotation)
 
+        if (DEBUG_MODE):
+            print("Sixth pass:")
+            self.print_average_underdone()
+            self.print_average_overdone()
+            self.print_average_blank()
+            print("")
+            print("")
+            print("")
 
-        print("Sixth pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-
-
+    # greedy step7
+    # For each roles of trainees,
+    # If trainees exist with unsatisfied educational requirements for some rotations, after doing step 3.
+    # Choose a half block occupied by vacation to replace them to that rotation, meanwhile, the rotation max should not be touched
+    # This step fills the half block
     def greedy_step7_4(self):
         trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
         rotations = self.rotations
-        print("")
-        print("")
-        print("")
+        if (DEBUG_MODE):
+            print("")
+            print("")
+            print("")
 
         for trainee in trainees:
             for req in trainee.processed_reqs:
@@ -1333,14 +1055,12 @@ class Schedule:
 
                     full_flag = True
                     for i in range(int(self.num_block/2)):
-                        # print(trainee.block[i].id)
                         if (trainee.block[2*i].id == -2):
 
                             full_flag = False
                             break
 
                     if (full_flag):
-                        # print("in flag")
                         break
 
                     id = self.rotations_id[req]
@@ -1350,50 +1070,44 @@ class Schedule:
                         break
 
                     if (trainee.role == "PGY1"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0,int(self.num_block/2)-1)
                         if ((trainee.block[2*i].id == -2) and (trainee.block[2*i+1].id == -2) and (rotation.processed_max1[2*i] > 0)):
                             self.fill_in(trainee, 2*i, rotation)
                             self.fill_in(trainee, 2*i+1, rotation)
+
                     if (trainee.role == "PGY2"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, int(self.num_block/2)-1)
                         if ((trainee.block[4*i].id == -2) and (trainee.block[2*i+1].id == -2) and (rotation.processed_max2[4*i] > 0)):
                             self.fill_in(trainee, 2 * i, rotation)
                             self.fill_in(trainee, 2 * i + 1, rotation)
 
                     if (trainee.role == "PGY3"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, int(self.num_block/2)-1)
                         if ((trainee.block[2*i].id == -2)  and (trainee.block[2*i+1].id == -2) and (rotation.processed_max3[2*i] > 0)):
                             self.fill_in(trainee, 2 * i, rotation)
                             self.fill_in(trainee, 2 * i + 1, rotation)
 
+        if (DEBUG_MODE):
+            print("Seventh pass:")
+            self.print_average_underdone()
+            self.print_average_overdone()
+            self.print_average_blank()
+            print("")
+            print("")
+            print("")
 
-        print("Seventh pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-
+    # greedy step8
+    # For each roles of trainees,
+    # If trainees exist with unsatisfied educational requirements for some rotations, after doing step 3.
+    # Choose a quarter block occupied by vacation to replace them to that rotation, meanwhile, the rotation max should not be touched
+    # This step fills the quarter block
     def greedy_step8_4(self):
         trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
         rotations = self.rotations
-        print("")
-        print("")
-        print("")
+        if (DEBUG_MODE):
+            print("")
+            print("")
+            print("")
 
         for trainee in trainees:
             for req in trainee.processed_reqs:
@@ -1403,13 +1117,11 @@ class Schedule:
 
                     full_flag = True
                     for i in range(self.num_block):
-                        # print(trainee.block[i].id)
                         if (trainee.block[i].id == -2):
                             full_flag = False
                             break
 
                     if (full_flag):
-                        # print("in flag")
                         break
 
                     id = self.rotations_id[req]
@@ -1419,282 +1131,29 @@ class Schedule:
                         break
 
                     if (trainee.role == "PGY1"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, self.num_block - 1)
                         if ((trainee.block[i].id == -2) and (rotation.processed_max1[i] > 0)):
                             self.fill_in(trainee, i, rotation)
 
                     if (trainee.role == "PGY2"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, self.num_block - 1)
                         if ((trainee.block[i].id == -2) and (rotation.processed_max2[i] > 0)):
                             self.fill_in(trainee, i, rotation)
 
                     if (trainee.role == "PGY3"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                        #         break
-                        # pass
                         i = random.randint(0, self.num_block - 1)
                         if ((trainee.block[i].id == -2) and (rotation.processed_max3[i] > 0)):
                             self.fill_in(trainee, i, rotation)
 
-        # # TODO: make it into step 2
-        # for i in range(self.num_block):
-        #     for rotation in rotations:
-        #         rot_name = rotation.name
-        #         rot_id = rotation.id
-        #         min_PGY1 = rotation.processed_min1[i]
-        #         min_PGY2 = rotation.processed_min2[i]
-        #         min_PGY3 = rotation.processed_min3[i]
-        #
-        #         # If rotation is still not satisfied
-        #         # TODO: Possibly randomize the fulfillment
-        #         if (min_PGY1 > 0):
-        #             # TODO: Possibly randomize the trainees
-        #             random.shuffle(trainees)
-        #
-        #             # TODO: Randomize within the group
-        #             for trainee in trainees:
-        #                 # random.shuffle(trainees)
-        #                 print(trainee.processed_limits)
-        #                 if ((trainee.role == "PGY1") and ((trainee.block[i].id == -1) or (trainee.block[i].id == -2)) and (trainee.processed_limits[rot_name] > 1)):
-        #                     self.fill_in(trainee, i, rotation)
-        #                     min_PGY1 -= 1
-        #                     if (min_PGY1 == 0): break
-        #
-        #         if (min_PGY2 > 0):
-        #             # TODO: Possibly randomize the trainees
-        #             random.shuffle(trainees)
-        #
-        #             # TODO: Randomize within the group
-        #             for trainee in trainees:
-        #                 # random.shuffle(trainees)
-        #                 if ((trainee.role == "PGY2") and ((trainee.block[i].id == -1) or (trainee.block[i].id == -2)) and (trainee.processed_limits[rot_name] > 1)):
-        #                     self.fill_in(trainee, i, rotation)
-        #                     min_PGY2 -= 1
-        #                     if (min_PGY2 == 0): break
-        #
-        #         if (min_PGY3 > 0):
-        #             # TODO: Possibly randomize the trainees
-        #             random.shuffle(trainees)
-        #
-        #             # TODO: Randomize within the group
-        #             for trainee in trainees:
-        #                 # random.shuffle(trainees)
-        #
-        #                 if ((trainee.role == "PGY3") and ((trainee.block[i].id == -1) or (trainee.block[i].id == -2)) and (trainee.processed_limits[rot_name] > 1)):
-        #                     self.fill_in(trainee, i, rotation)
-        #                     min_PGY3 -= 1
-        #                     if (min_PGY3 == 0): break
-        #         pass
-        #     pass
+        if (DEBUG_MODE):
+            print("Eighth pass:")
+            self.print_average_underdone()
+            self.print_average_overdone()
+            self.print_average_blank()
+            print("")
+            print("")
+            print("")
 
-        print("Eighth pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-
-
-    # TODO: make a big greedy schedule into function of STEPS, and call each step instead
-    def greedy_schedule(self):
-        trainees = self.trainees
-        # TODO: Break down into 3 trainee list for the randomization
-        rotations = self.rotations
-        print("")
-        print("")
-        print("")
-
-        # Step 1: Fill in the minimum teaching demands with unsatisfied residents
-        # TODO: implement the half block algorithm
-        #        Should step 1 keep same? Is min/max of rotation possible to be 1.5 or even 1.25
-        for i in range(self.num_block):
-            print("test start",i)
-            for rotation in rotations:
-
-                rot_name = rotation.name
-                rot_id = rotation.id
-                min_PGY1 = rotation.processed_min1[i]
-                min_PGY2 = rotation.processed_min2[i]
-                min_PGY3 = rotation.processed_min3[i]
-
-                #print(rot_name,min_PGY1)
-
-                # If rotation still needs to fill in min
-                # TODO: Possibly randomize the fulfillment before assigning.
-                if (min_PGY1 > 0):
-                    avail_trainees = Helper.search_trainee(min_PGY1, "PGY1", rot_name, trainees, i)
-                    #print(avail_trainees)
-                    self.fill_in_PGY1(avail_trainees, i, rotation)
-                if (min_PGY2 > 0):
-                    avail_trainees = Helper.search_trainee(min_PGY2, "PGY2", rot_name, trainees, i)
-                    self.fill_in_PGY2(avail_trainees, i, rotation)
-                if (min_PGY3 > 0):
-                    avail_trainees = Helper.search_trainee(min_PGY3, "PGY3", rot_name, trainees, i)
-                    self.fill_in_PGY3(avail_trainees, i, rotation)
-                pass
-            pass
-            print("test end")
-        print("First pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-
-        # Step 1.5: One more of step 3 between 2 and 1
-        # # Step 3: Fill in the residents with unsatisfied requirements
-        # for trainee in trainees:
-        #     for req in trainee.processed_reqs:
-        #         if (trainee.processed_reqs[req] > 0):
-        #             id = ROTATIONS_ID[req]
-        #             rotation = self.rotations[id
-        #             max_PGY1 = rotation.processed_max1[i]
-        #             max_PGY2 = rotation.processed_max2[i]
-        #             max_PGY3 = rotation.processed_max3[i]
-        #             if (trainee.role == "PGY1") and (max_PGY1 > 0):
-        #                 self.fill_in(trainee, i, rotation)
-        #                 max_PGY1 -= 1
-        #             if (trainee.role == "PGY2") and (max_PGY2 > 0):
-        #                 self.fill_in(trainee, i, rotation)
-        #                 max_PGY2 -= 1
-        #             if (trainee.role == "PGY3") and (max_PGY3 > 0):
-        #                 self.fill_in(trainee, i, rotation)
-        #                 max_PGY3 -= 1
-        # print("1.5th pass:")
-        # self.print_average_underdone()
-        # self.print_average_overdone()
-        # self.print_average_blank()
-        # print("")
-        # print("")
-        # print("")
-        # self.print_trainee_schedule()
-        #
-        # Step 2: Fill in minimum teaching demands through the year, regardless of residents' requirement
-        for i in range(self.num_block):
-            for rotation in rotations:
-                rot_name = rotation.name
-                rot_id = rotation.id
-                min_PGY1 = rotation.processed_min1[i]
-                min_PGY2 = rotation.processed_min2[i]
-                min_PGY3 = rotation.processed_min3[i]
-
-                # If rotation is still not satisfied
-                # TODO: Possibly randomize the fulfillment
-                if (min_PGY1 > 0):
-                    # TODO: Possibly randomize the trainees
-                    random.shuffle(trainees)
-
-                    # TODO: Randomize within the group
-                    for trainee in trainees:
-                        # random.shuffle(trainees)
-                        if ((trainee.role == "PGY1") and (trainee.block[i].id == -1)):
-                            self.fill_in(trainee, i, rotation)
-                            min_PGY1 -= 1
-                            if (min_PGY1 == 0): break
-
-                if (min_PGY2 > 0):
-                    # TODO: Possibly randomize the trainees
-                    random.shuffle(trainees)
-
-                    # TODO: Randomize within the group
-                    for trainee in trainees:
-                        # random.shuffle(trainees)
-                        if ((trainee.role == "PGY2") and (trainee.block[i].id == -1)):
-                            self.fill_in(trainee, i, rotation)
-                            min_PGY2 -= 1
-                            if (min_PGY2 == 0): break
-
-                if (min_PGY3 > 0):
-                    # TODO: Possibly randomize the trainees
-                    random.shuffle(trainees)
-
-                    # TODO: Randomize within the group
-                    for trainee in trainees:
-                        # random.shuffle(trainees)
-
-                        if ((trainee.role == "PGY3") and (trainee.block[i].id == -1)):
-                            self.fill_in(trainee, i, rotation)
-                            min_PGY3 -= 1
-                            if (min_PGY3 == 0): break
-                pass
-            pass
-        print("Second pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-        #
-        # Step 3: Fill in the residents with unsatisfied requirements
-        # for i in range(self.num_block):
-        for trainee in trainees:
-            for req in trainee.processed_reqs:
-                count = 0
-                while (trainee.processed_reqs[req] > 0 and count < 1000):
-                    count += 1
-
-                    full_flag = True
-                    for i in range(self.num_block):
-                        # print(trainee.block[i].id)
-                        if (trainee.block[i].id == -1):
-
-                            full_flag = False
-                            break
-
-                    if (full_flag):
-                        # print("in flag")
-                        break
-
-                    id = self.rotations_id[req]
-                    rotation = self.rotations[id]
-
-                    if (trainee.role == "PGY1"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                        #         break
-                        # pass
-                        i = random.randint(0,self.num_block-1)
-                        if ((trainee.block[i].id == -1) and (rotation.processed_max1[i] > 0)):
-                            self.fill_in(trainee, i, rotation)
-                    if (trainee.role == "PGY2"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                        #         break
-                        # pass
-                        i = random.randint(0, self.num_block - 1)
-                        if ((trainee.block[i].id == -1) and (rotation.processed_max2[i] > 0)):
-                            self.fill_in(trainee, i, rotation)
-
-                    if (trainee.role == "PGY3"):
-                        # for i in range(self.num_block):
-                        #     if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                        #         break
-                        # pass
-                        i = random.randint(0, self.num_block - 1)
-                        if ((trainee.block[i].id == -1) and (rotation.processed_max3[i] > 0)):
-                            self.fill_in(trainee, i, rotation)
-
-
-        print("Third pass:")
-        self.print_average_underdone()
-        self.print_average_overdone()
-        self.print_average_blank()
-        print("")
-        print("")
-        print("")
-        self.print_trainee_schedule()
 
     def sort_trainees(self):
         pgy1_list = []
@@ -1759,7 +1218,6 @@ class Schedule:
         for rotation in self.rotations:
             rotation.print_processed_reqs()
 
-    # TODO: Fix this to be more efficient, store it in a list
     def print_average_blank(self):
         print(self.average_blank())
 
@@ -1807,212 +1265,4 @@ class Schedule:
                 s += str(rot.id) + "," + rot.name + "," + str(0) + "\n"
         return s
 
-class Square:
-    """
-    Square objects that store the positional data of top left and bottom right corner, as well as the name and id of the
-    respective rotation
-    """
-    def __init__(self, x1, y1, x2, y2, color, rot_name, id):
-        self.x1 = x1
-        self.y1 = y1
-        self.x2 = x2
-        self.y2 = y2
-        self.rot_name = rot_name
-        self.id = id
 
-        dec_color = Helper.to_decimal_color(color)
-        self.color = dec_color
-        self.current_blur = 0
-        self.target_blur = 0
-
-    def draw(self):
-        Helper.draw_quad(self.x1, self.y1, self.x2, self.y2, self._blur_color(self.current_blur))
-
-    def draw_animated(self, steps):
-        step_blur = self.current_blur + (self.target_blur - self.current_blur) * (steps / ANIMATION_STEPS)
-        Helper.draw_quad(self.x1, self.y1, self.x2, self.y2, self._blur_color(step_blur))
-
-    def _blur_color(self, blur = 0):
-        if (blur == 0): return self.color
-        r, g, b = self.color
-        r = r + (1.0 - r) * blur
-        g = g + (1.0 - g) * blur
-        b = b + (1.0 - b) * blur
-        return (r, g, b)
-
-class SuperQuad:
-    """
-        SuperQuad is an object that contains information of many squares, as well as very effective method of drawing them
-    """
-    def __init__(self, id, num_points, indices_array, points_array, color):
-        self.num_points = num_points
-        self.indices_array = indices_array
-        self.points_array = points_array
-        self.id = id
-
-        dec_color = color
-        self.color = dec_color
-        self.current_blur = 0
-        self.target_blur = 0
-
-    def draw(self):
-        gl.glColor3f(*self._blur_color(self.current_blur))
-        pyglet.graphics.draw_indexed(self.num_points, pyglet.gl.GL_TRIANGLES,
-                                     self.indices_array,
-                                     ("v2i", self.points_array))
-
-    def draw_animated(self, steps):
-        step_blur = self.current_blur + (self.target_blur - self.current_blur) * (steps / ANIMATION_STEPS)
-        gl.glColor3f(*self._blur_color(step_blur))
-        pyglet.graphics.draw_indexed(self.num_points, pyglet.gl.GL_TRIANGLES,
-                                     self.indices_array,
-                                     ("v2i", self.points_array))
-
-    def _blur_color(self, blur=0):
-        if (blur == 0): return self.color
-        r, g, b = self.color
-        r = r + (1.0 - r) * blur
-        g = g + (1.0 - g) * blur
-        b = b + (1.0 - b) * blur
-        return (r, g, b)
-
-class ChartBar:
-    """
-        ChartBar contains information about the charts below the users
-    """
-    def __init__(self, x1, y1, col_num):
-        self.x1 = x1
-        self.y1 = y1
-        self.x2 = x1 + CHART_SIZE
-        self.col_num = col_num
-
-        self.current_color = Helper.to_decimal_color(ROTATIONS_COLOR[-1])
-        self.target_color = Helper.to_decimal_color(ROTATIONS_COLOR[-1])
-
-        self.current_height = 0
-        self.target_height = 0
-
-    def draw(self):
-        Helper.draw_quad(self.x1, self.y1, self.x2, self.y1 + self.current_height, self.current_color)
-
-    def draw_animated(self, steps):
-        height_blend = int(self.current_height + (self.target_height - self.current_height) * (steps / ANIMATION_STEPS))
-        Helper.draw_quad(self.x1, self.y1, self.x2, self.y1 + height_blend, self._blend_color(steps / ANIMATION_STEPS))
-
-    def _blend_color(self, blend):
-        if (blend == 0): return self.current_color
-        r1, g1, b1 = self.current_color
-        r2, g2, b2 = self.target_color
-        r = r1 * (1.0 - blend) + r2 * blend
-        g = g1 * (1.0 - blend) + g2 * blend
-        b = b1 * (1.0 - blend) + b2 * blend
-        return (r, g, b)
-
-class UnderdoneBar:
-    def __init__(self, x1, y1, bar_length, id):
-        self.x1 = x1
-        self.target_x1 = x1
-        self.x2 = x1 + bar_length
-        self.target_x2 = x1 + bar_length
-        self.y1 = y1
-        self.target_y1 = y1
-        self.y2 = y1 + UNDERDONE_SIZE
-        self.target_y2 = y1 + UNDERDONE_SIZE
-        self.id = id
-
-        self.color = Helper.to_decimal_color(ROTATIONS_COLOR[self.id])
-
-    def draw(self):
-        draw_quad(self.x1, self.y1, self.x2, self.y2, self.color)
-
-    def draw_animated(self, steps):
-        pass
-
-class Line:
-    def __init__(self, x1, y1, x2, y2, color = LINE_COLOR):
-        self.x1 = x1
-        self.x2 = x2
-        self.y1 = y1
-        self.y2 = y2
-        self.color = Helper.to_decimal_color_alpha(color)
-
-class SuperLine:
-    '''
-    A bunch of lines that are drawn efficiently using only one draw call
-    '''
-    def __init__(self, num_lines, points_array, color = LINE_COLOR):
-        self.num_lines = num_lines
-        self.points_array = points_array
-        self.color = Helper.to_decimal_color_alpha(color)
-
-    def draw(self):
-        gl.glLineWidth(LINE_WIDTH)
-        gl.glColor4f(*self.color)
-        pyglet.graphics.draw(self.num_lines * 2, pyglet.gl.GL_LINES,
-                             ('v2i', self.points_array))
-
-class AnimatedSuperQuad:
-    '''
-    This class serves to draw the underdone bars efficiently
-    '''
-
-    def __init__(self, id, num_points, indices_array, points_array, color):
-        self.num_points = num_points
-        self.indices_array = indices_array
-        self.base_points_array = np.array(points_array)
-        self.current_points_array = np.array(points_array)
-        self.target_points_array = np.array(points_array)
-        self.id = id
-
-        self.color = color # Already in decimal form
-        self.current_blur = 0
-        self.target_blur = 0
-
-    def draw(self):
-        gl.glColor3f(*self.color)
-        pyglet.graphics.draw_indexed(self.num_points, pyglet.gl.GL_TRIANGLES,
-                                     self.indices_array,
-                                     ("v2i", self.current_points_array))
-
-    def draw_animated(self, steps):
-        gl.glColor3f(*self.color)
-        temp_points_array = self.current_points_array * (ANIMATION_STEPS - steps) / ANIMATION_STEPS + self.target_points_array * steps / ANIMATION_STEPS
-        temp_points_array = temp_points_array.astype(int)
-        pyglet.graphics.draw_indexed(self.num_points, pyglet.gl.GL_TRIANGLES,
-                                     self.indices_array,
-                                     ("v2i", temp_points_array))
-
-class MarkLine():
-    def __init__(self, x1, x2, y):
-        self.x1 = x1
-        self.x2 = x2
-        self.y = y
-        self.current_height = 0
-        self.target_height = 0
-
-        self.color = Helper.to_decimal_color_alpha(MIN_LINE_COLOR)
-
-    def draw(self):
-        gl.glLineWidth(MIN_LINE_WIDTH)
-        gl.glColor4f(*self.color)
-        pyglet.graphics.draw(2, pyglet.gl.GL_LINES,
-                             ('v2i', [self.x1, self.y - self.current_height,
-                                      self.x2, self.y - self.current_height]))
-
-    def draw_animated(self, steps):
-        gl.glLineWidth(MIN_LINE_WIDTH)
-        gl.glColor4f(*self.color)
-        temp_height = int(self.current_height * (ANIMATION_STEPS - steps) / ANIMATION_STEPS + self.target_height * steps / ANIMATION_STEPS)
-        pyglet.graphics.draw(2, pyglet.gl.GL_LINES,
-                             ('v2i', [self.x1, self.y - temp_height,
-                                      self.x2, self.y - temp_height]))
-
-class ClickSquare():
-    def __init__(self, x1, y1, x2, y2, color, rot_name, id):
-        self.x1 = x1
-        self.y1 = y1
-        self.x2 = x2
-        self.y2 = y2
-        self.rot_name = rot_name
-        self.id = id
-        self.color = Helper.to_decimal_color(color)

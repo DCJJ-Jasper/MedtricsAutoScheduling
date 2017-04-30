@@ -337,8 +337,6 @@ def request_schedule(method):
             print(pgy2_lim)
             print(pgy3_lim)
 
-            # TODO: Create the prefilled code
-
             # -----------------------
             # Create greedy constants
             # -----------------------
