@@ -453,12 +453,12 @@ def request_schedule(method):
         # ---------------------------
 
         else:
-            (pgy1_req_full, pgy1_req_half, pgy1_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy1_req)
-            (pgy1_lim_full, pgy1_lim_half, pgy1_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy1_lim)
-            (pgy2_req_full, pgy2_req_half, pgy2_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy2_req)
-            (pgy2_lim_full, pgy2_lim_half, pgy2_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy2_lim)
-            (pgy3_req_full, pgy3_req_half, pgy3_req_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy3_req)
-            (pgy3_lim_full, pgy3_lim_half, pgy3_lim_quarter) = SolverUtil.generateFullHalfQuarterDict(pgy3_lim)
+            pgy1_req_full, pgy1_req_half, pgy1_req_quarter = SolverUtil.generateFullHalfQuarterDict(pgy1_req)
+            pgy1_lim_full, pgy1_lim_half, pgy1_lim_quarter = SolverUtil.generateFullHalfQuarterDict(pgy1_lim)
+            pgy2_req_full, pgy2_req_half, pgy2_req_quarter = SolverUtil.generateFullHalfQuarterDict(pgy2_req)
+            pgy2_lim_full, pgy2_lim_half, pgy2_lim_quarter = SolverUtil.generateFullHalfQuarterDict(pgy2_lim)
+            pgy3_req_full, pgy3_req_half, pgy3_req_quarter = SolverUtil.generateFullHalfQuarterDict(pgy3_req)
+            pgy3_lim_full, pgy3_lim_half, pgy3_lim_quarter = SolverUtil.generateFullHalfQuarterDict(pgy3_lim)
 
             seed = 100
             num_trainee_list = (num_pgy1, num_pgy2, num_pgy3)
