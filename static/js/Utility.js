@@ -1,8 +1,12 @@
 /**
- * Created by Son Pham on 2/21/2017.
+ * Utility.js
  */
 
-
+/**
+ * Based on given rgb values, convert to hex color codes
+ * @param color_tuple
+ * @returns {string}
+ */
 function convert_to_color_code(color_tuple) {
     var r = Math.round(color_tuple[0]);
     var g = Math.round(color_tuple[1]);
@@ -10,6 +14,10 @@ function convert_to_color_code(color_tuple) {
     return "0x" + r.toString(16) + g.toString(16) + b.toString(16);
 }
 
+/**
+ *
+ * @param schedule_info
+ */
 function convert_to_graphic_id(schedule_info) {
     var cloned_info = JSON.parse(JSON.stringify(schedule_info))
     for (var i = 0; i < cloned_info.length; i++) {
@@ -26,6 +34,10 @@ function convert_to_schedule_id(schedule_info) {
     return cloned_info;
 }
 
+/**
+ * Sort the trainees to be displayed in the visualization
+ * @param trainees_list
+ */
 function sort_trainees(trainees_list) {
     trainees_list.sort(function(a, b){
        if(a.name < b.name) return -1;
@@ -34,7 +46,9 @@ function sort_trainees(trainees_list) {
     })
 }
 
-// Function to download data to a file
+/**
+ * Function to download data to a .csv file
+ * */
 function download(data, filename, type) {
     var a = document.createElement("a"),
         file = new Blob([data], {type: type});
@@ -71,6 +85,13 @@ function generate_in_between_arr(arr1, arr2, animation_length = ANIMATION_LENGTH
     return in_between_arr;
 }
 
+/**
+ * Generate in between graphic values for animation
+ * @param val1
+ * @param val2
+ * @param animation_length
+ * @returns {Array}
+ */
 function generate_in_between_val(val1, val2, animation_length = ANIMATION_LENGTH) {
     var in_between_val = new Array(animation_length + 1);
     for (var i = 0; i < animation_length; i ++) {
@@ -80,15 +101,3 @@ function generate_in_between_val(val1, val2, animation_length = ANIMATION_LENGTH
     return in_between_val;
 }
 
-/**
- * Short function for drawing rectangle
- */
-function draw_rectangle(graphic, color, x1, y1, x2, y2) {
-    graphic.beginFill(color);
-    graphic.moveTo(x1, y1);
-    graphic.lineTo(x1, y2);
-    graphic.lineTo(x2, y2);
-    graphic.lineTo(x2, y1);
-    graphic.lineTo(x1, y1);
-    graphic.endFill();
-}
