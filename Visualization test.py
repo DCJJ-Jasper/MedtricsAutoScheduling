@@ -53,6 +53,14 @@ app = Flask(__name__)
 isScheduled = False
 scheduleText = ''
 
+@app.route('/pushTrainees', methods=['GET'])
+def push_trainees():
+    if isScheduled:
+        data = {'data': scheduleText}
+        return json.dumps(data)
+    else:
+        return json.dumps({'data': -1})
+
 @app.route('/requestToSchedule/<string:method>', methods = ['POST', 'GET'])
 def request_schedule(method):
     if request.method == 'POST':
@@ -72,8 +80,7 @@ def request_schedule(method):
             # ---------------------
             line_data = f.readline().rstrip('\n').split(",")
             program_name = line_data[1]
-            num_block = int(line_data[2]) * 4 # Fucking hack
-            print("SHIT-FUCK")
+            num_block = int(line_data[2]) * 4
             print(num_block)
             f.readline()
 
@@ -329,8 +336,6 @@ def request_schedule(method):
             print(pgy2_lim)
             print(pgy3_lim)
 
-            # TODO: Create the prefilled code
-
             # -----------------------
             # Create greedy constants
             # -----------------------
@@ -504,9 +509,11 @@ def request_schedule(method):
         scheduleText = schedule.generate_info_file()
         isScheduled = True
         return json.dumps({'data': scheduleText})
+    else:
+        return 'Finished'
 
 @app.route('/')
-def home_page():
+def hello_world():
     return render_template('index.html')
 
 if __name__ == '__main__':
