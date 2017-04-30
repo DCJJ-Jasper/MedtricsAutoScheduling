@@ -23,11 +23,11 @@ def search_trainee(n, role, rot_name, trainees, i):
     '''
         Find n students of a specific role that still needs to fulfill a rot
     '''
-    # TODO: To make things more random, we can perhaps randomize the list trainees here
+
     # Initialize the trainee_list
     trainee_list = []
 
-    # TODO: Randomize the trainee list
+
     random.shuffle(trainees)
 
     # Search for appropriate trainees

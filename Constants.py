@@ -98,7 +98,6 @@ ROTATIONS_ID = {}
 ROTATIONS = []
 id_count = 0
 
-# TODO: Limitations
 LIMITATIONS = {}
 
 LIMITATIONS["PGY1"] = {
