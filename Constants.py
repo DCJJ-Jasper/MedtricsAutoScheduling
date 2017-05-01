@@ -1,5 +1,12 @@
+#  Copyright (C) Medtrics Lab, Inc - All Rights Reserved
+#  Unauthorized copying of this file, via any medium is strictly prohibited
+#  Proprietary and confidential
+#  Written by Chengjunjie(Jasper) Ding, Son Pham, Yadong(AC) Li, Tung Phan <son@medtricslab.com>, May 2017
 
 DEBUG_MODE = False
+
+# All constants down below are used for local tests
+# So this file is not used if you run the online version
 
 # ------------------
 # SCHEDULE CONSTANTS
@@ -92,6 +99,7 @@ DESIRED_LENGTH_ROTATION = [("Ambulatory Medicine Blocks", 0.25, 3, 0, 0, 0, 0),
                   ("Neurology", 1, 3, 0, 0, 0, 0),
                   # ("Vacation", 0.25, 2)
                   ]
+
 NUM_ROT = len(ROTATIONS_LIST)
 ROTATIONS_DICT = {}
 ROTATIONS_ID = {}

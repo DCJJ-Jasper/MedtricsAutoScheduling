@@ -1,8 +1,7 @@
-# Author:
-# Jasper Ding
-# Son Pham
-
-
+#  Copyright (C) Medtrics Lab, Inc - All Rights Reserved
+#  Unauthorized copying of this file, via any medium is strictly prohibited
+#  Proprietary and confidential
+#  Written by Chengjunjie(Jasper) Ding, Son Pham, Yadong(AC) Li, Tung Phan <son@medtricslab.com>, May 2017
 
 # ---------------------------------
 # IMPORT LIBRARIES AND DEPENDENCIES
@@ -473,7 +472,6 @@ class Schedule:
             trainee.processed_reqs[rotation.name] -= 1
             trainee.processed_limits[rotation.name] -= 1
 
-
     # greedy step1
     # For each roles of trainees,
     # This function goes through each whole block for each rotation.
@@ -558,10 +556,8 @@ class Schedule:
             print("")
             print("")
 
-
-
     # greedy step2
-    #This function goes through each whole block for each rotation.
+    # This function goes through each whole block for each rotation.
     # For each rotation, if it has min requirement unsatisfied,
     # find trainees who do not take that rotation over the limit of that rotation to assign to this rotation.
     # If there still exist rotations with unsatisfied min requirement during any period,
@@ -761,8 +757,6 @@ class Schedule:
             print("")
             print("")
 
-
-
     # greedy step3
     # For each roles of trainees,
     # if there exist trainees with unsatisfied educational requirements for some rotations,
@@ -837,8 +831,6 @@ class Schedule:
             print("")
             print("")
             print("")
-
-
 
     # greedy step4
     # For each roles of trainees,
