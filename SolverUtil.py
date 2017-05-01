@@ -3,10 +3,7 @@ import math
 import random
 import copy
 
-# ------------------------
-# Solver UTILITY CONSTANTS
-# ------------------------
-DEBUG_PRINT = False
+from Constants import *
 
 # ------------------------
 # SOLVER UTILITY FUNCTIONS
@@ -182,7 +179,7 @@ def pruneSchedule(currentSchedule, prefilledSchedule, seed, num_trainee_list, ro
         # update the count array to reflect the pruned block
         for typeTrainee in typeTraineeList:
             count_array[block][rotation][typeTrainee] -= 1
-    if DEBUG_PRINT:
+    if DEBUG_MODE:
         print("Pruned " + str(pruneCount))
     return prunedSchedule
 
@@ -259,7 +256,7 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
                                      rot.min13, rot.max13,
                                      rot.min23, rot.max23,
                                      rot.mintotal, rot.maxtotal))
-    if DEBUG_PRINT:
+    if DEBUG_MODE:
         print("DEBUG Print, in SolverUtil.solveSchedule")
         print(num_block)
         print(num_trainee_list)
@@ -389,7 +386,7 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
     objective.SetMinimization()
 
     #Start solving
-    if DEBUG_PRINT:
+    if DEBUG_MODE:
         print("Constraints inputted. Solving")
     result_status = solver.Solve()
 
@@ -397,16 +394,16 @@ def solveSchedule(prefilled_schedule, num_block, num_trainee_list, rotations,
     # when using solvers other than
     # GLOP_LINEAR_PROGRAMMING, verifying the solution is highly recommended!
     resultArray = []
-    if DEBUG_PRINT:
+    if DEBUG_MODE:
         print('Number of variables =', solver.NumVariables())
         print('Number of constraints =', solver.NumConstraints())
 
     if ((result_status != pywraplp.Solver.OPTIMAL) or not (solver.VerifySolution(1e-7, True))):
-        if DEBUG_PRINT:
+        if DEBUG_MODE:
             print('No optimal solution found\n')
         resultArray = prefilled_schedule
     else:
-        if DEBUG_PRINT:
+        if DEBUG_MODE:
             # The solution looks legit, output it from the solver
             print('Problem solved in %f milliseconds' % solver.WallTime())
             print('Problem solved in %d iterations' % solver.Iterations())
