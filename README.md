@@ -16,6 +16,7 @@ If you wish to install dependencies separately, here are the following necessary
 * ```Flask==0.11.1```
 * ```numpy==1.12.0```
 * ```Pillow==3.3.0```
+* ```ortools==5.1.4045```
 * ```pyglet==1.2.4``` (Optional)
 
 ## JavaScript
