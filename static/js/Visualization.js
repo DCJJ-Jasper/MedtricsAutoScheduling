@@ -897,3 +897,16 @@ function draw_underdone_and_overdone_bars() {
     line_graphic.moveTo(base_x, base_y);
     line_graphic.lineTo(base_x, base_y + UNIT_RANGE * num_pgy_vis);
 }
+
+/**
+ * Short function for drawing rectangle
+ */
+function draw_rectangle(graphic, color, x1, y1, x2, y2) {
+    graphic.beginFill(color);
+    graphic.moveTo(x1, y1);
+    graphic.lineTo(x1, y2);
+    graphic.lineTo(x2, y2);
+    graphic.lineTo(x2, y1);
+    graphic.lineTo(x1, y1);
+    graphic.endFill();
+}

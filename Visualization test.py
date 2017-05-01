@@ -48,14 +48,6 @@ app = Flask(__name__)
 isScheduled = False
 scheduleText = ''
 
-@app.route('/pushTrainees', methods=['GET'])
-def push_trainees():
-    if isScheduled:
-        data = {'data': scheduleText}
-        return json.dumps(data)
-    else:
-        return json.dumps({'data': -1})
-
 @app.route('/requestToSchedule/<string:method>', methods = ['POST', 'GET'])
 def request_schedule(method):
     if request.method == 'POST':
@@ -508,7 +500,7 @@ def request_schedule(method):
         return 'Finished'
 
 @app.route('/')
-def hello_world():
+def home_page():
     return render_template('index.html')
 
 if __name__ == '__main__':

@@ -476,8 +476,9 @@ class Schedule:
 
     # greedy step1
     # For each roles of trainees,
-    # If a rotation exists in some period with unsatisfied min, and meanwhile, there exist trainees with unsatisfied educational requirements for that rotation.
-    # Choose the trainees cover the rotation for that period.
+    # This function goes through each whole block for each rotation.
+    # For each rotation, a helper function finds at most (rotation min) number of trainees with unsatisfied educational requirements for that rotation.
+    # Finally, this function calls appropriate fill-in function to fill the schedule.
     def greedy_step1_4(self):
 
         trainees = self.trainees
@@ -558,10 +559,13 @@ class Schedule:
             print("")
 
 
+
     # greedy step2
-    # For each roles of trainees,
-    # If no trainee exists with unsatisfied educational requirements for a particular rotation that has unsatisfied teaching service demands in some period.
-    # Choose an trainee who does not touch the limit of this rotation to assign to this rotation.
+    #This function goes through each whole block for each rotation.
+    # For each rotation, if it has min requirement unsatisfied,
+    # find trainees who do not take that rotation over the limit of that rotation to assign to this rotation.
+    # If there still exist rotations with unsatisfied min requirement during any period,
+    # find trainees who have any pre-fill vacation block and replace vacation to that rotation.
     def greedy_step2_4(self):
         trainees = self.trainees
         rotations = self.rotations
@@ -761,9 +765,10 @@ class Schedule:
 
     # greedy step3
     # For each roles of trainees,
-    # If trainees exist with unsatisfied educational requirements for some rotations.
-    # Choose a whole block to assign them to that rotation, meanwhile, the rotation max should not be touched
-    # This step fills the whole block
+    # if there exist trainees with unsatisfied educational requirements for some rotations,
+    # randomly pick a whole block to assign it to that rotation,
+    # meanwhile, the rotation max should not be touched.
+    # This step only fills the whole block.
     def greedy_step3_4(self):
         trainees = self.trainees
         rotations = self.rotations
@@ -837,9 +842,10 @@ class Schedule:
 
     # greedy step4
     # For each roles of trainees,
-    # If trainees exist with unsatisfied educational requirements for some rotations.
-    # Choose a half block to assign them to that rotation, meanwhile, the rotation max should not be touched
-    # This step fills the half block
+    # if there exist trainees with unsatisfied educational requirements for some rotations,
+    # randomly pick a half block to assign it to that rotation,
+    # meanwhile, the rotation max should not be touched.
+    # This step only fills the half block.
     def greedy_step4_4(self):
         trainees = self.trainees
         rotations = self.rotations
@@ -898,9 +904,10 @@ class Schedule:
 
     # greedy step5
     # For each roles of trainees,
-    # If trainees exist with unsatisfied educational requirements for some rotations.
-    # Choose a quarter block to assign them to that rotation, meanwhile, the rotation max should not be touched
-    # This step fills the quarter block
+    # if there exist trainees with unsatisfied educational requirements for some rotations,
+    # randomly pick a quarter block to assign it to that rotation,
+    # meanwhile, the rotation max should not be touched.
+    # This step only fills the quarter block.
     def greedy_step5_4(self):
         trainees = self.trainees
         rotations = self.rotations
@@ -956,9 +963,10 @@ class Schedule:
 
     # greedy step6
     # For each roles of trainees,
-    # If trainees exist with unsatisfied educational requirements for some rotations, after doing step 3.
-    # Choose a whole block occupied by vacation to replace them to that rotation, meanwhile, the rotation max should not be touched
-    # This step fills the whole block
+    # if there exist trainees with unsatisfied educational requirements for some rotations, after doing step 5,
+    # find  a whole block occupied by vacation to replace it to the rotations,
+    # meanwhile, the rotation max should not be touched.
+    # This step only fills the whole block.
     def greedy_step6_4(self):
         trainees = self.trainees
         rotations = self.rotations
@@ -1030,9 +1038,10 @@ class Schedule:
 
     # greedy step7
     # For each roles of trainees,
-    # If trainees exist with unsatisfied educational requirements for some rotations, after doing step 3.
-    # Choose a half block occupied by vacation to replace them to that rotation, meanwhile, the rotation max should not be touched
-    # This step fills the half block
+    # if there exist trainees with unsatisfied educational requirements for some rotations, after doing step 5,
+    # find a half block occupied by vacation to replace it to the rotations,
+    # meanwhile,the rotation max should not be touched.
+    # This step only fills the half block.
     def greedy_step7_4(self):
         trainees = self.trainees
         rotations = self.rotations
@@ -1092,9 +1101,10 @@ class Schedule:
 
     # greedy step8
     # For each roles of trainees,
-    # If trainees exist with unsatisfied educational requirements for some rotations, after doing step 3.
-    # Choose a quarter block occupied by vacation to replace them to that rotation, meanwhile, the rotation max should not be touched
-    # This step fills the quarter block
+    # if there exist trainees with unsatisfied educational requirements for some rotations, after doing step 5,
+    # find a quarter block occupied by vacation to replace it to the rotations,
+    #  meanwhile, the rotation max should not be touched.
+    # This step only fills the quarter block.
     def greedy_step8_4(self):
         trainees = self.trainees
         rotations = self.rotations
