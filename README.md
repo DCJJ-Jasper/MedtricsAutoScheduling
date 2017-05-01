@@ -36,6 +36,8 @@ For developers wishing to improve the existing algorithm in python, we also have
 
 Simply run ```Main.py``` to visualize a schedule. ```Constants.py``` should contains all information necessary about the scheduling problem.
 
-There is a ```DEBUG_MODE``` variable for those who wish to show some debugging information about the schedule.
+There is a ```DEBUG_MODE``` boolean variable inside ```Constants.py``` for those who wish to show some debugging information about the schedule.
 
+# Data format
 
+(To be written)

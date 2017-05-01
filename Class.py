@@ -183,6 +183,7 @@ class Rotation:
         self.min_block_length = min_block_length
         self.type = type
         self.num_block = num_block
+        self.vacation_allowed = vacation_allowed
 
         # Min, max cap for the rotation
         self.min1 = -1
