@@ -3,6 +3,11 @@
 ## Bucknell University Computer Science Engineering Senior Design CSCI475/476
 ## Professor Brian King
 
+#  
+
+![screenshot](view.png)
+
+
 # Abstract
 The client for our senior design project is Medtrics - a medical residency management software company based in Lewisburg, PA.
 We engineered a software to solve medical residency rotation scheduling problems, transforming six weeks of mental work to seconds of automatic processing.
@@ -59,7 +64,7 @@ There is a ```DEBUG_MODE``` boolean variable inside ```Constants.py``` for those
     * ```js```: JavaScript files. The 5 main files are ```Class.js```, ```Constants.js```, ```Helper.js```, ```Utility.js```, ```Visualization.js```. The rest are JS libraries.
 * ```templates```: Contain the HTML file to be served by the server
 
-```Class.py```, ```Constants.py```, ```Helper.py```, ```SolverUtil.py```, ```Visualization test.py``` are the Python codes for the scheduling server. 
+```Class.py```, ```Constants.py```, ```Helper.py```, ```SolverUtil.py```, ```Visualization test.py``` are the Python codes for the scheduling server.
 
 ```requirements.txt``` contains all python requirements and allow for quick installation.
 
