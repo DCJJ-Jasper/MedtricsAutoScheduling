@@ -1,6 +1,7 @@
-/**
- * Created by AC on 2/10/17.
- */
+// Copyright (C) Medtrics Lab, Inc - All Rights Reserved
+// Unauthorized copying of this file, via any medium is strictly prohibited
+// Proprietary and confidential
+// Written by Chengjunjie(Jasper) Ding, Son Pham, Yadong(AC) Li, Tung Phan <son@medtricslab.com>, May 2017
 
 ////////////////
 // MODEL CLASSES
