@@ -47,7 +47,20 @@ There is a ```DEBUG_MODE``` boolean variable inside ```Constants.py``` for those
 
 # File structure
 
-(To be written)
+* ```data```: This folder contains two example files called ```medtrics_problem.txt``` and ```yale_program.txt```, which can be used as sample problems for the GUI.
+* ```docs```: Contain two manuals:
+    * A User Manual that details how each feature is completed and details general problems for incompleted feature.
+    * A Technical Manua that detailed the technique involved in executing the project
+* ```node_modules```: Contains original JavaScript libraries used in the project.
+* ```static```:
+    * ```css```: Contains stylesheet
+    * ```images```: Some image elements for the GUI such as favicon, image loader, Medtrics logo.
+    * ```js```: JavaScript files. The 5 main files are ```Class.js```, ```Constants.js```, ```Helper.js```, ```Utility.js```, ```Visualization.js```. The rest are JS libraries.
+* ```templates```: Contain the HTML file to be served by the server
+
+```Class.py```, ```Constants.py```, ```Helper.py```, ```SolverUtil.py```, ```Visualization test.py``` are the Python codes for the scheduling server. 
+
+```requirements.txt``` contains all python requirements and allow for quick installation.
 
 # Data format
 In order to make our program 'understand' the data you uploaded, please upload files that follow this kind of format:
