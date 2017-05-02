@@ -50,7 +50,8 @@ There is a ```DEBUG_MODE``` boolean variable inside ```Constants.py``` for those
 * ```data```: This folder contains two example files called ```medtrics_problem.txt``` and ```yale_program.txt```, which can be used as sample problems for the GUI.
 * ```docs```: Contain two manuals:
     * A User Manual that details how each feature is completed and details general problems for incompleted feature.
-    * A Technical Manua that detailed the technique involved in executing the project
+    * A Technical Manual that detailed the technique involved in executing the project.
+    * A presentation slide and a poster of our project.
 * ```node_modules```: Contains original JavaScript libraries used in the project.
 * ```static```:
     * ```css```: Contains stylesheet
