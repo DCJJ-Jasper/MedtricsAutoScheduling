@@ -1,4 +1,11 @@
-This is the repository for our project called Medtrics Automated Scheduling. The project allows the program coordinator in a medical residency program to automatically solve 90% of the schedule based on input constraint and deal with the rest 10% with a user-friendly GUI
+# Medtrics Automated Scheduling
+## Team JAST: Jasper Ding, AC Li, Son Pham, Tung Phan
+## Bucknell University Computer Science Engineering Senior Design CSCI475/476
+## Professor Brian King
+
+# Abstract
+The client for our senior design project is Medtrics - a medical residency management software company based in Lewisburg, PA. 
+We engineered a software to solve medical residency rotation scheduling problems, transforming six weeks of mental work to seconds of automatic processing.
 
 # Installation
 
@@ -37,6 +44,10 @@ For developers wishing to improve the existing algorithm in python, we also have
 Simply run ```Main.py``` to visualize a schedule. ```Constants.py``` should contains all information necessary about the scheduling problem.
 
 There is a ```DEBUG_MODE``` boolean variable inside ```Constants.py``` for those who wish to show some debugging information about the schedule.
+
+# File structure
+
+(To be written)
 
 # Data format
 
